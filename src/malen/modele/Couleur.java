@@ -1,4 +1,4 @@
-//package malen.modele;
+package malen.modele;
 
 /** Classe Controleur
   * @author : Alizéa Lebaron
