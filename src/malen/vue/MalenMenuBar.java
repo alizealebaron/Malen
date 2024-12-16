@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class MalenMenuBar extends JMenuBar {
-    private MalenImagePanel imagePanel;
 
 	private MalenMainFrame mainFrame; // Référence vers MainFrame
 
