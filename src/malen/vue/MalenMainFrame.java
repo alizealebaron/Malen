@@ -88,4 +88,9 @@ public class MalenMainFrame extends JFrame {
 
 		}
 	}
+
+	public void saveImageToFile(String name)
+	{
+		this.imagePanel.saveImageToFile(name);
+	}
 }

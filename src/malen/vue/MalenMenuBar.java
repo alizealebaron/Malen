@@ -119,7 +119,7 @@ public class MalenMenuBar extends JMenuBar {
 	private void handleMenuAction(String menuItem) {
 		switch (menuItem) {
 			case "Sauvegarder":
-				System.out.println("ouai, tu utilise : " + menuItem);
+				this.mainFrame.saveImageToFile("output.png");
 				break;
 			case "Sauvegarder sous":
 				System.out.println("ouai, tu utilise : " + menuItem);
