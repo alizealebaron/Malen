@@ -54,6 +54,24 @@ public class MalenImagePanel extends JPanel implements MouseListener {
         repaint();
     }
 
+
+    public void showRotationSlider() {
+        rotationSlider.setVisible(true);
+        rotationSlider.setEnabled(true);
+    }
+
+    public void rotateImage (double angle)
+    {
+        this.rotate_angle = angle;
+        repaint();
+    }
+
+    public void rotationPlane (double angle)
+    {
+        this.rotate_angle += angle % 360;
+        repaint();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
