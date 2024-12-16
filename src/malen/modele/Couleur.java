@@ -6,7 +6,7 @@ package malen.modele;
   * @date : 16/12/2024
   */
 
-public class Malen 
+public class Couleur 
 {
 	/* -------------------------------------- */
 	/*               Attributs                */
@@ -18,7 +18,7 @@ public class Malen
 	/*              Constructeur              */
 	/* -------------------------------------- */
 
-	public Malen()
+	public Couleur()
 	{
 		
 	}
@@ -39,7 +39,7 @@ public class Malen
 	/*                 Méthode                */
 	/* -------------------------------------- */
 
-	
+
 
 	
 }
