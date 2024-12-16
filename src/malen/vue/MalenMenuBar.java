@@ -155,7 +155,7 @@ public class MalenMenuBar extends JMenuBar {
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Rotation Plane":
-				System.out.println("ouai, tu utilise : " + menuItem);
+			mainFrame.switchRotationPlane();
 				break;
 			case "Sélection Rectangle":
 				System.out.println("ouai, tu utilise : " + menuItem);
@@ -164,7 +164,7 @@ public class MalenMenuBar extends JMenuBar {
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Choix de Couleur sur l'image":
-				mainFrame.switchToPipette();
+				mainFrame.switchPipette();
 				break;
 			case "Choix de Couleur":
 				mainFrame.chooseColor();

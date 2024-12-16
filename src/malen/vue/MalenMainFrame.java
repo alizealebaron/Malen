@@ -59,7 +59,7 @@ public class MalenMainFrame extends JFrame {
 		}
 	}
 
-	public void switchToPipette() {
+	public void switchPipette() {
 		if (this.controleur.getCurseur().equals(Controleur.PIPETTE)) {
 			this.controleur.setCurseur(Controleur.SOURIS);
 		} else {
@@ -93,4 +93,11 @@ public class MalenMainFrame extends JFrame {
 	{
 		this.imagePanel.saveImageToFile(name);
 	}
+
+	public void switchRotationPlane()
+	{
+		this.imagePanel.showRotationSlider();
+	}
+
+	
 }
