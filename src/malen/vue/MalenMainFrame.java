@@ -27,7 +27,7 @@ public class MalenMainFrame extends JFrame {
 		add(menuPanel, BorderLayout.NORTH);
 
 		// Ajouter le panneau d'affichage d'image dans un JScrollPane
-		imagePanel = new MalenImagePanel();
+		imagePanel = new MalenImagePanel(this);
 		scrollPane = new JScrollPane(imagePanel); // Envelopper l'image dans un JScrollPane
 		scrollPane.setPreferredSize(new Dimension(800, 600)); // Taille du panneau d'affichage de l'image
 		add(scrollPane, BorderLayout.CENTER);
@@ -59,12 +59,33 @@ public class MalenMainFrame extends JFrame {
 		}
 	}
 
+	public void switchToPipette() {
+		if (this.controleur.getCurseur().equals(Controleur.PIPETTE)) {
+			this.controleur.setCurseur(Controleur.SOURIS);
+		} else {
+			this.controleur.setCurseur(Controleur.PIPETTE);
+		}
+	}
+
 	public void chooseColor() {
 		// Afficher un sélecteur de couleur
 		Color selectedColor = JColorChooser.showDialog(null, "Choisir une couleur", controleur.getCurrentColor());
 
 		if (selectedColor != null) {
 			controleur.setColor(selectedColor);
+		}
+	}
+
+	public void setPickedColor(Color color) {
+		if (this.controleur.getCurseur().equals(Controleur.PIPETTE)) {
+			// Afficher la couleur dans le label
+			// colorLabel.setBackground(color);
+
+			// Passer la couleur au contrôleur
+			controleur.setColor(color);
+
+			System.out.println(this.controleur.getCurrentColor().toString());
+
 		}
 	}
 }

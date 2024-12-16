@@ -163,7 +163,7 @@ public class MalenMenuBar extends JMenuBar {
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Choix de Couleur sur l'image":
-				System.out.println("ouai, tu utilise : " + menuItem);
+				mainFrame.switchToPipette();
 				break;
 			case "Choix de Couleur":
 				mainFrame.chooseColor();
