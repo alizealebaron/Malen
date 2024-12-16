@@ -1,3 +1,9 @@
 # Les .class
 
 *.class
+
+# Test avec image
+
+/src/malen/modele/*.png
+/src/malen/modele/*.jpg
+/src/*.png
