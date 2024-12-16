@@ -13,13 +13,15 @@ public class MalenMainFrame extends JFrame {
         setSize(1000, 700);
         setLayout(new BorderLayout());
 
-        // Ajouter le panneau de menu
-        MalenMenuBar menuPanel = new MalenMenuBar();
-        add(menuPanel, BorderLayout.NORTH);
-
         // Ajouter le panneau d'affichage d'image
         imagePanel = new MalenImagePanel();
+        
+
+        // Ajouter le panneau de menu
+        MalenMenuBar menuPanel = new MalenMenuBar(this.imagePanel);
+
         add(imagePanel, BorderLayout.CENTER);
+        add(menuPanel, BorderLayout.NORTH);
 
         // Afficher la fenêtre
         setLocationRelativeTo(null);

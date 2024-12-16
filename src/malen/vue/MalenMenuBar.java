@@ -1,11 +1,12 @@
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.HashMap;
 
 public class MalenMenuBar extends JMenuBar {
+    private MalenImagePanel imagePanel;
 
-    public MalenMenuBar() {
+    public MalenMenuBar(MalenImagePanel imagePanel) {
 
+        this.imagePanel = imagePanel;
         // Configuration du panneau principal
         JMenu fileMenu = new JMenu("Fichier");
         this.add(fileMenu);
@@ -111,7 +112,7 @@ public class MalenMenuBar extends JMenuBar {
     private void handleMenuAction(String menuItem) {
         switch (menuItem) {
             case "Sauvegarder":
-                System.out.println("ouai, tu utilise : " + menuItem);
+                imagePanel.saveImageToFile("output.png");
                 break;
             case "Sauvegarder sous":
                 System.out.println("ouai, tu utilise : " + menuItem);
@@ -144,10 +145,10 @@ public class MalenMenuBar extends JMenuBar {
                 System.out.println("ouai, tu utilise : " + menuItem);
                 break;
             case "Rotation Axial":
-                System.out.println("ouai, tu utilise : " + menuItem);
+                imagePanel.showRotationSlider();
                 break;
             case "Rotation Plane":
-                System.out.println("ouai, tu utilise : " + menuItem);
+                if (imagePanel != null) imagePanel.rotationPlane(180);
                 break;
             case "Sélection Rectangle":
                 System.out.println("ouai, tu utilise : " + menuItem);
