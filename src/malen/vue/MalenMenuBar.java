@@ -5,7 +5,6 @@ public class MalenMenuBar extends JMenuBar {
 
     public MalenMenuBar() {
         // Configuration du panneau principal
-        setLayout(new BorderLayout());
 
         // Menu Fichier
         JMenu fileMenu = new JMenu("Fichier");
