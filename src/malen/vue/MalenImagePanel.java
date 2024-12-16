@@ -1,6 +1,9 @@
 package malen.vue;
 
 import javax.swing.*;
+
+import org.w3c.dom.events.MouseEvent;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -32,6 +35,23 @@ public class MalenImagePanel extends JPanel implements MouseListener {
             JOptionPane.showMessageDialog(this, "Erreur lors du chargement de l'image.", "Erreur",
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public void showRotationSlider() {
+        rotationSlider.setVisible(true);
+        rotationSlider.setEnabled(true);
+    }
+
+    public void rotateImage (double angle)
+    {
+        this.rotate_angle = angle;
+        repaint();
+    }
+
+    public void rotationPlane (double angle)
+    {
+        this.rotate_angle += angle % 360;
+        repaint();
     }
 
     @Override
