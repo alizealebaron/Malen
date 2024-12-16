@@ -41,7 +41,7 @@ public class MalenMainFrame extends JFrame {
 	public void importImage() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(
-				new javax.swing.filechooser.FileNameExtensionFilter("jpeg", "gif"));
+				new javax.swing.filechooser.FileNameExtensionFilter("png", "gif"));
 		int result = fileChooser.showOpenDialog(this);
 
 		if (result == JFileChooser.APPROVE_OPTION) {
