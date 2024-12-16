@@ -30,7 +30,7 @@ public class Couleur
 	 * @param y Coordonnées y du point initial
 	 * @return L'image modifiée
 	 */
-	public static BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y)
+	public BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y)
 	{
 		// Initialisation de la liste des points
 		Queue<Point> file = new LinkedList<Point>();
@@ -69,7 +69,7 @@ public class Couleur
 	 * @param y Coordonnées y du point de référence
 	 * @return L'image modifiée
 	 */
-	public static BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y)
+	public BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y)
 	{
 		// Initialisation de la liste des points
 		Queue<Point> file = new LinkedList<Point>();
@@ -109,7 +109,7 @@ public class Couleur
 	 * @param contraste Le constraste à ajouter
 	 * @return La nouvelle image
 	 */
-	public static BufferedImage changerContraste(BufferedImage biOriginal, int contraste)
+	public BufferedImage changerContraste(BufferedImage biOriginal, int contraste)
 	{
 		Color couleur;
 
@@ -134,7 +134,7 @@ public class Couleur
 		return biOriginal;
 	}
 
-	public static BufferedImage changerLuminosite(BufferedImage biOriginal, int luminosite)
+	public BufferedImage changerLuminosite(BufferedImage biOriginal, int luminosite)
 	{
 		Color couleur;
 
@@ -164,7 +164,7 @@ public class Couleur
 	 * @param coul2 Deuxième couleur à comparée
 	 * @return La distance séparant les deux couleurs
 	 */
-	private static double distance (int coul1, int coul2)
+	private double distance (int coul1, int coul2)
 	{
 		Color color1 = new Color (coul1);
 		Color color2 = new Color (coul2);
@@ -177,7 +177,7 @@ public class Couleur
 	 * @param coul La couleur a vérifiée
 	 * @return La couleur changée si elle dépasse les bornes
 	 */
-	private static int verifBorneCouleur (int coul)
+	private int verifBorneCouleur (int coul)
 	{
 		if (coul > 255) { coul = 255;}
 		if (coul <   0) { coul =   0;}
