@@ -30,7 +30,7 @@ public class Couleur
 	 * @param y Coordonnées y du point initial
 	 * @return L'image modifiée
 	 */
-	public BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y)
+	public static BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y)
 	{
 		// Initialisation de la liste des points
 		Queue<Point> file = new LinkedList<Point>();
@@ -38,6 +38,9 @@ public class Couleur
 
 		// Récupération des couleurs en int
 		int intCoulOld = colOld.getRGB() & 0xFFFFFF;
+		int intCoulNew = colNew.getRGB() & 0xFFFFFF;
+
+		if (intCoulOld == intCoulNew) { return biOriginal; }
 
 		// Changement de tous les points présents dans la file
 		while ( ! file.isEmpty() )
@@ -69,7 +72,7 @@ public class Couleur
 	 * @param y Coordonnées y du point de référence
 	 * @return L'image modifiée
 	 */
-	public BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y)
+	public static BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y)
 	{
 		// Initialisation de la liste des points
 		Queue<Point> file = new LinkedList<Point>();
@@ -78,6 +81,8 @@ public class Couleur
 		// Récupération des couleurs en int
 		int intCoulOld  = colOld.getRGB() & 0xFFFFFF;
 		int coulTranspa = 0x00000000; // Couleur complètement transparente
+
+		if (intCoulOld == coulTranspa) { return biOriginal; }
 
 		System.out.printf("Couleur transparente : 0x%08X\n", coulTranspa);
 
@@ -109,7 +114,7 @@ public class Couleur
 	 * @param contraste Le constraste à ajouter
 	 * @return La nouvelle image
 	 */
-	public BufferedImage changerContraste(BufferedImage biOriginal, int contraste)
+	public static BufferedImage changerContraste(BufferedImage biOriginal, int contraste)
 	{
 		Color couleur;
 
@@ -134,7 +139,7 @@ public class Couleur
 		return biOriginal;
 	}
 
-	public BufferedImage changerLuminosite(BufferedImage biOriginal, int luminosite)
+	public static BufferedImage changerLuminosite(BufferedImage biOriginal, int luminosite)
 	{
 		Color couleur;
 
@@ -164,7 +169,7 @@ public class Couleur
 	 * @param coul2 Deuxième couleur à comparée
 	 * @return La distance séparant les deux couleurs
 	 */
-	private double distance (int coul1, int coul2)
+	private static double distance (int coul1, int coul2)
 	{
 		Color color1 = new Color (coul1);
 		Color color2 = new Color (coul2);
@@ -177,7 +182,7 @@ public class Couleur
 	 * @param coul La couleur a vérifiée
 	 * @return La couleur changée si elle dépasse les bornes
 	 */
-	private int verifBorneCouleur (int coul)
+	private static int verifBorneCouleur (int coul)
 	{
 		if (coul > 255) { coul = 255;}
 		if (coul <   0) { coul =   0;}

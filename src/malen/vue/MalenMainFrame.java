@@ -116,8 +116,8 @@ public class MalenMainFrame extends JFrame {
 		this.imagePanel.showRotationSlider();
 	}
 
-	public void onClick(BufferedImage biImage, int x, int y, Color coulPixel)
+	public void onClick(BufferedImage biImage, Color coulPixel, int x, int y)
 	{
-		this.controleur.onClick(biImage, x, y, coulPixel);
+		this.controleur.onClick(biImage, coulPixel, x, y);
 	}
 }
