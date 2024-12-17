@@ -91,6 +91,10 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
+	public BufferedImage getImage(){
+		return this.image;
+	}
+
 	public void pasteSubImage() {
 		System.out.println("oui");
 		if (mainFrame.getSubImage() != null && this.image != null && mainFrame.getPoint1() != null
