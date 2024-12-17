@@ -203,7 +203,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
         //     mainFrame.setPickedColor(color);
         // }
 
-        System.out.println("Coordonées : [" + clickPoint.getX() + ";" + clickPoint.getY() + "]");
+        System.out.println("Coordonées : [" + clickPoint.x() + ";" + clickPoint.y() + "]");
 
 		if (image != null) {
 			mainFrame.onClick(image, clickPoint.x(), clickPoint.y(), color);
