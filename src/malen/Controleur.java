@@ -29,6 +29,9 @@ public class Controleur {
 	public static final String SELECTION_RECTANGLE = "rectangle";
 	public static final String SELECTION_OVALE = "cercle";
 	public static final String EFFACE_FOND = "fond";
+	public static final String TEXT = "text";
+	public static final String LUMINOSITE = "lumi";
+	public static final String CONTRASTE = "cont";
 
 	private MalenMainFrame mainFrame;
 

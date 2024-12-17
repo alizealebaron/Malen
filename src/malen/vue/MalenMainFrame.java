@@ -9,9 +9,12 @@ import malen.modele.Point;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +23,7 @@ public class MalenMainFrame extends JFrame {
 
 	private MalenImagePanel imagePanel; // Référence au panneau d'image
 	private JScrollPane scrollPane; // JScrollPane pour gérer le défilement
+	private static final String REPERTOIRE = "./data/images/";
 
 	private Controleur controleur;
 
@@ -73,10 +77,59 @@ public class MalenMainFrame extends JFrame {
 		if (this.controleur.getCurseur().equals(curseur)) 
 		{
 			this.controleur.setCurseur(Controleur.SOURIS);
+			scrollPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		} 
 		else 
 		{
 			this.controleur.setCurseur(curseur);
+			changerCurseur(curseur);
+		}
+	}
+
+	/** Permet de changer le curseur selon le mode actuel
+	 * @param curseur Le mod activé
+	 */
+	private void changerCurseur (String curseur)
+	{
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image image = toolkit.getImage(REPERTOIRE + "pipette.png");
+		Cursor pipette = toolkit.createCustomCursor(image , new java.awt.Point(0, 0), "Pipette");
+
+		image = toolkit.getImage(REPERTOIRE + "remplissage.png");
+		Cursor pot = toolkit.createCustomCursor(image , new java.awt.Point(0, 0), "Pot");
+
+		image = toolkit.getImage(REPERTOIRE + "transparence.png");
+		Cursor trans = toolkit.createCustomCursor(image , new java.awt.Point(0, 0), "Transparence");
+
+		switch (curseur) 
+		{
+			case Controleur.SELECTION_RECTANGLE:
+				scrollPane.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				break;
+
+			case Controleur.SELECTION_OVALE:
+				scrollPane.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				break;
+
+			case Controleur.PIPETTE:
+				scrollPane.setCursor(pipette);
+				break;
+
+			case Controleur.POT_DE_PEINTURE:
+				scrollPane.setCursor(pot);
+				break;
+
+			case Controleur.EFFACE_FOND:
+				scrollPane.setCursor(trans);
+				break;
+
+			case Controleur.TEXT:
+				scrollPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+				break;
+		
+			default:
+				scrollPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				break;
 		}
 	}
 
