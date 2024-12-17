@@ -103,7 +103,15 @@ public class MalenMainFrame extends JFrame {
 		this.imagePanel.saveImageToFile(name);
 	}
 
-	public void switchRotationPlane()
+	public void switchRetournementHorizontal() {
+		imagePanel.switchFlipHorizontal();
+	}
+	
+	public void switchRetournementVertical() {
+		imagePanel.switchFlipVertical();
+	}
+
+	public void rotationAxiale()
 	{
 		this.imagePanel.showRotationSlider();
 	}
@@ -112,6 +120,4 @@ public class MalenMainFrame extends JFrame {
 	{
 		this.controleur.onClick(biImage, x, y, coulPixel);
 	}
-
-	
 }
