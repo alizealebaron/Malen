@@ -87,18 +87,17 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		if (!imageLoaded) {
-			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(0, 0, getWidth(), getHeight());
-			g.setColor(Color.BLACK);
-			g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
-		} else {
-			Graphics2D g2d = (Graphics2D) g.create();
-
-			int panelCenterX = getWidth() / 2;
-			int panelCenterY = getHeight() / 2;
-
-			g2d.translate(panelCenterX, panelCenterY);
+        // Si aucune image n'est chargée, afficher une zone vide (ou un message)
+        if (!imageLoaded) 
+        {
+            g.setColor(Color.LIGHT_GRAY);
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(Color.BLACK);
+            g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
+        } 
+        else 
+        {
+            Graphics2D g2d = (Graphics2D) g.create();
 
 			if (flipHorizontal) {
 				g2d.scale(-1, 1);
@@ -110,9 +109,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 			g2d.rotate(Math.toRadians(this.rotate_angle));
 
-			int imageCenterX = image.getWidth() / 2;
-			int imageCenterY = image.getHeight() / 2;
-			g2d.drawImage(image, -imageCenterX, -imageCenterY, null);
+            g2d.drawImage(image, 0, 0, null);
 
 			
 
@@ -200,11 +197,13 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		Point clickPoint = new Point((int) (awtPoint.getX()), (int) (awtPoint.getY()));
 		Color color = getColorAtPoint(clickPoint);
 
-		// if (color != null)
-		// {
-		// // Informer la fenêtre principale (MalenMainFrame) pour traiter la couleur
-		// mainFrame.setPickedColor(color);
-		// }
+        // if (color != null) 
+        // {
+        //     // Informer la fenêtre principale (MalenMainFrame) pour traiter la couleur
+        //     mainFrame.setPickedColor(color);
+        // }
+
+        System.out.println("Coordonées : [" + clickPoint.getX() + ";" + clickPoint.getY() + "]");
 
 		if (image != null) {
 			mainFrame.onClick(image, clickPoint.x(), clickPoint.y(), color);
