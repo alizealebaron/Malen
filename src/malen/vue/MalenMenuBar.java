@@ -273,11 +273,11 @@ public class MalenMenuBar extends JMenuBar
 	public static String[][] getModeleBar ( )
 	{
 		return new String[][] {
-			{	MENU, 				                "",			   "fichier.png",		"F"				    },
+			{	MENU, 				         "Fichier",			   "fichier.png",		"F"				    },
 			{		ITEM, 			     "Sauvegarder",			"sauvegarde.png",		"S", "CTRL+S"	    },
 			{		ITEM, 			"Sauvegarder Sous",			"sauvegarde.png",		"A", "CTRL+SHIFT+S"	},
 			{		ITEM, 			          "Ouvrir",			    "ouvrir.png",		"O", "CTRL+O"	    },
-			{	MENU, 			                	"",			   "couleur.png",		"C"	             	},
+			{	MENU, 			             "Couleur",			   "couleur.png",		"C"	             	},
 			{		ITEM, 			     "Remplissage",		   "remplissage.png",	    "I"			    	},
 			{		ITEM, 			     "Transparent",		  "transparence.png",	    "T"			    	},
 			{		ITEM, 			      "Luminosité",	        "luminosite.png",	    "L"			     	},
@@ -285,12 +285,12 @@ public class MalenMenuBar extends JMenuBar
 			{		SEPARATEUR														                 		},
 			{		ITEM, 			         "Pipette",	           "pipette.png",	    "P"			     	},
 			{		ITEM, 			         "Palette",	           "couleur.png",	    "L"			     	},
-			{	MENU, 				                "",		        "police.png",		"P"				    },
-			{	MENU, 				                "",		      "rotation.png",		"R"				    },
+			{	MENU, 				           "Texte",		        "police.png",		"P"				    },
+			{	MENU, 				        "Rotation",		      "rotation.png",		"R"				    },
 			{		ITEM, 			 "Rotation Axiale",	          "rotation.png",	    "O"			     	},
 			{		ITEM, 	   "Retournement Vertical",	         "verticale.png",	    "V"			     	},
 			{		ITEM,    "Retournement Horizontal",	       "horizontale.png",	    "H"			     	},
-			{	MENU, 				                "",		     "selection.png",		"S"				    },
+			{	MENU, 				       "Sélection",		     "selection.png",		"S"				    },
 			{		ITEM, 	     "Sélection Rectangle",	             "carre.png",	    "R"			     	},
 			{		ITEM,            "Sélection Ovale",	            "cercle.png",	    "O"			     	},
 		};
