@@ -236,16 +236,18 @@ public class MalenMenuBar extends JMenuBar
 				mainFrame.switchCurseur(Controleur.EFFACE_FOND);
 				break;
 			case "Luminosité":
+				mainFrame.afficherSlider('L');
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Constraste":
+				mainFrame.afficherSlider('C');
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Police":
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Rotation Axiale":
-				mainFrame.rotationAxiale();
+				mainFrame.afficherSlider('R');
 				break;
 			case "Retournement Vertical":
 				mainFrame.switchRetournementVertical();
@@ -275,9 +277,9 @@ public class MalenMenuBar extends JMenuBar
 	{
 		return new String[][] {
 			{	MENU, 				         "Fichier",			   "fichier.png",		"F"				    },
-			{		ITEM, 			     "Sauvegarder",			"sauvegarde.png",		"S", "CTRL+S"	    },
-			{		ITEM, 			"Sauvegarder Sous",			"sauvegarde.png",		"A", "CTRL+SHIFT+S"	},
 			{		ITEM, 			          "Ouvrir",			    "ouvrir.png",		"O", "CTRL+O"	    },
+			{		ITEM, 			     "Enregistrer",			"sauvegarde.png",		"S", "CTRL+S"	    },
+			{		ITEM, 		   "Entregistrer Sous",			"sauvegarde.png",		"A", "CTRL+SHIFT+S"	},
 			{	MENU, 			             "Couleur",			   "couleur.png",		"C"	             	},
 			{		ITEM, 			     "Remplissage",		   "remplissage.png",	    "I"			    	},
 			{		ITEM, 			     "Transparent",		  "transparence.png",	    "T"			    	},
