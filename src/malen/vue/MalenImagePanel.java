@@ -77,18 +77,6 @@ public class MalenImagePanel extends JPanel implements MouseListener {
         repaint();
     }
 
-    public BufferedImage flipVertical(BufferedImage sprite) {
-        BufferedImage img = new BufferedImage(sprite.getWidth(), sprite.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        
-        for (int xx = 0; xx < sprite.getWidth(); xx++) {
-            for (int yy = 0; yy < sprite.getHeight(); yy++) {
-                img.setRGB(xx, sprite.getHeight() - 1 - yy, sprite.getRGB(xx, yy));
-            }
-        }
-        
-        return img;
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
