@@ -14,7 +14,8 @@ public class MalenMainFrame extends JFrame {
 
 	private Controleur controleur;
 
-	public MalenMainFrame(Controleur controleur) {
+	public MalenMainFrame(Controleur controleur) 
+	{
 		this.controleur = controleur;
 		// Configuration de la fenêtre principale
 		setTitle("Mini Paint Application");
@@ -38,7 +39,8 @@ public class MalenMainFrame extends JFrame {
 	}
 
 	// Méthode pour ouvrir le dialogue d'importation d'image
-	public void importImage() {
+	public void importImage() 
+	{
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(
 				new javax.swing.filechooser.FileNameExtensionFilter("png", "gif"));
@@ -59,7 +61,8 @@ public class MalenMainFrame extends JFrame {
 		}
 	}
 
-	public void switchPipette() {
+	public void switchPipette() 
+	{
 		if (this.controleur.getCurseur().equals(Controleur.PIPETTE)) {
 			this.controleur.setCurseur(Controleur.SOURIS);
 		} else {
@@ -67,7 +70,8 @@ public class MalenMainFrame extends JFrame {
 		}
 	}
 
-	public void chooseColor() {
+	public void chooseColor() 
+	{
 		// Afficher un sélecteur de couleur
 		Color selectedColor = JColorChooser.showDialog(null, "Choisir une couleur", controleur.getCurrentColor());
 
@@ -76,7 +80,8 @@ public class MalenMainFrame extends JFrame {
 		}
 	}
 
-	public void setPickedColor(Color color) {
+	public void setPickedColor(Color color) 
+	{
 		if (this.controleur.getCurseur().equals(Controleur.PIPETTE)) {
 			// Afficher la couleur dans le label
 			// colorLabel.setBackground(color);
@@ -97,6 +102,11 @@ public class MalenMainFrame extends JFrame {
 	public void switchRotationPlane()
 	{
 		this.imagePanel.showRotationSlider();
+	}
+
+	public void onClick()
+	{
+		this.controleur.onClick();
 	}
 
 	

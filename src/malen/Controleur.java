@@ -22,6 +22,8 @@ public class Controleur
 	public static final String PIPETTE = "pipette";
 	public static final String SOURIS = "souris";
 
+  	public String etatCurseur;
+
 	private MalenMainFrame mainFrame;
 	private Couleur        couleur;
 
@@ -59,6 +61,23 @@ public class Controleur
 	// Méthode pour obtenir la couleur actuelle
 	public Color getCurrentColor() {
 		return currentColor;
+	}
+
+	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+	/*                                                          Action avec le click                                                                    */
+	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+	public void onClick()
+	{
+		// switch (this.etatCurseur) 
+		// {
+		// 	case value->
+				
+		// 		break;
+		
+		// 	default:
+		// 		break;
+		// }
 	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
