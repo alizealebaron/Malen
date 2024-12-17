@@ -12,7 +12,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -21,14 +20,13 @@ import java.awt.image.BufferedImage;
 
 public class MalenImagePanel extends JPanel implements MouseListener, MouseMotionListener {
 
-	private BufferedImage image;
-	private boolean imageLoaded = false;
-	private MalenMainFrame mainFrame;
-	private double rotate_angle = 0;
-	private JSlider rotationSlider;
-	private JPanel sliderPanel;
-	private boolean flipHorizontal = false;
-	private boolean flipVertical = false;
+    private BufferedImage  image;
+    private boolean        imageLoaded = false;
+    private MalenMainFrame mainFrame;
+    private double         rotate_angle = 0;
+    private JPanel         sliderPanel;
+    private boolean        flipHorizontal = false;
+    private boolean        flipVertical = false;
 
 	private JSlider outilSlider;
 	private char outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
@@ -168,20 +166,30 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		repaint();
 	}
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+    public BufferedImage getImage() {
+        Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+        return this.image = rotation.getImage(this.image);
+    }
 
-		// Si aucune image n'est chargée, afficher une zone vide (ou un message)
-		if (!imageLoaded) {
-			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(0, 0, getWidth(), getHeight());
-			g.setColor(Color.BLACK);
-			g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
-		} else {
-			Graphics2D g2d = (Graphics2D) g.create();
-			Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
-			BufferedImage transformedImage = rotation.applyTransformations(image);
+    @Override
+    protected void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+        
+        if (!imageLoaded)
+        {
+            g.setColor(Color.LIGHT_GRAY);
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(Color.BLACK);
+            g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
+        }
+        else
+        {
+            Graphics2D g2d = (Graphics2D) g.create();
+            Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+            BufferedImage transformedImage = rotation.applyTransformations(image);
+
+            this.setSize(new Dimension(image.getWidth(), image.getHeight()));
 
 			g2d.drawImage(transformedImage, 0, 0, null);
 

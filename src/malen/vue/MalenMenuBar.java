@@ -12,6 +12,7 @@ package malen.vue;
 import javax.swing.*;
 import malen.Controleur;
 import java.awt.event.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.awt.*;
 import java.util.List;
@@ -218,10 +219,10 @@ public class MalenMenuBar extends JMenuBar
 	private void handleMenuAction(String menuItem) {
 		switch (menuItem) {
 			case "Sauvegarder":
-				this.mainFrame.saveImageToFile("output.png");
+				mainFrame.saveImage( "image_malen.png");
 				break;
-			case "Sauvegarder sous":
-				System.out.println("ouai, tu utilise : " + menuItem);
+			case "Sauvegarder Sous":
+				mainFrame.saveImage();
 				break;
 			case "Ouvrir":
 				mainFrame.importImage();
