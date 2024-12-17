@@ -65,13 +65,16 @@ public class MalenMenuBar extends JMenuBar {
 		JMenu rotationMenu = new JMenu("Rotation");
 		this.add(rotationMenu);
 		JMenuItem axialItem = new JMenuItem("Rotation Axial");
-		JMenuItem planeItem = new JMenuItem("Rotation Plane");
+		JMenuItem mirrorVertiItem = new JMenuItem("Retournement vertical");
+		JMenuItem mirrorHorizItem = new JMenuItem("Retournement horizontal");
 		rotationMenu.add(axialItem);
-		rotationMenu.add(planeItem);
+		rotationMenu.add(mirrorVertiItem);
+		rotationMenu.add(mirrorHorizItem);
 
 		// Ajouter l'ItemListener à chaque JMenuItem
 		addItemListenerToMenu(axialItem);
-		addItemListenerToMenu(planeItem);
+		addItemListenerToMenu(mirrorVertiItem);
+		addItemListenerToMenu(mirrorHorizItem);
 
 		// Menu Sélection
 		JMenu selectionMenu = new JMenu("Sélection");
@@ -153,8 +156,11 @@ public class MalenMenuBar extends JMenuBar {
 			case "Rotation Axial":
 				mainFrame.rotationAxiale();
 				break;
-			case "Rotation Plane":
-				mainFrame.switchRotationPlane();
+			case "Retournement vertical":
+				mainFrame.switchRetournementVertical();
+				break;
+			case "Retournement horizontal":
+				mainFrame.switchRetournementHorizontal();
 				break;
 			case "Sélection Rectangle":
 				System.out.println("ouai, tu utilise : " + menuItem);

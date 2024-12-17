@@ -94,15 +94,16 @@ public class MalenMainFrame extends JFrame {
 		this.imagePanel.saveImageToFile(name);
 	}
 
-	public void switchRotationPlane()
-	{
-		this.imagePanel.rotationPlane(180);
+	public void switchRetournementHorizontal() {
+		imagePanel.switchFlipHorizontal();
+	}
+	
+	public void switchRetournementVertical() {
+		imagePanel.switchFlipVertical();
 	}
 
 	public void rotationAxiale()
 	{
 		this.imagePanel.showRotationSlider();
 	}
-
-	
 }

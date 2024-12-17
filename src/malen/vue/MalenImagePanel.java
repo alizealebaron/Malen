@@ -16,6 +16,8 @@ public class MalenImagePanel extends JPanel implements MouseListener {
     private double        rotate_angle = 0;
     private JSlider       rotationSlider;
     private JPanel        sliderPanel;
+    private boolean flipHorizontal = false;
+    private boolean flipVertical = false;
 
     public MalenImagePanel(MalenMainFrame mainframe) {
         this.mainFrame = mainframe;
@@ -63,27 +65,63 @@ public class MalenImagePanel extends JPanel implements MouseListener {
         repaint();
     }
 
-    public void rotationPlane (double angle)
+    public void switchFlipHorizontal()
     {
-        this.rotate_angle += angle % 360;
+        this.flipHorizontal = !this.flipHorizontal;
         repaint();
+    }
+
+    public void switchFlipVertical()
+    {
+        this.flipVertical = !this.flipVertical;
+        repaint();
+    }
+
+    public BufferedImage flipVertical(BufferedImage sprite) {
+        BufferedImage img = new BufferedImage(sprite.getWidth(), sprite.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        
+        for (int xx = 0; xx < sprite.getWidth(); xx++) {
+            for (int yy = 0; yy < sprite.getHeight(); yy++) {
+                img.setRGB(xx, sprite.getHeight() - 1 - yy, sprite.getRGB(xx, yy));
+            }
+        }
+        
+        return img;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Si aucune image n'est chargée, afficher une zone vide (ou un message)
         if (!imageLoaded) {
             g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(0, 0, getWidth(), getHeight()); // Zone vide
+            g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.BLACK);
             g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
-        } else {
+        }
+        else
+        {
             Graphics2D g2d = (Graphics2D) g.create();
-            g2d.translate(this.getSize().width/2, this.getSize().height/2);
-            g2d.rotate(Math.toRadians(this.rotate_angle));  
-            g2d.drawImage(image, -image.getWidth()/2, -image.getHeight()/2, null);
+
+            int panelCenterX = getWidth() / 2;
+            int panelCenterY = getHeight() / 2;
+
+            g2d.translate(panelCenterX, panelCenterY);
+
+            if (flipHorizontal) {
+                g2d.scale(-1, 1);
+            }
+
+            if (flipVertical) {
+                g2d.scale(1, -1);
+            }
+
+            g2d.rotate(Math.toRadians(this.rotate_angle));
+
+            int imageCenterX = image.getWidth() / 2;
+            int imageCenterY = image.getHeight() / 2;
+            g2d.drawImage(image, -imageCenterX, -imageCenterY, null);
+
             g2d.dispose();
         }
     }
