@@ -116,7 +116,7 @@ public class MalenMainFrame extends JFrame {
 	}
 
 	public void onClick(BufferedImage biImage, int x, int y, Color coulPixel) {
-		this.controleur.onClick(biImage, x, y, coulPixel);
+		this.controleur.onClick(biImage, coulPixel, x, y);
 		if (controleur.getCurseur().equals(Controleur.SELECTION_RECTANGLE)) {
 			Point point1 = controleur.getPoint1();
 			Point point2 = controleur.getPoint2();
