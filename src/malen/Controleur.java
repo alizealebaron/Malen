@@ -31,9 +31,8 @@ public class Controleur {
 	public static final String EFFACE_FOND = "fond";
 
 	private MalenMainFrame mainFrame;
-	private Couleur couleur;
 
-	private Color currentColor = Color.BLACK; // La couleur actuelle, par défaut noire
+	private Color currentColor = Color.GREEN; // La couleur actuelle, par défaut noire
 	private String curseur;
 
 	private Point point1;
@@ -104,8 +103,10 @@ public class Controleur {
 	 * curseur
 	 * 
 	 */
-	public void onClick(BufferedImage biImage, int x, int y, Color coulPixel) {
-		switch (this.curseur) {
+	public void onClick (BufferedImage biImage, Color coulPixel, int x, int y)
+	{
+		switch (this.curseur) 
+		{
 			case Controleur.SOURIS:
 
 				System.out.println("Souris en mode : " + this.curseur);
@@ -119,13 +120,15 @@ public class Controleur {
 			case Controleur.POT_DE_PEINTURE:
 
 				System.out.println("Souris en mode : " + this.curseur);
+
+				fill(biImage, coulPixel, this.currentColor, x, y);
+
 				break;
 
 			case Controleur.EFFACE_FOND:
 
 				System.out.println("Souris en mode : " + this.curseur);
-
-				// // if (x > biImage.getWidth() && x <)
+				
 				fondTransparent(biImage, coulPixel, x, y);
 
 				break;
@@ -164,20 +167,24 @@ public class Controleur {
 	/*---------------------------------------------------------Liaison modele couleur-------------------------------------------------------------------*/
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	public BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y) {
-		return this.couleur.fill(biOriginal, colOld, colNew, x, y);
+	public BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y)
+	{
+		return Couleur.fill(biOriginal, colOld, colNew, x, y);
 	}
 
-	public BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y) {
-		return this.couleur.fondTransparent(biOriginal, colOld, x, y);
+	public BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y)
+	{
+		return Couleur.fondTransparent(biOriginal, colOld, x, y);
 	}
 
-	public BufferedImage changerContraste(BufferedImage biOriginal, int contraste) {
-		return this.couleur.changerContraste(biOriginal, contraste);
+	public BufferedImage changerContraste(BufferedImage biOriginal, int contraste)
+	{
+		return Couleur.changerContraste(biOriginal, contraste);
 	}
 
-	public BufferedImage changerLuminosite(BufferedImage biOriginal, int luminosite) {
-		return this.couleur.changerLuminosite(biOriginal, luminosite);
+	public BufferedImage changerLuminosite(BufferedImage biOriginal, int luminosite)
+	{
+		return Couleur.changerLuminosite(biOriginal, luminosite);
 	}
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
