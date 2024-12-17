@@ -23,10 +23,12 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	private boolean imageLoaded = false; // Pour savoir si une image a été chargée
 	private MalenMainFrame mainFrame; // Référence à la fenêtre principale (Vue)
 	private double rotate_angle = 0;
-	private JSlider rotationSlider;
 	private JPanel sliderPanel;
 	private boolean flipHorizontal = false;
 	private boolean flipVertical = false;
+
+	private JSlider outilSlider;
+	private char    outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
 
 	public MalenImagePanel(MalenMainFrame mainframe) {
 		this.mainFrame = mainframe;
@@ -35,15 +37,42 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		sliderPanel = new JPanel();
 		sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS)); // Empile les composants verticalement
 
-		rotationSlider = new JSlider(0, 360, 0); // Curseur de 0 à 360 degrés
-		rotationSlider.setVisible(false);
+		outilSlider = new JSlider(0, 0, 0); // Curseur de 0 à 360 degrés
+		outilSlider.setVisible(false);
 
-		sliderPanel.add(rotationSlider);
+		sliderPanel.add(outilSlider);
 		add(sliderPanel, BorderLayout.NORTH);
 
-		rotationSlider.addChangeListener(e -> {
-			int angle = rotationSlider.getValue() % 360;
-			this.rotateImage(angle);
+		outilSlider.addChangeListener(e -> 
+		{
+			int value = outilSlider.getValue();
+
+			switch (this.outil) 
+			{
+				case 'R':
+					
+					this.rotateImage(value % 360);
+					break;
+
+				case 'L':
+					if (!outilSlider.getValueIsAdjusting() && image != null) 
+					{
+						this.mainFrame.changerLuminosite(image, value);
+						repaint();
+					}
+					break;
+
+				case 'C':
+				if (!outilSlider.getValueIsAdjusting() && image != null)
+				{
+					this.mainFrame.changerContraste(image, value);
+					repaint();
+				}
+				break;
+			
+				default:
+					break;
+			}
 		});
 
 		addMouseListener(this); // Ajouter un écouteur de souris
@@ -63,12 +92,49 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
-	public void showRotationSlider() {
-		rotationSlider.setVisible(true);
-		rotationSlider.setEnabled(true);
+	public void showOutilSlider(char outil) 
+	{
+
+		if (outilSlider.isVisible() && outil == this.outil)
+		{
+			outilSlider.setVisible(false);
+			outilSlider.setEnabled(false);
+		}
+		else
+		{
+			outilSlider.setVisible(true);
+			outilSlider.setEnabled(true);
+		}
+
+		this.outil = outil;
+
+		switch (this.outil) 
+		{
+			case 'R':
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(0);
+				outilSlider.setMaximum(360);
+				break;
+
+			case 'L':
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(-255);
+				outilSlider.setMaximum(255);
+				break;
+
+			case 'C':
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(-100);
+				outilSlider.setMaximum(100);
+				break;
+
+			default:
+				break;
+		}
 	}
 
-	public void rotateImage(double angle) {
+	public void rotateImage(double angle) 
+	{
 		this.rotate_angle = angle;
 		repaint();
 	}
