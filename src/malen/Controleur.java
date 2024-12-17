@@ -19,8 +19,15 @@ import java.awt.image.BufferedImage;
 
 public class Controleur 
 {
-	public static final String PIPETTE = "pipette";
-	public static final String SOURIS = "souris";
+	/**
+	 * 
+	 */
+	public static final String PIPETTE             =   "pipette";
+	public static final String SOURIS              =    "souris";
+	public static final String POT_DE_PEINTURE     =       "pot";
+	public static final String SELECTION_RECTANGLE = "rectangle";
+	public static final String SELECTION_OVALE     =    "cercle";
+	public static final String EFFACE_FOND         =      "fond";
 
 	private MalenMainFrame mainFrame;
 	private Couleur        couleur;
@@ -59,6 +66,47 @@ public class Controleur
 	// Méthode pour obtenir la couleur actuelle
 	public Color getCurrentColor() {
 		return currentColor;
+	}
+
+	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+	/*                                                          Action avec le click                                                                    */
+	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+	/** Méthode permettant de faire une action pendant un click selon l'état du curseur
+	 * 
+	 */
+	public void onClick (BufferedImage biImage, int x, int y, Color coulPixel)
+	{
+		switch (this.curseur) 
+		{
+			case Controleur.SOURIS:
+
+            	System.out.println("Souris en mode : " + this.curseur);
+				break;
+
+			case Controleur.PIPETTE:
+
+				System.out.println("Souris en mode : " + this.curseur);
+				break;
+			
+			case Controleur.POT_DE_PEINTURE:
+
+				System.out.println("Souris en mode : " + this.curseur);	
+				break;
+
+			case Controleur.EFFACE_FOND:
+
+				System.out.println("Souris en mode : " + this.curseur);
+				
+				// // if (x > biImage.getWidth() && x <)
+				fondTransparent(biImage, coulPixel, x, y);
+
+				break;
+
+			default:
+				System.out.println("Choix incorrect");
+				break;
+		}
 	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
