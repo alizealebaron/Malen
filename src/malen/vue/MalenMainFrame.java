@@ -1,5 +1,6 @@
 package malen.vue;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import malen.Controleur;
@@ -13,6 +14,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 public class MalenMainFrame extends JFrame {
 
@@ -78,6 +80,10 @@ public class MalenMainFrame extends JFrame {
 		}
 	}
 
+	public boolean isCurseurOn(String curseur) {
+		return this.controleur.getCurseur().equals(curseur);
+	}
+
 	public void chooseColor() {
 		// Afficher un sélecteur de couleur
 		Color selectedColor = JColorChooser.showDialog(null, "Choisir une couleur", controleur.getCurrentColor());
@@ -91,7 +97,7 @@ public class MalenMainFrame extends JFrame {
 	 * @deprecated
 	 */
 	public void setPickedColor(Color color) {
-		if (this.controleur.getCurseur().equals(Controleur.PIPETTE)) {
+		if (this.isCurseurOn(Controleur.PIPETTE)) {
 			// Afficher la couleur dans le label
 			// colorLabel.setBackground(color);
 
@@ -132,28 +138,6 @@ public class MalenMainFrame extends JFrame {
 
 	public void onClick(BufferedImage biImage, int x, int y, Color coulPixel) {
 		this.controleur.onClick(biImage, coulPixel, x, y);
-		if (controleur.getCurseur().equals(Controleur.SELECTION_RECTANGLE)) {
-			Point point1 = controleur.getPoint1();
-			Point point2 = controleur.getPoint2();
-
-			// Si un point1 existe, afficher un rectangle en pointillé
-			if (point1 != null) {
-				Graphics2D g = (Graphics2D) biImage.getGraphics();
-				g.setColor(Color.BLACK);
-				g.setStroke(
-						new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10, new float[] { 10 }, 0)); // pointillé
-				g.drawRect(Math.min(point1.x(), x), Math.min(point1.y(), y), Math.abs(x - point1.x()),
-						Math.abs(y - point1.y()));
-				repaint(); // Redessiner
-			}
-
-			// Si les deux points sont définis, créer la subimage
-			if (point1 != null && point2 != null) {
-				controleur.createSubImage(biImage);
-				// Remettre les points à null après la sélection
-				controleur.resetSelection();
-			}
-		}
 	}
 
 	public Point getPoint1() {
@@ -162,5 +146,50 @@ public class MalenMainFrame extends JFrame {
 
 	public Point getPoint2() {
 		return controleur.getPoint2();
+	}
+
+	public void setPoint1(Point point1) {
+		controleur.setPoint1(point1);
+	}
+
+	public void setPoint2(Point point2) {
+		controleur.setPoint2(point2);
+	}
+
+	public void createSubImage(BufferedImage image) {
+		this.controleur.createSubImage(image);
+	}
+
+	public BufferedImage getSubImage() {
+		return this.controleur.getSubImage();
+	}
+
+	public void pasteSubImage(){
+		System.out.println("oui");
+		this.imagePanel.pasteSubImage();
+	}
+
+	public BufferedImage getImage() {
+		return this.imagePanel.getImage();
+	}
+
+	public void saveImage() {
+		JFileChooser fileChooser = new JFileChooser();
+		int userSelection = fileChooser.showSaveDialog(null);
+
+		if (userSelection == JFileChooser.APPROVE_OPTION) {
+			File fileToSave = fileChooser.getSelectedFile();
+			this.saveImage(fileToSave.getAbsolutePath() + ".png");
+		}
+	}
+	
+	public void saveImage(String fileName) {
+		try {
+			File outputFile = new File(fileName);
+			ImageIO.write(this.imagePanel.getImage(), "png", outputFile);
+			System.out.println("Image sauvegardée dans : " + fileName);
+		} catch (IOException e) {
+			System.err.println("Erreur lors de la sauvegarde : " + e.getMessage());
+		}
 	}
 }
