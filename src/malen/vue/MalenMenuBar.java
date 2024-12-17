@@ -254,10 +254,10 @@ public class MalenMenuBar extends JMenuBar
 			case "Retournement Horizontal":
 				mainFrame.switchRetournementHorizontal();
 				break;
-			case "Rectangle":
+			case "Sélection Rectangle":
 				mainFrame.switchCurseur(Controleur.SELECTION_RECTANGLE);
 				break;
-			case "Oval":
+			case "Sélection Ovale":
 				mainFrame.switchCurseur(Controleur.SELECTION_OVALE);
 				break;
 			case "Pipette":
