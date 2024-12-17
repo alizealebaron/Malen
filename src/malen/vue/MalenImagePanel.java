@@ -3,6 +3,7 @@ package malen.vue;
 import javax.swing.*;
 
 import malen.modele.Point;
+import malen.modele.Rotation;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -19,13 +20,14 @@ import java.awt.image.BufferedImage;
 
 public class MalenImagePanel extends JPanel implements MouseListener, MouseMotionListener {
 
-	private BufferedImage image; // Image qui sera affichée
-	private boolean imageLoaded = false; // Pour savoir si une image a été chargée
-	private MalenMainFrame mainFrame; // Référence à la fenêtre principale (Vue)
-	private double rotate_angle = 0;
-	private JPanel sliderPanel;
-	private boolean flipHorizontal = false;
-	private boolean flipVertical = false;
+    private BufferedImage  image;
+    private boolean        imageLoaded = false;
+    private MalenMainFrame mainFrame;
+    private double         rotate_angle = 0;
+    private JSlider        rotationSlider;
+    private JPanel         sliderPanel;
+    private boolean        flipHorizontal = false;
+    private boolean        flipVertical = false;
 
 	private JSlider outilSlider;
 	private char    outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
@@ -133,11 +135,11 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
-	public void rotateImage(double angle) 
-	{
-		this.rotate_angle = angle;
-		repaint();
-	}
+    public void rotateImage(double angle)
+    {
+        this.rotate_angle = angle;
+        repaint();
+    }
 
 	public void switchFlipHorizontal() {
 		this.flipHorizontal = !this.flipHorizontal;
@@ -149,94 +151,40 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		repaint();
 	}
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-        // Si aucune image n'est chargée, afficher une zone vide (ou un message)
-        if (!imageLoaded) 
+    @Override
+    protected void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+        
+        if (!imageLoaded)
         {
             g.setColor(Color.LIGHT_GRAY);
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.BLACK);
             g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
-        } 
-        else 
+        }
+        else
         {
             Graphics2D g2d = (Graphics2D) g.create();
+            Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+            BufferedImage transformedImage = rotation.applyTransformations(image);
 
-			if (flipHorizontal) {
-				g2d.scale(-1, 1);
-			}
+            g2d.drawImage(transformedImage, 0, 0, null);
+            g2d.dispose();
+        }
+    }
 
-			if (flipVertical) {
-				g2d.scale(1, -1);
-			}
-
-			g2d.rotate(Math.toRadians(this.rotate_angle));
-
-            g2d.drawImage(image, 0, 0, null);
-
-			
-
-			// Dessiner le rectangle de sélection
-            if (mainFrame.getPoint1() != null) {
-                Point point1 = mainFrame.getPoint1();
-                Point point2 = mainFrame.getPoint2();
-                if (point2 != null) {
-                    g2d.setColor(Color.BLACK);
-                    g2d.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10, new float[]{10}, 0)); // pointillé
-                    g2d.drawRect(Math.min(point1.x(), point2.x()), Math.min(point1.y(), point2.y()),
-                            Math.abs(point1.x() - point2.x()), Math.abs(point1.y() - point2.y()));
-                }
-            }
-
-			g2d.dispose();
-		}
-	}
-
-	public void saveImageToFile(String filePath) {
-		if (!imageLoaded) {
-			JOptionPane.showMessageDialog(this, "Aucune image à sauvegarder.", "Erreur", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
-
-		// Calcul des dimensions du rectangle englobant après rotation
-		double radians = Math.toRadians(rotate_angle);
-		int newWidth = (int) Math.round(Math.abs(image.getWidth() * Math.cos(radians)) +
-				Math.abs(image.getHeight() * Math.sin(radians)));
-		int newHeight = (int) Math.round(Math.abs(image.getWidth() * Math.sin(radians)) +
-				Math.abs(image.getHeight() * Math.cos(radians)));
-
-		// Créer un BufferedImage avec la taille calculée
-		BufferedImage outputImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = outputImage.createGraphics();
-
-		// Activer le rendu haute qualité
-		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		// Appliquer la rotation autour du centre de la nouvelle image
-		g2d.translate(newWidth / 2, newHeight / 2);
-		g2d.rotate(radians);
-		g2d.translate(-image.getWidth() / 2, -image.getHeight() / 2);
-
-		// Dessiner l'image transformée
-		g2d.drawImage(image, 0, 0, null);
-		g2d.dispose();
-
-		// Sauvegarder l'image transformée
-		try {
-			File outputFile = new File(filePath);
-			ImageIO.write(outputImage, "png", outputFile);
-			JOptionPane.showMessageDialog(this, "Image sauvegardée avec succès.", "Succès",
-					JOptionPane.INFORMATION_MESSAGE);
-		} catch (IOException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Erreur lors de la sauvegarde.", "Erreur", JOptionPane.ERROR_MESSAGE);
-		}
-	}
+    public void saveImageToFile(String filePath)
+    {
+        if (!imageLoaded)
+        {
+            JOptionPane.showMessageDialog(this, "Aucune image à sauvegarder.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    
+        Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+        rotation.saveImageToFile(image, filePath);
+    }
 
 	// Méthode pour obtenir la taille de l'image
 	public Dimension getImageSize() {
