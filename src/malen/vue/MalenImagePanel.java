@@ -166,7 +166,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		repaint();
 	}
 
-    public BufferedImage getImage() {
+    public BufferedImage changeImage() {
         Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
         return this.image = rotation.getImage(this.image);
     }
@@ -188,7 +188,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
             Graphics2D g2d = (Graphics2D) g.create();
             Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
             BufferedImage transformedImage = rotation.applyTransformations(image);
-
+			
             this.setSize(new Dimension(image.getWidth(), image.getHeight()));
 
 			g2d.drawImage(transformedImage, 0, 0, null);
@@ -240,6 +240,13 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+
+		if (this.outil == 'R') {
+			this.changeImage();
+			outilSlider.setValue(0);
+			this.repaint();
+		}
+
 		// Lorsqu'on clique sur l'image, obtenir la couleur sous le curseur
 		java.awt.Point awtPoint = e.getPoint();
 		Point clickPoint = new Point((int) awtPoint.getX(), (int) awtPoint.getY());
