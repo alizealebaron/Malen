@@ -46,7 +46,9 @@ public class MalenImagePanel extends JPanel implements MouseListener {
             this.image = ImageIO.read(new File(imagePath));
             this.imageLoaded = true;
             this.repaint(); // Redessiner après avoir chargé l'image
-        } catch (IOException e) {
+        } 
+        catch (IOException e) 
+        {
             e.printStackTrace();
             this.imageLoaded = false;
             JOptionPane.showMessageDialog(this, "Erreur lors du chargement de l'image.", "Erreur",
@@ -81,20 +83,17 @@ public class MalenImagePanel extends JPanel implements MouseListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if (!imageLoaded) {
+        // Si aucune image n'est chargée, afficher une zone vide (ou un message)
+        if (!imageLoaded) 
+        {
             g.setColor(Color.LIGHT_GRAY);
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.BLACK);
             g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
-        }
-        else
+        } 
+        else 
         {
             Graphics2D g2d = (Graphics2D) g.create();
-
-            int panelCenterX = getWidth() / 2;
-            int panelCenterY = getHeight() / 2;
-
-            g2d.translate(panelCenterX, panelCenterY);
 
             if (flipHorizontal) {
                 g2d.scale(-1, 1);
@@ -106,9 +105,7 @@ public class MalenImagePanel extends JPanel implements MouseListener {
 
             g2d.rotate(Math.toRadians(this.rotate_angle));
 
-            int imageCenterX = image.getWidth() / 2;
-            int imageCenterY = image.getHeight() / 2;
-            g2d.drawImage(image, -imageCenterX, -imageCenterY, null);
+            g2d.drawImage(image, 0, 0, null);
 
             g2d.dispose();
         }
@@ -186,6 +183,8 @@ public class MalenImagePanel extends JPanel implements MouseListener {
         //     // Informer la fenêtre principale (MalenMainFrame) pour traiter la couleur
         //     mainFrame.setPickedColor(color);
         // }
+
+        System.out.println("Coordonées : [" + clickPoint.getX() + ";" + clickPoint.getY() + "]");
 
         if (image != null)
         {
