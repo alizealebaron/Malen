@@ -66,10 +66,14 @@ public class MalenMainFrame extends JFrame {
 		}
 	}
 
-	public void switchCurseur(String curseur) {
-		if (this.controleur.getCurseur().equals(curseur)) {
+	public void switchCurseur(String curseur) 
+	{
+		if (this.controleur.getCurseur().equals(curseur)) 
+		{
 			this.controleur.setCurseur(Controleur.SOURIS);
-		} else {
+		} 
+		else 
+		{
 			this.controleur.setCurseur(curseur);
 		}
 	}

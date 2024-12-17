@@ -24,7 +24,6 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
     private boolean        imageLoaded = false;
     private MalenMainFrame mainFrame;
     private double         rotate_angle = 0;
-    private JSlider        rotationSlider;
     private JPanel         sliderPanel;
     private boolean        flipHorizontal = false;
     private boolean        flipVertical = false;
