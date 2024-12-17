@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 
 public class Rotation
 {
-
     private double  angle;
     private boolean flipHorizontal;
     private boolean flipVertical;
@@ -28,10 +27,10 @@ public class Rotation
 		int originalHeight = image.getHeight();
 	
 		double radians = Math.toRadians(angle);
-		int newWidth  = (int) Math.round(Math.abs(originalWidth * Math.cos(radians)) + 
-										 Math.abs(originalHeight * Math.sin(radians)));
-		int newHeight = (int) Math.round(Math.abs(originalWidth * Math.sin(radians)) + 
-										 Math.abs(originalHeight * Math.cos(radians)));
+		int newWidth   = (int) Math.round(Math.abs(originalWidth  * Math.cos(radians)) + 
+										  Math.abs(originalHeight * Math.sin(radians)));
+		int newHeight  = (int) Math.round(Math.abs(originalWidth  * Math.sin(radians)) + 
+										  Math.abs(originalHeight * Math.cos(radians)));
 	
 		BufferedImage outputImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = outputImage.createGraphics();
