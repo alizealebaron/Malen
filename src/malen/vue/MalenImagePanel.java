@@ -95,11 +95,6 @@ public class MalenImagePanel extends JPanel implements MouseListener {
         {
             Graphics2D g2d = (Graphics2D) g.create();
 
-            int panelCenterX = getWidth() / 2;
-            int panelCenterY = getHeight() / 2;
-
-            g2d.translate(panelCenterX, panelCenterY);
-
             if (flipHorizontal) {
                 g2d.scale(-1, 1);
             }
@@ -110,9 +105,7 @@ public class MalenImagePanel extends JPanel implements MouseListener {
 
             g2d.rotate(Math.toRadians(this.rotate_angle));
 
-            int imageCenterX = image.getWidth() / 2;
-            int imageCenterY = image.getHeight() / 2;
-            g2d.drawImage(image, -imageCenterX, -imageCenterY, null);
+            g2d.drawImage(image, 0, 0, null);
 
             g2d.dispose();
         }
