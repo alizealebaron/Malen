@@ -115,8 +115,19 @@ public class MalenMainFrame extends JFrame {
 		imagePanel.switchFlipVertical();
 	}
 
-	public void rotationAxiale() {
-		this.imagePanel.showRotationSlider();
+	public void afficherSlider(char outil) 
+	{
+		this.imagePanel.showOutilSlider(outil);
+	}
+
+	public void changerContraste(BufferedImage bi, int value)
+	{
+		this.controleur.changerContraste(bi, value);
+	}
+
+	public void changerLuminosite(BufferedImage bi, int value)
+	{
+		this.controleur.changerLuminosite(bi, value);
 	}
 
 	public void onClick(BufferedImage biImage, int x, int y, Color coulPixel) {

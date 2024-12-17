@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import malen.Controleur;
 import malen.modele.Point;
+import malen.modele.Rotation;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -20,14 +21,17 @@ import java.awt.image.BufferedImage;
 
 public class MalenImagePanel extends JPanel implements MouseListener, MouseMotionListener {
 
-	private BufferedImage image; // Image qui sera affichée
-	private boolean imageLoaded = false; // Pour savoir si une image a été chargée
-	private MalenMainFrame mainFrame; // Référence à la fenêtre principale (Vue)
+	private BufferedImage image;
+	private boolean imageLoaded = false;
+	private MalenMainFrame mainFrame;
 	private double rotate_angle = 0;
 	private JSlider rotationSlider;
 	private JPanel sliderPanel;
 	private boolean flipHorizontal = false;
 	private boolean flipVertical = false;
+
+	private JSlider outilSlider;
+	private char outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
 	private boolean isMovingSubImage;
 
 	public MalenImagePanel(MalenMainFrame mainframe) {
@@ -37,15 +41,38 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		sliderPanel = new JPanel();
 		sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS)); // Empile les composants verticalement
 
-		rotationSlider = new JSlider(0, 360, 0); // Curseur de 0 à 360 degrés
-		rotationSlider.setVisible(false);
+		outilSlider = new JSlider(0, 0, 0); // Curseur de 0 à 360 degrés
+		outilSlider.setVisible(false);
 
-		sliderPanel.add(rotationSlider);
+		sliderPanel.add(outilSlider);
 		add(sliderPanel, BorderLayout.NORTH);
 
-		rotationSlider.addChangeListener(e -> {
-			int angle = rotationSlider.getValue() % 360;
-			this.rotateImage(angle);
+		outilSlider.addChangeListener(e -> {
+			int value = outilSlider.getValue();
+
+			switch (this.outil) {
+				case 'R':
+
+					this.rotateImage(value % 360);
+					break;
+
+				case 'L':
+					if (!outilSlider.getValueIsAdjusting() && image != null) {
+						this.mainFrame.changerLuminosite(image, value);
+						repaint();
+					}
+					break;
+
+				case 'C':
+					if (!outilSlider.getValueIsAdjusting() && image != null) {
+						this.mainFrame.changerContraste(image, value);
+						repaint();
+					}
+					break;
+
+				default:
+					break;
+			}
 		});
 
 		addMouseListener(this); // Ajouter un écouteur de souris
@@ -90,9 +117,40 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
-	public void showRotationSlider() {
-		rotationSlider.setVisible(true);
-		rotationSlider.setEnabled(true);
+	public void showOutilSlider(char outil) {
+
+		if (outilSlider.isVisible() && outil == this.outil) {
+			outilSlider.setVisible(false);
+			outilSlider.setEnabled(false);
+		} else {
+			outilSlider.setVisible(true);
+			outilSlider.setEnabled(true);
+		}
+
+		this.outil = outil;
+
+		switch (this.outil) {
+			case 'R':
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(0);
+				outilSlider.setMaximum(360);
+				break;
+
+			case 'L':
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(-255);
+				outilSlider.setMaximum(255);
+				break;
+
+			case 'C':
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(-100);
+				outilSlider.setMaximum(100);
+				break;
+
+			default:
+				break;
+		}
 	}
 
 	public void rotateImage(double angle) {
@@ -122,18 +180,10 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 			g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
 		} else {
 			Graphics2D g2d = (Graphics2D) g.create();
+			Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+			BufferedImage transformedImage = rotation.applyTransformations(image);
 
-			if (flipHorizontal) {
-				g2d.scale(-1, 1);
-			}
-
-			if (flipVertical) {
-				g2d.scale(1, -1);
-			}
-
-			g2d.rotate(Math.toRadians(this.rotate_angle));
-
-			g2d.drawImage(image, 0, 0, null);
+			g2d.drawImage(transformedImage, 0, 0, null);
 
 			// Dessiner le rectangle de sélection
 			if (mainFrame.getPoint1() != null) {
@@ -158,41 +208,8 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 			return;
 		}
 
-		// Calcul des dimensions du rectangle englobant après rotation
-		double radians = Math.toRadians(rotate_angle);
-		int newWidth = (int) Math.round(Math.abs(image.getWidth() * Math.cos(radians)) +
-				Math.abs(image.getHeight() * Math.sin(radians)));
-		int newHeight = (int) Math.round(Math.abs(image.getWidth() * Math.sin(radians)) +
-				Math.abs(image.getHeight() * Math.cos(radians)));
-
-		// Créer un BufferedImage avec la taille calculée
-		BufferedImage outputImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = outputImage.createGraphics();
-
-		// Activer le rendu haute qualité
-		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		// Appliquer la rotation autour du centre de la nouvelle image
-		g2d.translate(newWidth / 2, newHeight / 2);
-		g2d.rotate(radians);
-		g2d.translate(-image.getWidth() / 2, -image.getHeight() / 2);
-
-		// Dessiner l'image transformée
-		g2d.drawImage(image, 0, 0, null);
-		g2d.dispose();
-
-		// Sauvegarder l'image transformée
-		try {
-			File outputFile = new File(filePath);
-			ImageIO.write(outputImage, "png", outputFile);
-			JOptionPane.showMessageDialog(this, "Image sauvegardée avec succès.", "Succès",
-					JOptionPane.INFORMATION_MESSAGE);
-		} catch (IOException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Erreur lors de la sauvegarde.", "Erreur", JOptionPane.ERROR_MESSAGE);
-		}
+		Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+		rotation.saveImageToFile(image, filePath);
 	}
 
 	// Méthode pour obtenir la taille de l'image
