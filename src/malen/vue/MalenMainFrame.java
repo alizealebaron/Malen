@@ -96,6 +96,11 @@ public class MalenMainFrame extends JFrame {
 
 	public void switchRotationPlane()
 	{
+		this.imagePanel.rotationPlane(180);
+	}
+
+	public void rotationAxiale()
+	{
 		this.imagePanel.showRotationSlider();
 	}
 

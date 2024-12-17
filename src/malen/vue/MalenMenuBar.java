@@ -151,10 +151,10 @@ public class MalenMenuBar extends JMenuBar {
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Rotation Axial":
-				System.out.println("ouai, tu utilise : " + menuItem);
+				mainFrame.rotationAxiale();
 				break;
 			case "Rotation Plane":
-			mainFrame.switchRotationPlane();
+				mainFrame.switchRotationPlane();
 				break;
 			case "Sélection Rectangle":
 				System.out.println("ouai, tu utilise : " + menuItem);
