@@ -5,6 +5,7 @@ import javax.swing.*;
 import malen.Controleur;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class MalenMainFrame extends JFrame {
@@ -61,12 +62,12 @@ public class MalenMainFrame extends JFrame {
 		}
 	}
 
-	public void switchPipette() 
+	public void switchCurseur(String curseur) 
 	{
-		if (this.controleur.getCurseur().equals(Controleur.PIPETTE)) {
+		if (this.controleur.getCurseur().equals(curseur)) {
 			this.controleur.setCurseur(Controleur.SOURIS);
 		} else {
-			this.controleur.setCurseur(Controleur.PIPETTE);
+			this.controleur.setCurseur(curseur);
 		}
 	}
 
@@ -80,6 +81,9 @@ public class MalenMainFrame extends JFrame {
 		}
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPickedColor(Color color) 
 	{
 		if (this.controleur.getCurseur().equals(Controleur.PIPETTE)) {
@@ -104,9 +108,9 @@ public class MalenMainFrame extends JFrame {
 		this.imagePanel.showRotationSlider();
 	}
 
-	public void onClick()
+	public void onClick(BufferedImage biImage, int x, int y, Color coulPixel)
 	{
-		this.controleur.onClick();
+		this.controleur.onClick(biImage, x, y, coulPixel);
 	}
 
 	

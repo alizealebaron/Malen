@@ -1,6 +1,9 @@
 package malen.vue;
 
 import javax.swing.*;
+
+import malen.Controleur;
+
 import java.awt.event.*;
 
 public class MalenMenuBar extends JMenuBar {
@@ -128,9 +131,11 @@ public class MalenMenuBar extends JMenuBar {
 				break;
 			case "Pot de peinture":
 				System.out.println("ouai, tu utilise : " + menuItem);
+				mainFrame.switchCurseur(Controleur.POT_DE_PEINTURE);
 				break;
 			case "Fond":
 				System.out.println("ouai, tu utilise : " + menuItem);
+				mainFrame.switchCurseur(Controleur.EFFACE_FOND);
 				break;
 			case "Luminance":
 				System.out.println("ouai, tu utilise : " + menuItem);
@@ -157,13 +162,13 @@ public class MalenMenuBar extends JMenuBar {
 				mainFrame.switchRotationPlane();
 				break;
 			case "Sélection Rectangle":
-				System.out.println("ouai, tu utilise : " + menuItem);
+				mainFrame.switchCurseur(Controleur.SELECTION_RECTANGLE);
 				break;
 			case "Sélection Ovale":
-				System.out.println("ouai, tu utilise : " + menuItem);
+				mainFrame.switchCurseur(Controleur.SELECTION_OVALE);
 				break;
 			case "Choix de Couleur sur l'image":
-				mainFrame.switchPipette();
+				mainFrame.switchCurseur(Controleur.PIPETTE);
 				break;
 			case "Choix de Couleur":
 				mainFrame.chooseColor();

@@ -157,12 +157,15 @@ public class MalenImagePanel extends JPanel implements MouseListener {
         Point clickPoint = e.getPoint();
         Color color = getColorAtPoint(clickPoint);
 
-        if (color != null) 
-        {
-            // Informer la fenêtre principale (MalenMainFrame) pour traiter la couleur
-            mainFrame.setPickedColor(color);
+        // if (color != null) 
+        // {
+        //     // Informer la fenêtre principale (MalenMainFrame) pour traiter la couleur
+        //     mainFrame.setPickedColor(color);
+        // }
 
-            mainFrame.onClick();
+        if (image != null)
+        {
+            mainFrame.onClick(image, (int) clickPoint.getX(), (int) clickPoint.getY(), color);
         }
     }
 
