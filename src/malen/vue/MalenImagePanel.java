@@ -5,13 +5,12 @@ import javax.swing.*;
 import malen.modele.Point;
 import malen.modele.Rotation;
 
-import java.awt.BasicStroke;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -84,6 +83,11 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		this.flipVertical = !this.flipVertical;
 		repaint();
 	}
+
+    public BufferedImage getImage() {
+        Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+        return rotation.getImage(this.image);
+    }
 
     @Override
     protected void paintComponent(Graphics g)

@@ -51,6 +51,8 @@ public class Rotation
 	
 		g2d.drawImage(image, 0, 0, null);
 		g2d.dispose();
+
+		image = outputImage;
 	
 		return outputImage;
 	}
@@ -69,5 +71,11 @@ public class Rotation
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erreur lors de la sauvegarde.", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+	public BufferedImage getImage(BufferedImage image)
+	{
+        BufferedImage transformedImage = applyTransformations(image);
+		return transformedImage;
     }
 }
