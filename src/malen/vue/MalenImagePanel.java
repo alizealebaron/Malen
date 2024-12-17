@@ -86,7 +86,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
     public BufferedImage getImage() {
         Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
-        return rotation.getImage(this.image);
+        return this.image = rotation.getImage(this.image);
     }
 
     @Override
@@ -106,6 +106,8 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
             Graphics2D g2d = (Graphics2D) g.create();
             Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
             BufferedImage transformedImage = rotation.applyTransformations(image);
+
+            this.setSize(new Dimension(image.getWidth(), image.getHeight()));
 
             g2d.drawImage(transformedImage, 0, 0, null);
             g2d.dispose();
