@@ -1,14 +1,39 @@
 package malen.vue;
 
 import javax.swing.*;
-
 import malen.Controleur;
-
 import java.awt.event.*;
+import java.awt.*;
 
-public class MalenMenuBar extends JMenuBar {
+public class MalenMenuBar extends JMenuBar 
+{
+	/* ------------------------------------------------------------ */
+	/*             Constante pour navigation modulable              */
+	/* ------------------------------------------------------------ */
+
+	private static final String REPERTOIRE = "./data/images/";
+
+	// Identifiants des éléments du menu
+	private static final String MENU            = "M";
+	private static final String ITEM            = "I";
+	private static final String SEPARATEUR      = "S";
+	private static final String SOUS_MENU       = "m";
+	private static final String ITEM_SM         = "i";
+	private static final String SEPARATEUR_SM   = "s";
+
+	// Position des éléments du menu dans le "modeleBar"
+	private static final int TYPE = 0;
+	private static final int NAME = 1;
+	private static final int ICON = 2;
+	private static final int CHAR = 3;
+	private static final int KEYS = 4;
+
+	/* ------------------------------------------------------------ */
+	/*                                                              */
+	/* ------------------------------------------------------------ */
 
 	private MalenMainFrame mainFrame; // Référence vers MainFrame
+	
 
 	public MalenMenuBar(MalenMainFrame mainFrame) {
 		this.mainFrame = mainFrame;
@@ -47,7 +72,13 @@ public class MalenMenuBar extends JMenuBar {
 		addItemListenerToMenu(bwItem);
 
 		// Menu Texte
-		JMenu textMenu = new JMenu("Texte");
+
+		ImageIcon originalIcon = new ImageIcon(REPERTOIRE + "police.png"); // Chemin vers l'icône
+        Image resizedImage = originalIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+		JMenu textMenu = new JMenu("");
+		textMenu.setIcon(resizedIcon);
 		this.add(textMenu);
 		JMenuItem fontItem = new JMenuItem("Police");
 		JMenuItem colorItem = new JMenuItem("Couleur");
@@ -183,5 +214,28 @@ public class MalenMenuBar extends JMenuBar {
 				System.out.println("Action non définie pour " + menuItem);
 				break;
 		}
+	}
+
+	public static String[][] getModeleBar ( )
+	{
+		return new String[][] {
+			{	MENU, 				                "",			   "fichier.png",		"F"				    },
+			{		ITEM, 			     "Sauvegarder",			"sauvegarde.png",		"S", "CTRL+S"	    },
+			{		ITEM, 			"Sauvegarder Sous",			"sauvegarde.png",		"A", "CTRL+SHIFT+S"	},
+			{		ITEM, 			          "Ouvrir",			    "ouvrir.png",		"O", "CTRL+O"	    },
+			{	MENU, 			                	"",			   "couleur.png",		"C"	             	},
+			{		ITEM, 			     "Remplissage",		   "remplissage.png",	    "I"			    	},
+			{		ITEM, 			     "Transparent",		  "transparence.png",	    "T"			    	},
+			{		ITEM, 			      "Luminosité",	        "luminosite.png",	    "L"			     	},
+			{		ITEM, 			      "Constraste",	        "constraste.png",	    "C"			     	},
+			{	MENU, 				                "",		        "police.png",		"P"				    },
+			{	MENU, 				                "",		      "rotation.png",		"R"				    },
+			{		ITEM, 			 "Rotation Axiale",	          "rotation.png",	    "O"			     	},
+			{		ITEM, 	   "Retournement Vertical",	         "verticale.png",	    "V"			     	},
+			{		ITEM,  "Retournement Horizontale",	       "horizontale.png",	    "H"			     	},
+			{	MENU, 				                "",		     "selection.png",		"S"				    },
+			{		ITEM, 	               "Rectangle",	         "verticale.png",	    "R"			     	},
+			{		ITEM,                       "Oval",	       "horizontale.png",	    "O"			     	},
+		};
 	}
 }
