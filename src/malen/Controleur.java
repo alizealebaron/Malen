@@ -6,6 +6,8 @@ import javax.swing.SwingUtilities;
 
 import malen.vue.MalenMainFrame;
 import malen.modele.Couleur;
+import malen.modele.Point;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -17,27 +19,33 @@ import java.awt.image.BufferedImage;
  * @date : 16/12/2024
  */
 
-public class Controleur 
-{
+public class Controleur {
 	/**
 	 * 
 	 */
-	public static final String PIPETTE             =   "pipette";
-	public static final String SOURIS              =    "souris";
-	public static final String POT_DE_PEINTURE     =       "pot";
+	public static final String PIPETTE = "pipette";
+	public static final String SOURIS = "souris";
+	public static final String POT_DE_PEINTURE = "pot";
 	public static final String SELECTION_RECTANGLE = "rectangle";
-	public static final String SELECTION_OVALE     =    "cercle";
-	public static final String EFFACE_FOND         =      "fond";
+	public static final String SELECTION_OVALE = "cercle";
+	public static final String EFFACE_FOND = "fond";
 
 	private MalenMainFrame mainFrame;
 
 	private Color currentColor = Color.GREEN; // La couleur actuelle, par défaut noire
 	private String curseur;
 
-	public Controleur() 
-	{
+	private Point point1;
+	private Point point2;
+	private BufferedImage subImage;
+
+	public Controleur() {
 		mainFrame = new MalenMainFrame(this); // Crée la fenêtre principale
 		this.curseur = "souris";
+
+		this.point1 = null;
+		this.point2 = null;
+		this.subImage = null;
 	}
 
 	// Méthode pour démarrer l'application
@@ -47,13 +55,20 @@ public class Controleur
 		});
 	}
 
-	public void setCurseur(String curseur)
-	{
+	public void setCurseur(String curseur) {
 		this.curseur = curseur;
+		if (!curseur.equals(SELECTION_RECTANGLE)) {
+			resetSelection(); // Réinitialiser la sélection quand on sort du mode sélection rectangle
+		}
 	}
 
-	public String getCurseur()
-	{
+	public void resetSelection() {
+		point1 = null;
+		point2 = null;
+		subImage = null;
+	}
+
+	public String getCurseur() {
 		return this.curseur;
 	}
 
@@ -67,11 +82,25 @@ public class Controleur
 		return currentColor;
 	}
 
-	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
-	/*                                                          Action avec le click                                                                    */
-	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+	public Point getPoint1() {
+		return point1;
+	}
 
-	/** Méthode permettant de faire une action pendant un click selon l'état du curseur
+	public Point getPoint2() {
+		return point2;
+	}
+
+	public BufferedImage getSubImage() {
+		return subImage;
+	}
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*---------------------------------------------------------Action avec le click---------------------------------------------------------------------*/
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	/**
+	 * Méthode permettant de faire une action pendant un click selon l'état du
+	 * curseur
 	 * 
 	 */
 	public void onClick (BufferedImage biImage, Color coulPixel, int x, int y)
@@ -80,14 +109,14 @@ public class Controleur
 		{
 			case Controleur.SOURIS:
 
-            	System.out.println("Souris en mode : " + this.curseur);
+				System.out.println("Souris en mode : " + this.curseur);
 				break;
 
 			case Controleur.PIPETTE:
 
 				System.out.println("Souris en mode : " + this.curseur);
 				break;
-			
+
 			case Controleur.POT_DE_PEINTURE:
 
 				System.out.println("Souris en mode : " + this.curseur);
@@ -104,15 +133,39 @@ public class Controleur
 
 				break;
 
+			case Controleur.SELECTION_RECTANGLE:
+
+				System.out.println("Souris en mode : " + this.curseur);
+				if (point1 == null) {
+					point1 = new Point(x, y); // Premier clic : définir le premier point
+				} else {
+					point2 = new Point(x, y); // Deuxième clic : définir le deuxième point
+					createSubImage(biImage); // Créer la subimage entre les deux points
+				}
+
+				break;
+
 			default:
 				System.out.println("Choix incorrect");
 				break;
+
 		}
 	}
 
-	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
-	/*                                                         Liaison Modele Couleur                                                                   */
-	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+	public void createSubImage(BufferedImage image) {
+		if (point1 != null && point2 != null) {
+			int x1 = Math.min(point1.x(), point2.x());
+			int y1 = Math.min(point1.y(), point2.y());
+			int width = Math.abs(point1.x() - point2.x());
+			int height = Math.abs(point1.y() - point2.y());
+
+			subImage = image.getSubimage(x1, y1, width, height);
+		}
+	}
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*---------------------------------------------------------Liaison modele couleur-------------------------------------------------------------------*/
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	public BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y)
 	{
@@ -134,9 +187,9 @@ public class Controleur
 		return Couleur.changerLuminosite(biOriginal, luminosite);
 	}
 
-	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
-	/*                                                                    Main                                                                          */
-	/* ------------------------------------------------------------------------------------------------------------------------------------------------ */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*------------------------------------------------------------------main----------------------------------------------------------------------------*/
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	public static void main(String[] args) {
 		// Lancer l'application depuis le contrôleur
