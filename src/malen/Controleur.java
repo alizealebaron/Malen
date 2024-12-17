@@ -90,8 +90,16 @@ public class Controleur {
 		return point2;
 	}
 
+	public void setPoint1(Point point1) {
+		this.point1 = point1;
+	}
+
+	public void setPoint2(Point point2) {
+		this.point2 = point2;
+	}
+
 	public BufferedImage getSubImage() {
-		return subImage;
+		return this.subImage;
 	}
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -103,10 +111,8 @@ public class Controleur {
 	 * curseur
 	 * 
 	 */
-	public void onClick (BufferedImage biImage, Color coulPixel, int x, int y)
-	{
-		switch (this.curseur) 
-		{
+	public void onClick(BufferedImage biImage, Color coulPixel, int x, int y) {
+		switch (this.curseur) {
 			case Controleur.SOURIS:
 
 				System.out.println("Souris en mode : " + this.curseur);
@@ -128,22 +134,23 @@ public class Controleur {
 			case Controleur.EFFACE_FOND:
 
 				System.out.println("Souris en mode : " + this.curseur);
-				
+
 				fondTransparent(biImage, coulPixel, x, y);
 
 				break;
 
-			case Controleur.SELECTION_RECTANGLE:
-
-				System.out.println("Souris en mode : " + this.curseur);
-				if (point1 == null) {
-					point1 = new Point(x, y); // Premier clic : définir le premier point
-				} else {
-					point2 = new Point(x, y); // Deuxième clic : définir le deuxième point
-					createSubImage(biImage); // Créer la subimage entre les deux points
-				}
-
-				break;
+				case Controleur.SELECTION_RECTANGLE:
+	
+					System.out.println("Souris en mode : " + this.curseur);
+					System.out.println(this.subImage!=null);
+	
+					if (this.subImage!=null) { //peut poser des problemes, mettre verif sur point1 et point2
+						System.out.println("oui");
+						this.mainFrame.pasteSubImage();
+					}
+	
+					break;
+	
 
 			default:
 				System.out.println("Choix incorrect");
@@ -153,13 +160,19 @@ public class Controleur {
 	}
 
 	public void createSubImage(BufferedImage image) {
-		if (point1 != null && point2 != null) {
-			int x1 = Math.min(point1.x(), point2.x());
-			int y1 = Math.min(point1.y(), point2.y());
-			int width = Math.abs(point1.x() - point2.x());
-			int height = Math.abs(point1.y() - point2.y());
+		if (image == null) {
+			this.subImage = null;
+		} else {
+			if (point1 != null && point2 != null && point1.x() != point2.x() && point1.y() != point2.y()) {
+				int x1 = Math.min(point1.x(), point2.x());
+				int y1 = Math.min(point1.y(), point2.y());
+				int width = Math.abs(point1.x() - point2.x());
+				int height = Math.abs(point1.y() - point2.y());
 
-			subImage = image.getSubimage(x1, y1, width, height);
+				System.out.println("subimage : " + x1 + " " + y1 + " " + width + " " + height + " ");
+
+				subImage = image.getSubimage(x1, y1, width, height);
+			}
 		}
 	}
 
@@ -167,23 +180,19 @@ public class Controleur {
 	/*---------------------------------------------------------Liaison modele couleur-------------------------------------------------------------------*/
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	public BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y)
-	{
+	public BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y) {
 		return Couleur.fill(biOriginal, colOld, colNew, x, y);
 	}
 
-	public BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y)
-	{
+	public BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y) {
 		return Couleur.fondTransparent(biOriginal, colOld, x, y);
 	}
 
-	public BufferedImage changerContraste(BufferedImage biOriginal, int contraste)
-	{
+	public BufferedImage changerContraste(BufferedImage biOriginal, int contraste) {
 		return Couleur.changerContraste(biOriginal, contraste);
 	}
 
-	public BufferedImage changerLuminosite(BufferedImage biOriginal, int luminosite)
-	{
+	public BufferedImage changerLuminosite(BufferedImage biOriginal, int luminosite) {
 		return Couleur.changerLuminosite(biOriginal, luminosite);
 	}
 
