@@ -6,7 +6,7 @@ import malen.Controleur;
 import malen.modele.Point;
 import malen.modele.Rotation;
 
-
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
