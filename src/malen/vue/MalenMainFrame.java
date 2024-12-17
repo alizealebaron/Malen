@@ -92,11 +92,11 @@ public class MalenMainFrame extends JFrame {
 	private void changerCurseur (String curseur)
 	{
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Image image = toolkit.getImage(REPERTOIRE + "pipette.png");
+		Image image = toolkit.getImage(REPERTOIRE + "pipette-retournee.png");
 		Cursor pipette = toolkit.createCustomCursor(image , new java.awt.Point(0, 0), "Pipette");
 
-		image = toolkit.getImage(REPERTOIRE + "remplissage.png");
-		Cursor pot = toolkit.createCustomCursor(image , new java.awt.Point(0, 0), "Pot");
+		image = toolkit.getImage(REPERTOIRE + "pot.png");
+		Cursor pot = toolkit.createCustomCursor(image , new java.awt.Point(0,15), "Pot");
 
 		image = toolkit.getImage(REPERTOIRE + "transparence.png");
 		Cursor trans = toolkit.createCustomCursor(image , new java.awt.Point(0, 0), "Transparence");

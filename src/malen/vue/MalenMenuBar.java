@@ -218,10 +218,10 @@ public class MalenMenuBar extends JMenuBar
 	// Méthode pour gérer l'action de chaque élément du menu
 	private void handleMenuAction(String menuItem) {
 		switch (menuItem) {
-			case "Sauvegarder":
+			case "Enregistrer":
 				mainFrame.saveImage( "image_malen.png");
 				break;
-			case "Sauvegarder Sous":
+			case "Enregistrer Sous":
 				mainFrame.saveImage();
 				break;
 			case "Ouvrir":
