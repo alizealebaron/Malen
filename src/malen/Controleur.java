@@ -1,9 +1,12 @@
 package malen;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Toolkit;
 
 import javax.swing.SwingUtilities;
 
@@ -38,6 +41,8 @@ public class Controleur {
 	public static final String LUMINOSITE = "lumi";
 	public static final String CONTRASTE = "cont";
 
+	private static final String REPERTOIRE = "./data/images/";
+
 	private MalenMainFrame mainFrame;
 	private MalenSubFrame subFrame;
 
@@ -57,7 +62,7 @@ public class Controleur {
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	public Controleur() {
-		mainFrame = new MalenMainFrame(this); // Crée la fenêtre principale
+		this.mainFrame = new MalenMainFrame(this); // Crée la fenêtre principale
 		this.curseur = "souris";
 
 		this.point1 = null;
@@ -116,6 +121,65 @@ public class Controleur {
 
 	public void setCurseur(String curseur) {
 		this.curseur = curseur;
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		switch (this.curseur) {
+			case Controleur.SELECTION_RECTANGLE:
+				this.mainFrame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				}
+				break;
+
+			case Controleur.SELECTION_OVALE:
+				this.mainFrame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				}
+				break;
+
+			case Controleur.PIPETTE:
+				this.mainFrame.setCursor(toolkit.createCustomCursor(
+						toolkit.getImage(REPERTOIRE + "pipette-retournee.png"), new java.awt.Point(0, 0), "Pipette"));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(
+							toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "pipette-retournee.png"),
+									new java.awt.Point(0, 0), "Pipette"));
+				}
+				break;
+
+			case Controleur.POT_DE_PEINTURE:
+				this.mainFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "pot.png"),
+						new java.awt.Point(0, 15), "Pot"));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "pot.png"),
+							new java.awt.Point(0, 15), "Pot"));
+				}
+				break;
+
+			case Controleur.EFFACE_FOND:
+				this.mainFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "transparence.png"),
+						new java.awt.Point(0, 0), "Transparence"));
+				if (this.subFrame != null) {
+					this.subFrame
+							.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "transparence.png"),
+									new java.awt.Point(0, 0), "Transparence"));
+				}
+				break;
+
+			case Controleur.TEXT:
+				this.mainFrame.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+				}
+				break;
+
+			default:
+				this.mainFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				}
+				break;
+		}
 		if (!curseur.equals(SELECTION_RECTANGLE)) {
 			resetSelection(); // Réinitialiser la sélection quand on sort du mode sélection rectangle
 		}

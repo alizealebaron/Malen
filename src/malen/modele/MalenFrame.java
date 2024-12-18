@@ -26,7 +26,6 @@ public abstract class MalenFrame extends JFrame {
 	protected Controleur controleur;
 	protected MalenImagePanel imagePanel;
 	protected JScrollPane scrollPane;
-	private static final String REPERTOIRE = "./data/images/";
 	private Color currentColor = Color.BLACK; // La couleur actuelle, par défaut noire
 
 	public MalenFrame(Controleur controleur) {
@@ -72,58 +71,13 @@ public abstract class MalenFrame extends JFrame {
 	public void switchCurseur(String curseur) {
 		if (this.controleur.getCurseur().equals(curseur)) {
 			this.controleur.setCurseur(Controleur.SOURIS);
-			scrollPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		} else {
 			this.controleur.setCurseur(curseur);
-			changerCurseur(curseur);
 		}
 	}
 
-	/**
-	 * Permet de changer le curseur selon le mode actuel
-	 * 
-	 * @param curseur Le mod activé
-	 */
-	private void changerCurseur(String curseur) {
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Image image = toolkit.getImage(REPERTOIRE + "pipette-retournee.png");
-		Cursor pipette = toolkit.createCustomCursor(image, new java.awt.Point(0, 0), "Pipette");
-
-		image = toolkit.getImage(REPERTOIRE + "pot.png");
-		Cursor pot = toolkit.createCustomCursor(image, new java.awt.Point(0, 15), "Pot");
-
-		image = toolkit.getImage(REPERTOIRE + "transparence.png");
-		Cursor trans = toolkit.createCustomCursor(image, new java.awt.Point(0, 0), "Transparence");
-
-		switch (curseur) {
-			case Controleur.SELECTION_RECTANGLE:
-				scrollPane.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-				break;
-
-			case Controleur.SELECTION_OVALE:
-				scrollPane.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-				break;
-
-			case Controleur.PIPETTE:
-				scrollPane.setCursor(pipette);
-				break;
-
-			case Controleur.POT_DE_PEINTURE:
-				scrollPane.setCursor(pot);
-				break;
-
-			case Controleur.EFFACE_FOND:
-				scrollPane.setCursor(trans);
-				break;
-
-			case Controleur.TEXT:
-				scrollPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-				break;
-
-			default:
-				scrollPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-				break;
-		}
+	public void setCursor(Cursor nouveauCurseur){
+		this.scrollPane.setCursor(nouveauCurseur);
 	}
 
 	public boolean isCurseurOn(String curseur) {
@@ -230,8 +184,28 @@ public abstract class MalenFrame extends JFrame {
 		return this.controleur.getSubImage();
 	}
 
-	public void pasteSubImage() {
-		this.imagePanel.pasteSubImage();
+	public BufferedImage pasteSubImage() {
+		BufferedImage image = this.imagePanel.getImage();
+		
+		if (this.getSubImage() != null && image != null && this.getPoint1() != null
+				&& this.getPoint2() != null) {
+			// Déterminer les coordonnées où coller la subimage
+			int x = Math.min(this.getPoint1().x(), this.getPoint2().x());
+			int y = Math.min(this.getPoint1().y(), this.getPoint2().y());
+
+			// Dessiner la subimage sur l'image principale
+			Graphics2D g2d = image.createGraphics();
+			g2d.drawImage(this.getSubImage(), x, y, null);
+			g2d.dispose();
+
+			// Réinitialiser la sélection et la subimage
+			this.setPoint1(null);
+			this.setPoint2(null); // Réinitialiser le deuxième point
+			this.createSubImage(null);
+
+			// Redessiner le panneau pour voir les changements
+		}
+		return image;
 	}
 
 	public BufferedImage getImage() {

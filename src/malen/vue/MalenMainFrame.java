@@ -14,10 +14,7 @@ import java.io.IOException;
 
 public class MalenMainFrame extends MalenFrame {
 
-	private MalenImagePanel imagePanel; // Référence au panneau d'image
 	private MalenMenuBar menuPanel;
-
-	protected Controleur controleur;
 
 	public MalenMainFrame(Controleur controleur) {
 		super(controleur);

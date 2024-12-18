@@ -10,9 +10,7 @@ import malen.Controleur;
 import malen.modele.MalenFrame;
 
 public class MalenSubFrame extends MalenFrame {
-	private MalenMainFrame mainFrame;
 	private MalenMenuBar subMenuBar;
-	protected Controleur controleur;
 
 	private static final String[][] MODELE_SUB_BAR = {
 			{ "M", "Fichier", "fichier.png", "F" },
@@ -37,19 +35,11 @@ public class MalenSubFrame extends MalenFrame {
 
 	public MalenSubFrame(MalenMainFrame mainFrame, Controleur controleur) {
 		super(controleur);
-		this.mainFrame = mainFrame;
-		this.controleur = controleur;
-
 		this.setTitle("Malen - Fenêtre Secondaire");
 		this.setLocation(500, 250);
 
 		this.subMenuBar = new MalenMenuBar(this, MODELE_SUB_BAR);
 		add(subMenuBar, BorderLayout.NORTH);
-	}
-
-	public void subFrame() {
-		this.mainFrame.setVisible(false);
-		System.out.println("SALUT");
 	}
 
 	public void onClickRight(MouseEvent e) {
