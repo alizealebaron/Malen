@@ -1,6 +1,7 @@
 package malen;
 
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
@@ -10,6 +11,7 @@ import javax.swing.SwingUtilities;
 import malen.vue.MalenMainFrame;
 import malen.modele.Couleur;
 import malen.modele.Point;
+import malen.nouvellevue.FramePrincipale;
 
 import java.awt.image.BufferedImage;
 
@@ -38,7 +40,7 @@ public class Controleur
 	public static final String LUMINOSITE = "lumi";
 	public static final String CONTRASTE = "cont";
 
-	private MalenMainFrame mainFrame;
+	private FramePrincipale mainFrame;
 
 	private Color currentColor = Color.BLACK; // La couleur actuelle, par défaut noire
 	private String curseur;
@@ -54,7 +56,7 @@ public class Controleur
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	public Controleur() {
-		mainFrame = new MalenMainFrame(this); // Crée la fenêtre principale
+		mainFrame = new FramePrincipale(this); // Crée la fenêtre principale
 		this.curseur = "souris";
 
 		this.point1 = null;
@@ -87,11 +89,11 @@ public class Controleur
 			resetSelection(); // Réinitialiser la sélection quand on sort du mode sélection rectangle
 	}
 
-	public void setColor (Color selectedColor) 
-	{
-		currentColor = selectedColor;
-		this.mainFrame.updateButton();
-	}
+	// public void setColor (Color selectedColor) 
+	// {
+	// 	currentColor = selectedColor;
+	// 	this.mainFrame.updateButton();
+	// }
 
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -137,7 +139,7 @@ public class Controleur
 			case Controleur.PIPETTE:
 
 				System.out.println("Souris en mode : " + this.curseur);
-				setColor(coulPixel);
+				// this.setColor(coulPixel);
 				break;
 
 			case Controleur.POT_DE_PEINTURE:
@@ -152,14 +154,14 @@ public class Controleur
 
 			case Controleur.SELECTION_RECTANGLE:
 				if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
-					this.mainFrame.pasteSubImage();
+					// this.mainFrame.pasteSubImage();
 				}
 
 				break;
 
 				case Controleur.SELECTION_OVALE:	
 					if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
-						this.mainFrame.pasteSubImage();
+						// this.mainFrame.pasteSubImage();
 					}
 	
 					break;
