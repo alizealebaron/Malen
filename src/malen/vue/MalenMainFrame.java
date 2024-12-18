@@ -10,7 +10,6 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -21,19 +20,15 @@ public class MalenMainFrame extends JFrame {
 	private MalenImagePanel imagePanel; // Référence au panneau d'image
 	private JScrollPane scrollPane; // JScrollPane pour gérer le défilement
 
-	private Controleur controleur;
+	protected Controleur controleur;
 
 	public MalenMainFrame(Controleur controleur) {
 		this.controleur = controleur;
-		// Configuration de la fenêtre principale
-		setTitle("Mini Paint Application");
+		setTitle("Malen - Fenêtre Principale");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1000, 700);
 		setLayout(new BorderLayout());
-
-		// Ajouter le panneau de menu
-		MalenMenuBar menuPanel = new MalenMenuBar(this);
-		add(menuPanel, BorderLayout.NORTH);
+		
 
 		// Ajouter le panneau d'affichage d'image dans un JScrollPane
 		imagePanel = new MalenImagePanel(this);
@@ -187,5 +182,48 @@ public class MalenMainFrame extends JFrame {
 		} catch (IOException e) {
 			System.err.println("Erreur lors de la sauvegarde : " + e.getMessage());
 		}
+	}
+
+	public void nouvelleFenetre () {
+		this.controleur.nouvelleFenetre();
+	}
+
+	public void setMainFrameMenu() {
+		MalenMenuBar menuPanel = new MalenMenuBar(this);
+		add(menuPanel, BorderLayout.NORTH);
+	}
+
+	public void export() {
+		this.controleur.export();
+	}
+
+	public void addImage(BufferedImage img) {
+		if (img == null) {
+			System.out.println("Aucune image à exporter.");
+			return;
+		}
+	
+		BufferedImage baseImage = imagePanel.getImage();
+		if (baseImage == null || baseImage.getWidth() == 1 && baseImage.getHeight() == 1) {
+			baseImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		}
+	
+		BufferedImage resultImage = fusionnerImages(baseImage, img);
+		imagePanel.setImage(resultImage);
+		repaint();
+	}
+
+	private BufferedImage fusionnerImages(BufferedImage base, BufferedImage ajout) {
+		int largeur = Math.max(base.getWidth(), ajout.getWidth());
+		int hauteur = Math.max(base.getHeight(), ajout.getHeight());
+	
+		BufferedImage resultat = new BufferedImage(largeur, hauteur, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = resultat.createGraphics();
+	
+		g2d.drawImage(base, 0, 0, null);
+		g2d.drawImage(ajout, 0, 0, null);
+		g2d.dispose();
+	
+		return resultat;
 	}
 }

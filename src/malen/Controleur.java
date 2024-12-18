@@ -5,6 +5,7 @@ import java.awt.Color;
 import javax.swing.SwingUtilities;
 
 import malen.vue.MalenMainFrame;
+import malen.vue.MalenSubFrame;
 import malen.modele.Couleur;
 import malen.modele.Point;
 
@@ -31,6 +32,7 @@ public class Controleur {
 	public static final String EFFACE_FOND = "fond";
 
 	private MalenMainFrame mainFrame;
+	private MalenSubFrame  subFrame;
 
 	private Color currentColor = Color.GREEN; // La couleur actuelle, par défaut noire
 	private String curseur;
@@ -51,8 +53,20 @@ public class Controleur {
 	// Méthode pour démarrer l'application
 	public void startApplication() {
 		SwingUtilities.invokeLater(() -> {
+			mainFrame.setMainFrameMenu();
 			mainFrame.setVisible(true);
 		});
+	}
+
+	public void nouvelleFenetre() {
+		subFrame = new MalenSubFrame(this);
+		subFrame.setVisible(true);
+	}
+
+	public void export() {
+		BufferedImage img = subFrame.getImage();
+		subFrame.setVisible(false);
+		mainFrame.addImage(img);
 	}
 
 	public void setCurseur(String curseur) {

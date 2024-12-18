@@ -6,7 +6,7 @@ import malen.Controleur;
 import malen.modele.Point;
 import malen.modele.Rotation;
 
-
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -130,7 +130,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 		switch (this.outil) {
 			case 'R':
-				outilSlider.setValue(0);
+				outilSlider.setValue((int)this.rotate_angle);
 				outilSlider.setMinimum(0);
 				outilSlider.setMaximum(360);
 				break;
@@ -153,7 +153,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	}
 
 	public void rotateImage(double angle) {
-		this.rotate_angle = angle;
+		this.rotate_angle = angle % 360;
 		repaint();
 	}
 
@@ -168,9 +168,20 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	}
 
     public BufferedImage getImage() {
-        Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
-        return this.image = rotation.getImage(this.image);
-    }
+		if (this.image == null) {
+			System.out.println("Image actuelle nulle");
+			this.image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		}
+	
+		Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+		this.image = rotation.applyTransformations(this.image);
+		return this.image;
+	}
+
+	public void setImage(BufferedImage img) {
+		this.image = img;
+		repaint();
+	}
 
     @Override
     protected void paintComponent(Graphics g)

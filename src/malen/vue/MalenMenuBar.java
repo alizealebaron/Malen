@@ -12,7 +12,6 @@ package malen.vue;
 import javax.swing.*;
 import malen.Controleur;
 import java.awt.event.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.awt.*;
 import java.util.List;
@@ -45,16 +44,23 @@ public class MalenMenuBar extends JMenuBar
 	/* ------------------------------------------------------------ */
 
 	private MalenMainFrame mainFrame;
+	private String[][]     modeleBar;
 
 	/** Construteur de la navBar
 	 * @param mainFrame
 	 */
 	public MalenMenuBar(MalenMainFrame mainFrame) 
 	{
+		this(mainFrame, MalenMenuBar.getModeleBar());
+	}
+
+	public MalenMenuBar(MalenMainFrame mainFrame, String[][] modelebar)
+	{
 		//Initialisation
-		super ( );
+		super ();
 
 		this.mainFrame = mainFrame;
+		this.modeleBar = modelebar;
 
 		this.initComposants ( );
 	}
@@ -70,7 +76,7 @@ public class MalenMenuBar extends JMenuBar
 		String hotkey;
 
 		// Format du MenuBar
-		String[][] modeleBar = MalenMenuBar.getModeleBar ( );
+		//String[][] modeleBar = MalenMenuBar.getModeleBar ( );
 
 		// Générer les composants
 		for ( int cptLig = 0; cptLig < modeleBar.length; cptLig++ )
@@ -218,10 +224,10 @@ public class MalenMenuBar extends JMenuBar
 	// Méthode pour gérer l'action de chaque élément du menu
 	private void handleMenuAction(String menuItem) {
 		switch (menuItem) {
-			case "Sauvegarder":
+			case "Enregistrer":
 				mainFrame.saveImage( "image_malen.png");
 				break;
-			case "Sauvegarder Sous":
+			case "Enregistrer Sous":
 				mainFrame.saveImage();
 				break;
 			case "Ouvrir":
@@ -267,6 +273,12 @@ public class MalenMenuBar extends JMenuBar
 			case "Palette":
 				mainFrame.chooseColor();
 				break;
+			case "Nouvelle Fenêtre":
+				mainFrame.nouvelleFenetre();
+				break;
+			case "Exporter":
+				mainFrame.export();
+				break;
 			default:
 				System.out.println("Action non définie pour " + menuItem);
 				break;
@@ -296,6 +308,8 @@ public class MalenMenuBar extends JMenuBar
 			{	MENU, 				       "Sélection",		     "selection.png",		"S"				    },
 			{		ITEM, 	     "Sélection Rectangle",	             "carre.png",	    "R"			     	},
 			{		ITEM,            "Sélection Ovale",	            "cercle.png",	    "O"			     	},
+			{   MENU,               "Nouvelle Fenêtre",              "frame.png",       "N", "CTRL+N"       },
+			{       ITEM,           "Nouvelle Fenêtre",              "frame.png",       "N", "CTRL+N"       },
 		};
 	}
 }
