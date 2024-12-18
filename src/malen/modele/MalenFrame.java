@@ -186,7 +186,7 @@ public abstract class MalenFrame extends JFrame {
 
 	public BufferedImage pasteSubImage() {
 		BufferedImage image = this.imagePanel.getImage();
-		
+
 		if (this.getSubImage() != null && image != null && this.getPoint1() != null
 				&& this.getPoint2() != null) {
 			// Déterminer les coordonnées où coller la subimage
@@ -240,9 +240,7 @@ public abstract class MalenFrame extends JFrame {
 		return this.controleur.isOnSecondFrame();
 	}
 
-	public boolean isMainFrame() {
-		return true;
-	}
+	public abstract boolean isMainFrame();
 
 	public void addImage(BufferedImage img) {
 		if (img == null) {

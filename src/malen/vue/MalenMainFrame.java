@@ -48,7 +48,7 @@ public class MalenMainFrame extends MalenFrame {
 	public void onClickRight(MouseEvent e) {
 		if (this.controleur.isOnSecondFrame()) {
 			this.controleur.setOnMainFrame();
-			System.out.println("passage en seconde frame");
+			System.out.println("passage en main frame");
 		} else {
 
 			JPopupMenu contextMenu = new JPopupMenu();
@@ -76,5 +76,9 @@ public class MalenMainFrame extends MalenFrame {
 
 	public void updateButton() {
 		this.menuPanel.setCouleurButton();
+	}
+
+	public boolean isMainFrame() {
+		return true;
 	}
 }

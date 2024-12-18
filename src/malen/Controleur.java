@@ -255,14 +255,22 @@ public class Controleur {
 
 			case Controleur.SELECTION_RECTANGLE:
 				if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
-					this.mainFrame.pasteSubImage();
+					if (this.isOnMainFrame()) {
+						this.mainFrame.pasteSubImage();
+					} else {
+						this.subFrame.pasteSubImage();
+					}
 				}
 
 				break;
 
 			case Controleur.SELECTION_OVALE:
 				if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
-					this.mainFrame.pasteSubImage();
+					if (this.isOnMainFrame()) {
+						this.mainFrame.pasteSubImage();
+					} else {
+						this.subFrame.pasteSubImage();
+					}
 				}
 
 				break;

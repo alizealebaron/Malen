@@ -222,8 +222,9 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 					g2d.drawImage(transformedImage, mainFrame.getPoint1().x(), mainFrame.getPoint1().y(), null);
 				} else {
 
-					g2d.drawImage(this.mainFrame.getSubImage(), mainFrame.getPoint1().x(),
-							mainFrame.getPoint1().y(),
+					g2d.drawImage(this.mainFrame.getSubImage(),
+							Math.min(mainFrame.getPoint1().x(), mainFrame.getPoint2().x()),
+							Math.min(mainFrame.getPoint1().y(), mainFrame.getPoint2().y()),
 							null);
 
 					g2d.setColor(Color.BLACK);
@@ -482,7 +483,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 			if (image != null && x >= 0 && y >= 0 && x < this.image.getWidth() && y < this.image.getHeight()) {
 				System.out.println(color);
-				mainFrame.onClickLeft(image, clickPoint.x(), clickPoint.y(), color);
+				mainFrame.onClickLeft(this.image, clickPoint.x(), clickPoint.y(), color);
 				repaint();
 			}
 
@@ -525,21 +526,21 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 				&& ((this.mainFrame.isOnMainFrame()
 						&& this.mainFrame.isMainFrame())
 						|| (this.mainFrame.isOnSecondFrame() && !this.mainFrame.isMainFrame()))) {
-							System.out.println("oui 1");
+			System.out.println("oui 1" + this.mainFrame.isMainFrame());
 
 			if (mainFrame.getSubImage() == null) {
 				mainFrame.setPoint1(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
 				mainFrame.setPoint2(null); // Réinitialiser le deuxième point
 				mainFrame.createSubImage(null);
 			} else {
-				System.out.println("oui 2");
+				System.out.println("oui 2" + this.mainFrame.isMainFrame());
 				int x1 = Math.min(mainFrame.getPoint1().x(), mainFrame.getPoint2().x());
 				int y1 = Math.min(mainFrame.getPoint1().y(), mainFrame.getPoint2().y());
 				int x2 = Math.max(mainFrame.getPoint1().x(), mainFrame.getPoint2().x());
 				int y2 = Math.max(mainFrame.getPoint1().y(), mainFrame.getPoint2().y());
 
 				if (e.getX() >= x1 && e.getX() <= x2 && e.getY() >= y1 && e.getY() <= y2) {
-					System.out.println("oui 3");
+					System.out.println("oui 3" + this.mainFrame.isMainFrame());
 					// Si le clic est dans la zone de la subimage, on commence à la déplacer
 					this.isMovingSubImage = true;
 				} else {
