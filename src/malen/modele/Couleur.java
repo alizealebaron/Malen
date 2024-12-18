@@ -7,12 +7,8 @@ package malen.modele;
   */
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.nio.Buffer;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import javax.imageio.ImageIO;
 
 import java.awt.Color;
 
@@ -84,8 +80,6 @@ public class Couleur
 
 		if (intCoulOld == coulTranspa) { return biOriginal; }
 
-		System.out.printf("Couleur transparente : 0x%08X\n", coulTranspa);
-
 		// Changement de tous les points présents dans la file
 		while ( ! file.isEmpty() )
 		{
@@ -127,10 +121,6 @@ public class Couleur
 				int rouge = verifBorneCouleur((int) (couleur.getRed  () + contraste / 100.0 * (couleur.getRed  ()-127)));
 				int vert  = verifBorneCouleur((int) (couleur.getGreen() + contraste / 100.0 * (couleur.getGreen()-127)));
 				int bleu  = verifBorneCouleur((int) (couleur.getBlue () + contraste / 100.0 * (couleur.getBlue ()-127)));
-
-				// System.out.println("Rouge [" + couleur.getRed() + ";" + rouge + "]");
-				// System.out.println("Rouge [" + couleur.getGreen() + ";" + vert + "]");
-				// System.out.println("Rouge [" + couleur.getBlue() + ";" + bleu + "]");
 
 				biOriginal.setRGB(x, y, (new Color (rouge, vert, bleu).getRGB()));
 			}
@@ -179,12 +169,13 @@ public class Couleur
 
 
 	/** Permet de vérifier que la couleur est dans les bornes
-	 * @param coul La couleur a vérifiée
+	 * @param coul La couleur a vérifier
 	 * @return La couleur changée si elle dépasse les bornes
 	 */
 	private static int verifBorneCouleur (int coul)
 	{
-		if (coul > 255) { coul = 255;}
+		// Si la couleur est trop grande ou trop petite, on la ramène à la borne inférieur ou supérieur
+		if (coul > 255) { coul = 255;} 
 		if (coul <   0) { coul =   0;}
 
 		return coul;

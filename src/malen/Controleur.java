@@ -1,6 +1,9 @@
 package malen;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 
 import javax.swing.SwingUtilities;
 
@@ -20,10 +23,12 @@ import java.awt.image.BufferedImage;
  * @date : 16/12/2024
  */
 
-public class Controleur {
-	/**
-	 * 
-	 */
+public class Controleur 
+{
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*                                                                  Attributs                                                                       */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
 	public static final String PIPETTE = "pipette";
 	public static final String SOURIS = "souris";
 	public static final String POT_DE_PEINTURE = "pot";
@@ -39,12 +44,18 @@ public class Controleur {
 
 	private boolean onMainFrame;
 
-	private Color currentColor = Color.GREEN; // La couleur actuelle, par défaut noire
+	private Color currentColor = Color.BLACK; // La couleur actuelle, par défaut noire
 	private String curseur;
 
 	private Point point1;
 	private Point point2;
 	private BufferedImage subImage;
+
+	private int densite;
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*                                                                Controleurs                                                                       */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	public Controleur() {
 		mainFrame = new MalenMainFrame(this); // Crée la fenêtre principale
@@ -55,6 +66,42 @@ public class Controleur {
 		this.subImage = null;
 		this.onMainFrame = true;
 	}
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*                                                                Accesseurs                                                                        */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	public Color         getCurrentColor () { return this.currentColor;}
+	public String        getCurseur      () { return this.curseur;     }
+	public Point         getPoint1       () { return this.point1;      }
+	public Point         getPoint2       () { return this.point2;      }
+	public BufferedImage getSubImage     () { return this.subImage;    }
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*                                                               Modificateurs                                                                      */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	public void setPoint1(Point point1       ) {this.point1  = point1;       }
+	public void setPoint2(Point point2       ) {this.point2  = point2;       }
+
+	public void setCurseur(String curseur) 
+	{
+		this.curseur = curseur;
+
+		if (!curseur.equals(SELECTION_RECTANGLE)) 
+			resetSelection(); // Réinitialiser la sélection quand on sort du mode sélection rectangle
+	}
+
+	public void setColor (Color selectedColor) 
+	{
+		currentColor = selectedColor;
+		this.mainFrame.updateButton();
+	}
+
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*                                                                 Méthodes                                                                         */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	// Méthode pour démarrer l'application
 	public void startApplication() {
@@ -81,38 +128,11 @@ public class Controleur {
 		subImage = null;
 	}
 
-	public String getCurseur() {
-		return this.curseur;
-	}
-
-	// Méthode pour afficher le sélecteur de couleur et stocker la couleur choisie
-	public void setColor(Color selectedColor) {
-		currentColor = selectedColor;
-	}
-
 	// Méthode pour obtenir la couleur actuelle
-	public Color getCurrentColor() {
-		return currentColor;
-	}
 
-	public Point getPoint1() {
-		return point1;
-	}
 
-	public Point getPoint2() {
-		return point2;
-	}
-
-	public void setPoint1(Point point1) {
-		this.point1 = point1;
-	}
-
-	public void setPoint2(Point point2) {
-		this.point2 = point2;
-	}
-
-	public BufferedImage getSubImage() {
-		return this.subImage;
+	public void setSubImage(BufferedImage image) {
+		this.subImage = image;
 	}
 
 	public void setOnMainFrame()
@@ -147,44 +167,37 @@ public class Controleur {
 	public void onClickLeft(BufferedImage biImage, Color coulPixel, int x, int y) {
 		switch (this.curseur) {
 			case Controleur.SOURIS:
-
-				System.out.println("Souris en mode : " + this.curseur);
 				break;
 
 			case Controleur.PIPETTE:
 
 				System.out.println("Souris en mode : " + this.curseur);
-				this.currentColor = coulPixel;
+				setColor(coulPixel);
 				break;
 
 			case Controleur.POT_DE_PEINTURE:
-
-				System.out.println("Souris en mode : " + this.curseur);
-
 				fill(biImage, coulPixel, this.currentColor, x, y);
 
 				break;
 
 			case Controleur.EFFACE_FOND:
-
-				System.out.println("Souris en mode : " + this.curseur);
-
 				fondTransparent(biImage, coulPixel, x, y);
 
 				break;
 
 			case Controleur.SELECTION_RECTANGLE:
-
-				System.out.println("Souris en mode : " + this.curseur);
-				System.out.println(this.subImage!=null);
-
-				if (this.subImage!=null) { //peut poser des problemes, mettre verif sur point1 et point2
-					System.out.println("oui");
+				if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
 					this.mainFrame.pasteSubImage();
 				}
 
 				break;
+
+				case Controleur.SELECTION_OVALE:	
+					if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
+						this.mainFrame.pasteSubImage();
+					}
 	
+					break;
 
 			default:
 				System.out.println("Choix incorrect");
@@ -193,7 +206,7 @@ public class Controleur {
 		}
 	}
 
-	public void createSubImage(BufferedImage image) {
+	public void createRectangleSubImage(BufferedImage image) {
 		if (image == null) {
 			this.subImage = null;
 		} else {
@@ -203,9 +216,45 @@ public class Controleur {
 				int width = Math.abs(point1.x() - point2.x());
 				int height = Math.abs(point1.y() - point2.y());
 
-				System.out.println("subimage : " + x1 + " " + y1 + " " + width + " " + height + " ");
+				System.out.println("subimage rect : " + x1 + " " + y1 + " " + width + " " + height + " ");
 
 				subImage = image.getSubimage(x1, y1, width, height);
+			}
+		}
+	}
+
+	public void createOvalSubImage(BufferedImage image) {
+
+		if (image == null) {
+			this.subImage = null;
+		} else {
+			if (point1 != null && point2 != null && point1.x() != point2.x() && point1.y() != point2.y()) {
+				int x1 = Math.min(point1.x(), point2.x());
+				int y1 = Math.min(point1.y(), point2.y());
+				int width = Math.abs(point1.x() - point2.x());
+				int height = Math.abs(point1.y() - point2.y());
+
+				System.out.println("subimage oval : " + x1 + " " + y1 + " " + width + " " + height + " ");
+
+				// Crée une image vide avec un canal alpha (transparence)
+				BufferedImage ovalImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+				// Crée un Graphics2D pour dessiner sur l'image ovale
+				Graphics2D g2d = ovalImage.createGraphics();
+
+				// Activer l'anti-aliasing pour des bords plus lisses
+				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
+				// Créer une forme ovale
+				Shape oval = new java.awt.geom.Ellipse2D.Double(0, 0, width, height);
+
+				// Dessiner l'image source à l'intérieur de l'ovale
+				g2d.setClip(oval); // Limite le dessin à la région ovale
+				g2d.drawImage(image, -x1, -y1, null); // Ajuste pour positionner la bonne partie de l'image source
+
+				g2d.dispose();
+				this.subImage = ovalImage;
 			}
 		}
 	}

@@ -12,8 +12,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -34,48 +37,61 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	private char outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
 	private boolean isMovingSubImage;
 
+	/* Gestion du texte */
+	private JPanel panelGestionText;
+	private JTextField textField; // Zone de texte temporaire
+	private Rectangle textBounds; // Bordure de la zone de texte
+	private Font textFont = new Font("Arial", Font.PLAIN, 20); // Font par défaut
+	private boolean editingText = false; // État de modification du texte
+	private Color textColor = Color.BLACK; // Couleur du texte
+	private JButton btnCouleurText;
+
 	public MalenImagePanel(MalenFrame mainframe) {
 		this.mainFrame = mainframe;
+
+		// Désactiver le layout pour permettre un positionnement absolu
+		// this.setLayout(null); // Remplace le BorderLayout par null
 		setPreferredSize(new Dimension(800, 600)); // Taille initiale du panneau
 
 		sliderPanel = new JPanel();
 		sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS)); // Empile les composants verticalement
+		sliderPanel.setBounds(0, 0, 200, 50); // Positionnement manuel si nécessaire
+		this.add(sliderPanel);
 
 		outilSlider = new JSlider(0, 0, 0); // Curseur de 0 à 360 degrés
 		outilSlider.setVisible(false);
-
 		sliderPanel.add(outilSlider);
-		add(sliderPanel, BorderLayout.NORTH);
 
 		outilSlider.addChangeListener(e -> {
 			int value = outilSlider.getValue();
 
 			switch (this.outil) {
 				case 'R':
-
 					this.rotateImage(value % 360);
 					break;
-
 				case 'L':
 					if (!outilSlider.getValueIsAdjusting() && image != null) {
 						this.mainFrame.changerLuminosite(image, value);
 						repaint();
 					}
 					break;
-
 				case 'C':
 					if (!outilSlider.getValueIsAdjusting() && image != null) {
 						this.mainFrame.changerContraste(image, value);
 						repaint();
 					}
 					break;
-
 				default:
+					this.rotateImage(0);
 					break;
 			}
 		});
 
-		addMouseListener(this); // Ajouter un écouteur de souris
+		// Initialisation du panel de texte
+		initialisationPanelText();
+
+		// Gestion de la souris
+		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
 
@@ -93,8 +109,11 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
+	public BufferedImage getImage() {
+		return this.image;
+	}
+
 	public void pasteSubImage() {
-		System.out.println("oui");
 		if (mainFrame.getSubImage() != null && this.image != null && mainFrame.getPoint1() != null
 				&& mainFrame.getPoint2() != null) {
 			// Déterminer les coordonnées où coller la subimage
@@ -103,7 +122,6 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 			// Dessiner la subimage sur l'image principale
 			Graphics2D g2d = image.createGraphics();
-			System.out.println("c'est collé");
 			g2d.drawImage(mainFrame.getSubImage(), x, y, null);
 			g2d.dispose();
 
@@ -117,11 +135,17 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
+	/**
+	 * Permet d'aficher ou non la barre d'outil (Rotation, Luminosité, Contraste)
+	 * 
+	 * @param outil L = Luminosité / C = Contraste / R = Rotation / D = Default
+	 */
 	public void showOutilSlider(char outil) {
 
-		if (outilSlider.isVisible() && outil == this.outil) {
+		if (outilSlider.isVisible() && outil == this.outil || outil == 'D') {
 			outilSlider.setVisible(false);
 			outilSlider.setEnabled(false);
+			outil = 'D';
 		} else {
 			outilSlider.setVisible(true);
 			outilSlider.setEnabled(true);
@@ -149,6 +173,9 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 				break;
 
 			default:
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(0);
+				outilSlider.setMaximum(0);
 				break;
 		}
 	}
@@ -168,20 +195,9 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		repaint();
 	}
 
-	public BufferedImage getImage() {
-		if (this.image == null) {
-			System.out.println("Image actuelle nulle");
-			this.image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-		}
-
+	public BufferedImage changeImage(BufferedImage rotaImage) {
 		Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
-		this.image = rotation.applyTransformations(this.image);
-		return this.image;
-	}
-
-	public void setImage(BufferedImage img) {
-		this.image = img;
-		repaint();
+		return rotation.getImage(rotaImage);
 	}
 
 	@Override
@@ -196,23 +212,47 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		} else {
 			Graphics2D g2d = (Graphics2D) g.create();
 			Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
-			BufferedImage transformedImage = rotation.applyTransformations(image);
 
-			this.setSize(new Dimension(image.getWidth(), image.getHeight()));
-
-			g2d.drawImage(transformedImage, 0, 0, null);
+			BufferedImage transformedImage;
 
 			// Dessiner le rectangle de sélection
-			if (mainFrame.getPoint1() != null) {
-				Point point1 = mainFrame.getPoint1();
-				Point point2 = mainFrame.getPoint2();
-				if (point2 != null) {
+			if (mainFrame.getPoint1() != null && mainFrame.getPoint2() != null) {
+				this.setSize(new Dimension(image.getWidth(), image.getHeight()));
+
+				g2d.drawImage(image, 0, 0, null);
+
+				if (this.outil == 'R') {
+
+					transformedImage = rotation.applyTransformations(mainFrame.getSubImage());
+
+					this.mainFrame.setPoint1(new Point(transformedImage.getMinX() + mainFrame.getPoint1().x(),
+							transformedImage.getMinY() + mainFrame.getPoint1().y()));
+					this.mainFrame.setPoint2(new Point(
+							transformedImage.getMinX() + transformedImage.getWidth() + mainFrame.getPoint1().x(),
+							transformedImage.getMinY() + transformedImage.getHeight() + mainFrame.getPoint1().y()));
+
+					g2d.drawImage(transformedImage, mainFrame.getPoint1().x(), mainFrame.getPoint1().y(), null);
+				} else {
+
+					g2d.drawImage(this.mainFrame.getSubImage(), mainFrame.getPoint1().x(),
+							mainFrame.getPoint1().y(),
+							null);
+
 					g2d.setColor(Color.BLACK);
 					g2d.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10,
 							new float[] { 10 }, 0)); // pointillé
-					g2d.drawRect(Math.min(point1.x(), point2.x()), Math.min(point1.y(), point2.y()),
-							Math.abs(point1.x() - point2.x()), Math.abs(point1.y() - point2.y()));
+					g2d.drawRect(Math.min(mainFrame.getPoint1().x(), mainFrame.getPoint2().x()),
+							Math.min(mainFrame.getPoint1().y(), mainFrame.getPoint2().y()),
+							Math.abs(mainFrame.getPoint1().x() - mainFrame.getPoint2().x()),
+							Math.abs(mainFrame.getPoint1().y() - mainFrame.getPoint2().y()));
 				}
+			} else {
+
+				transformedImage = rotation.applyTransformations(image);
+
+				this.setSize(new Dimension(image.getWidth(), image.getHeight()));
+
+				g2d.drawImage(transformedImage, 0, 0, null);
 			}
 
 			g2d.dispose();
@@ -245,7 +285,181 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		return null; // Retourne null si la position est hors de l'image
 	}
 
-	/*------------------------------------------ Pipette ------------------------------------------*/
+	/*
+	 * -----------------------------------------------------------------------------
+	 * -------------------------------------------------
+	 */
+	/* Gestion du texte */
+	/*
+	 * -----------------------------------------------------------------------------
+	 * -------------------------------------------------
+	 */
+
+	/**
+	 * Initialise le panel de texte et tout ses composants
+	 * 
+	 */
+	public void initialisationPanelText() {
+		// Initialisation d'un panel
+		this.panelGestionText = new JPanel();
+
+		// Initialiser la zone de texte qui s'affichera
+		this.textField = new JTextField();
+		this.textField.setVisible(false);
+		this.textField.setBorder(null);
+		this.textField.addActionListener(e -> finalizeText());
+
+		// Récupération de toutes les polices d'écriture du pc
+		String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+
+		// Initialisation des différents champs de modification
+		JComboBox<String> fontBox = new JComboBox<>(fonts);
+		JSpinner sizeSpinner = new JSpinner(new SpinnerNumberModel(20, 8, 72, 1));
+		JCheckBox boldCheck = new JCheckBox("Gras");
+		JCheckBox italicCheck = new JCheckBox("Italique");
+		this.btnCouleurText = new JButton("      ");
+        this.btnCouleurText.addActionListener(e -> chooseColor());
+		this.btnCouleurText.setBackground(this.mainFrame.getCurrentColor());
+		this.btnCouleurText.setFocusPainted(false);
+        this.btnCouleurText.setBackground(this.textColor); // Couleur de fond
+		this.btnCouleurText.setForeground(this.textColor);
+        this.btnCouleurText.setOpaque(true); 
+        this.btnCouleurText.setBorderPainted(false); 
+        this.btnCouleurText.setToolTipText("Couleur actuelle");
+
+		// Ajout des différents composants au panel
+		this.panelGestionText.add(new JLabel("Police:"));
+		this.panelGestionText.add(fontBox);
+		this.panelGestionText.add(new JLabel("Taille:"));
+		this.panelGestionText.add(sizeSpinner);
+		this.panelGestionText.add(boldCheck);
+		this.panelGestionText.add(italicCheck);
+		this.panelGestionText.add(btnCouleurText);
+
+		// Ajout de l'évenement pour écouter chacun des champs
+		fontBox.addActionListener(e -> updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck));
+		sizeSpinner.addChangeListener(e -> updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck));
+		boldCheck.addActionListener(e -> updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck));
+		italicCheck.addActionListener(e -> updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck));
+
+		// Ajout du panelTexte au panelImage puis on le rend invisible
+		this.add(this.panelGestionText, BorderLayout.SOUTH);
+		this.panelGestionText.setVisible(false);
+
+		// Ajout de la zone de texte invisible
+		this.add(textField);
+	}
+
+	/**
+	 * Permet d'afficher le panel de modification du texte
+	 * 
+	 */
+	public void afficherPanelText() {
+		if (this.panelGestionText.isVisible()) {
+			this.panelGestionText.setVisible(false);
+		} else {
+			if (this.outilSlider.isVisible())
+				showOutilSlider('D');
+
+			this.panelGestionText.setVisible(true);
+		}
+	}
+
+	/**
+	 * Récupération de toutes les données des champs pour modifier le champ de texte
+	 * en direct
+	 * 
+	 * @param fontBox
+	 * @param sizeSpinner
+	 * @param boldCheck
+	 * @param italicCheck
+	 */
+	private void updateTextFont(JComboBox<String> fontBox, JSpinner sizeSpinner, JCheckBox boldCheck,
+			JCheckBox italicCheck) {
+		int style = Font.PLAIN;
+		if (boldCheck.isSelected())
+			style |= Font.BOLD;
+		if (italicCheck.isSelected())
+			style |= Font.ITALIC;
+
+		this.textFont = new Font((String) fontBox.getSelectedItem(), style, (Integer) sizeSpinner.getValue());
+		this.textField.setFont(textFont);
+
+		// Repositionner la zone de texte si nécessaire
+		if (editingText && textBounds != null) {
+			textField.setBounds(textBounds); // Réutiliser la position précédente
+		}
+	}
+
+	/**
+	 * Finalisation de l'ajout du texte à l'image
+	 * 
+	 */
+	private void finalizeText() {
+		// Création du graphique g2d pour jouter le texte
+		Graphics2D g2d = image.createGraphics();
+
+		if (editingText) {
+			String text = textField.getText();
+
+			// On ajout le texte à l'image s'il n'est pas vide
+            if (!text.isEmpty()) 
+			{
+                g2d.setFont(textFont);
+                g2d.setColor(this.textColor);
+                g2d.drawString(text, textBounds.x + 2, textBounds.y + textBounds.height - 10);
+            }
+
+			// On rend le text invisible
+			textField.setVisible(false);
+			editingText = false;
+			textField.setText("");
+			textBounds = null;
+
+			// On repaint l'image
+			this.repaint();
+		}
+	}
+
+	private void startTextEditing(int x, int y) {
+		System.out.println("" + x + "|" + y);
+		this.textBounds = new Rectangle(x, y, 150, 30); // Taille initiale de la zone
+		this.textField.setBounds(textBounds);
+		this.textField.setFont(textFont);
+		this.textField.setText("");
+		this.textField.setVisible(true);
+		this.textField.requestFocus();
+		this.editingText = true;
+
+        this.repaint();
+    }
+
+	/** Permet de changer la couleur du texte
+	 * 
+	 */
+	private void chooseColor() 
+	{
+        Color newColor = JColorChooser.showDialog(this, "Choisir la couleur du texte", textColor);
+
+        if (newColor != null)
+		{
+			this.textColor = newColor;
+			this.textField.setForeground(this.textColor);
+			this.btnCouleurText.setBackground(this.textColor);
+			this.btnCouleurText.setForeground(this.textColor); 
+    	}
+
+	}
+
+	/*
+	 * -----------------------------------------------------------------------------
+	 * -------------------------------------------------
+	 */
+	/* Gestion de la souris */
+	/*
+	 * -----------------------------------------------------------------------------
+	 * -------------------------------------------------
+	 */
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -284,22 +498,60 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 			System.out.println(color);
 			mainFrame.onClickLeft(image, clickPoint.x(), clickPoint.y(), color);
 			repaint();
-		}}
+		}
+
+		if (this.mainFrame.isCurseurOn(Controleur.TEXT))
+		{
+
+				if (this.editingText) 
+				{
+                    finalizeText(); // Terminer l'édition du texte en cours
+                }
+
+                startTextEditing(e.getX(), e.getY());
+		}
+
+			repaint();
 	}
+
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+
+		if (this.outil == 'R') {
+			if (mainFrame.getPoint1() != null && mainFrame.getPoint2() != null) {
+				this.mainFrame.setSubimage(this.changeImage(this.mainFrame.getSubImage()));
+			} else {
+				this.image = this.changeImage(this.image);
+			}
+
+			this.showOutilSlider('R');
+			outilSlider.setValue(0);
+			this.repaint();
+		}
+
+		if (this.outil == 'R') {
+			if (mainFrame.getPoint1() != null && mainFrame.getPoint2() != null) {
+				this.mainFrame.setSubimage(this.changeImage(this.mainFrame.getSubImage()));
+			} else {
+				this.image = this.changeImage(this.image);
+			}
+
+			this.showOutilSlider('R');
+			outilSlider.setValue(0);
+			this.repaint();
+		}
 
 		if ((mainFrame.isCurseurOn(Controleur.SELECTION_RECTANGLE)
 				|| mainFrame.isCurseurOn(Controleur.SELECTION_OVALE))
 				&& ((this.mainFrame.isOnMainFrame()
 						&& this.mainFrame.isMainFrame())
 						|| (this.mainFrame.isOnSecondFrame() && !this.mainFrame.isMainFrame()))) {
+							
 			if (null == mainFrame.getSubImage()) {
 				mainFrame.setPoint1(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
 				mainFrame.setPoint2(null); // Réinitialiser le deuxième point
 				mainFrame.createSubImage(null);
-				System.out.println("non");
 			} else {
 				int x1 = Math.min(mainFrame.getPoint1().x(), mainFrame.getPoint2().x());
 				int y1 = Math.min(mainFrame.getPoint1().y(), mainFrame.getPoint2().y());
@@ -317,7 +569,6 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 					mainFrame.setPoint1(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
 					mainFrame.setPoint2(null); // Réinitialiser le deuxième point
 					mainFrame.createSubImage(null);
-					System.out.println("oui mais non");
 				}
 			}
 		}
