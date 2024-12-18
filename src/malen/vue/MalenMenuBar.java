@@ -14,10 +14,11 @@ import malen.Controleur;
 import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.awt.*;
 import java.util.List;
 
-public class MalenMenuBar extends JMenuBar
+public class MalenMenuBar extends JMenuBar implements ActionListener
 {
 	/* ------------------------------------------------------------ */
 	/*             Constante pour navigation modulable              */
@@ -45,6 +46,7 @@ public class MalenMenuBar extends JMenuBar
 	/* ------------------------------------------------------------ */
 
 	private MalenMainFrame mainFrame;
+	private JButton btnCouleurAct;
 
 	/** Construteur de la navBar
 	 * @param mainFrame
@@ -111,8 +113,20 @@ public class MalenMenuBar extends JMenuBar
 			}
 		}
 
-		JButton btnCouleurAct = new JButton("");
-        btnCouleurAct.addActionListener(e -> JOptionPane.showMessageDialog(this, "Action déclenchée !"));
+		this.add(Box.createHorizontalGlue());
+
+		// Ajout du bouton de couleur
+		this.btnCouleurAct = new JButton("      ");
+		this.btnCouleurAct.setBackground(this.mainFrame.getCurrentColor());
+		this.btnCouleurAct.setFocusPainted(false);
+        this.btnCouleurAct.setBackground(this.mainFrame.getCurrentColor()); // Couleur de fond
+		this.btnCouleurAct.setForeground(this.mainFrame.getCurrentColor());
+        this.btnCouleurAct.setOpaque(true); 
+        this.btnCouleurAct.setBorderPainted(false); 
+        this.btnCouleurAct.setToolTipText("Couleur actuelle");
+		
+
+        this.btnCouleurAct.addActionListener(this);
 
 		this.add(btnCouleurAct);
 	}
@@ -180,6 +194,12 @@ public class MalenMenuBar extends JMenuBar
     	ImageIcon resizedIcon = new ImageIcon(resizedImage);
 
 		return resizedIcon;
+	}
+
+	public void setCouleurButton ()
+	{
+		this.btnCouleurAct.setBackground(this.mainFrame.getCurrentColor());
+		this.btnCouleurAct.setForeground(this.mainFrame.getCurrentColor());
 	}
 
 	/**
@@ -306,5 +326,24 @@ public class MalenMenuBar extends JMenuBar
 			{		ITEM, 	     "Sélection Rectangle",	             "carre.png",	    "R"			     	},
 			{		ITEM,            "Sélection Ovale",	            "cercle.png",	    "O"			     	},
 		};
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) 
+	{
+
+        // Ouvrir le sélecteur de couleur
+        Color selectedColor = JColorChooser.showDialog
+		(
+            null,
+            "Sélectionnez une couleur",
+            this.mainFrame.getCurrentColor()
+         );
+
+        // Si une couleur est sélectionnée, appliquer la couleur au label
+        if (selectedColor != null) 
+		{
+            this.mainFrame.setCurrentColor(selectedColor);
+        }
 	}
 }

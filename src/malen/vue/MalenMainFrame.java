@@ -25,6 +25,7 @@ public class MalenMainFrame extends JFrame {
 	private MalenImagePanel imagePanel; // Référence au panneau d'image
 	private JScrollPane scrollPane; // JScrollPane pour gérer le défilement
 	private static final String REPERTOIRE = "./data/images/";
+	private MalenMenuBar menuPanel;
 
 	private Controleur controleur;
 
@@ -37,8 +38,8 @@ public class MalenMainFrame extends JFrame {
 		setLayout(new BorderLayout());
 
 		// Ajouter le panneau de menu
-		MalenMenuBar menuPanel = new MalenMenuBar(this);
-		add(menuPanel, BorderLayout.NORTH);
+		this.menuPanel = new MalenMenuBar(this);
+		add(this.menuPanel, BorderLayout.NORTH);
 
 		// Ajouter le panneau d'affichage d'image dans un JScrollPane
 		imagePanel = new MalenImagePanel(this);
@@ -137,6 +138,8 @@ public class MalenMainFrame extends JFrame {
 	public boolean isCurseurOn(String curseur) {
 		return this.controleur.getCurseur().equals(curseur);
 	}
+
+	public Color getCurrentColor() {return this.controleur.getCurrentColor();}
 
 	public void chooseColor() {
 		// Afficher un sélecteur de couleur
@@ -246,6 +249,10 @@ public class MalenMainFrame extends JFrame {
 			System.err.println("Erreur lors de la sauvegarde : " + e.getMessage());
 		}
 	}
+
+	public void updateButton () {this.menuPanel.setCouleurButton ();}
+
+	public void setCurrentColor (Color c) { this.controleur.setColor(c);}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------ */
 	/*                                                     Gestion du texte                                                           */
