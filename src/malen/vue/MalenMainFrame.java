@@ -6,12 +6,9 @@ import javax.swing.*;
 import malen.Controleur;
 import malen.modele.Point;
 
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -103,9 +100,6 @@ public class MalenMainFrame extends JFrame {
 
 			// Passer la couleur au contrôleur
 			controleur.setColor(color);
-
-			System.out.println(this.controleur.getCurrentColor().toString());
-
 		}
 	}
 
@@ -157,15 +151,24 @@ public class MalenMainFrame extends JFrame {
 	}
 
 	public void createSubImage(BufferedImage image) {
-		this.controleur.createSubImage(image);
+		if (this.isCurseurOn(Controleur.SELECTION_RECTANGLE)) {
+			this.controleur.createRectangleSubImage(image);
+		}
+		if (this.isCurseurOn(Controleur.SELECTION_OVALE)) {
+			this.controleur.createOvalSubImage(image);
+		}
 	}
 
 	public BufferedImage getSubImage() {
 		return this.controleur.getSubImage();
 	}
 
+	public void setSubimage(BufferedImage image)
+	{
+		this.controleur.setSubImage(image);
+	}
+
 	public void pasteSubImage(){
-		System.out.println("oui");
 		this.imagePanel.pasteSubImage();
 	}
 
@@ -187,7 +190,6 @@ public class MalenMainFrame extends JFrame {
 		try {
 			File outputFile = new File(fileName);
 			ImageIO.write(this.imagePanel.getImage(), "png", outputFile);
-			System.out.println("Image sauvegardée dans : " + fileName);
 		} catch (IOException e) {
 			System.err.println("Erreur lors de la sauvegarde : " + e.getMessage());
 		}

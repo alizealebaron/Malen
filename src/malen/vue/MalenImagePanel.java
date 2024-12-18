@@ -20,13 +20,13 @@ import java.awt.image.BufferedImage;
 
 public class MalenImagePanel extends JPanel implements MouseListener, MouseMotionListener {
 
-    private BufferedImage  image;
-    private boolean        imageLoaded = false;
-    private MalenMainFrame mainFrame;
-    private double         rotate_angle = 0;
-    private JPanel         sliderPanel;
-    private boolean        flipHorizontal = false;
-    private boolean        flipVertical = false;
+	private BufferedImage image;
+	private boolean imageLoaded = false;
+	private MalenMainFrame mainFrame;
+	private double rotate_angle = 0;
+	private JPanel sliderPanel;
+	private boolean flipHorizontal = false;
+	private boolean flipVertical = false;
 
 	private JSlider outilSlider;
 	private char outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
@@ -69,6 +69,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 					break;
 
 				default:
+					this.rotateImage(0);
 					break;
 			}
 		});
@@ -91,12 +92,11 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
-	public BufferedImage getImage(){
+	public BufferedImage getImage() {
 		return this.image;
 	}
 
 	public void pasteSubImage() {
-		System.out.println("oui");
 		if (mainFrame.getSubImage() != null && this.image != null && mainFrame.getPoint1() != null
 				&& mainFrame.getPoint2() != null) {
 			// Déterminer les coordonnées où coller la subimage
@@ -105,7 +105,6 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 			// Dessiner la subimage sur l'image principale
 			Graphics2D g2d = image.createGraphics();
-			System.out.println("c'est collé");
 			g2d.drawImage(mainFrame.getSubImage(), x, y, null);
 			g2d.dispose();
 
@@ -124,6 +123,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		if (outilSlider.isVisible() && outil == this.outil) {
 			outilSlider.setVisible(false);
 			outilSlider.setEnabled(false);
+			outil = 'D';
 		} else {
 			outilSlider.setVisible(true);
 			outilSlider.setEnabled(true);
@@ -151,6 +151,9 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 				break;
 
 			default:
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(0);
+				outilSlider.setMaximum(0);
 				break;
 		}
 	}
@@ -170,44 +173,61 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		repaint();
 	}
 
-    public BufferedImage changeImage() {
-        Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
-        return this.image = rotation.getImage(this.image);
-    }
+	public BufferedImage changeImage(BufferedImage rotaImage) {
+		Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+		return rotation.getImage(rotaImage);
+	}
 
-    @Override
-    protected void paintComponent(Graphics g)
-    {
-        super.paintComponent(g);
-        
-        if (!imageLoaded)
-        {
-            g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(0, 0, getWidth(), getHeight());
-            g.setColor(Color.BLACK);
-            g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
-        }
-        else
-        {
-            Graphics2D g2d = (Graphics2D) g.create();
-            Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
-            BufferedImage transformedImage = rotation.applyTransformations(image);
-			
-            this.setSize(new Dimension(image.getWidth(), image.getHeight()));
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 
-			g2d.drawImage(transformedImage, 0, 0, null);
+		if (!imageLoaded) {
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(0, 0, getWidth(), getHeight());
+			g.setColor(Color.BLACK);
+			g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
+		} else {
+			Graphics2D g2d = (Graphics2D) g.create();
+			Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+
+			BufferedImage transformedImage;
 
 			// Dessiner le rectangle de sélection
-			if (mainFrame.getPoint1() != null) {
-				Point point1 = mainFrame.getPoint1();
-				Point point2 = mainFrame.getPoint2();
-				if (point2 != null) {
+			if (mainFrame.getPoint1() != null && mainFrame.getPoint2() != null) {
+				this.setSize(new Dimension(image.getWidth(), image.getHeight()));
+
+				g2d.drawImage(image, 0, 0, null);
+
+				if (this.outil == 'R') {
+
+					transformedImage = rotation.applyTransformations(mainFrame.getSubImage());
+
+					this.mainFrame.setPoint1(new Point(transformedImage.getMinX() + mainFrame.getPoint1().x(), transformedImage.getMinY() + mainFrame.getPoint1().y()));
+					this.mainFrame.setPoint2(new Point(transformedImage.getMinX() + transformedImage.getWidth() + mainFrame.getPoint1().x(), transformedImage.getMinY() + transformedImage.getHeight() + mainFrame.getPoint1().y()));
+
+					g2d.drawImage(transformedImage, mainFrame.getPoint1().x(), mainFrame.getPoint1().y(), null);
+				} else {
+
+					g2d.drawImage(this.mainFrame.getSubImage(), mainFrame.getPoint1().x(),
+							mainFrame.getPoint1().y(),
+							null);
+
 					g2d.setColor(Color.BLACK);
 					g2d.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10,
 							new float[] { 10 }, 0)); // pointillé
-					g2d.drawRect(Math.min(point1.x(), point2.x()), Math.min(point1.y(), point2.y()),
-							Math.abs(point1.x() - point2.x()), Math.abs(point1.y() - point2.y()));
+					g2d.drawRect(Math.min(mainFrame.getPoint1().x(), mainFrame.getPoint2().x()),
+							Math.min(mainFrame.getPoint1().y(), mainFrame.getPoint2().y()),
+							Math.abs(mainFrame.getPoint1().x() - mainFrame.getPoint2().x()),
+							Math.abs(mainFrame.getPoint1().y() - mainFrame.getPoint2().y()));
 				}
+			} else {
+
+				transformedImage = rotation.applyTransformations(image);
+
+				this.setSize(new Dimension(image.getWidth(), image.getHeight()));
+
+				g2d.drawImage(transformedImage, 0, 0, null);
 			}
 
 			g2d.dispose();
@@ -244,13 +264,6 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
-		if (this.outil == 'R') {
-			this.changeImage();
-			outilSlider.setValue(0);
-			this.repaint();
-		}
-
 		// Lorsqu'on clique sur l'image, obtenir la couleur sous le curseur
 		java.awt.Point awtPoint = e.getPoint();
 		Point clickPoint = new Point((int) awtPoint.getX(), (int) awtPoint.getY());
@@ -265,10 +278,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		// mainFrame.setPickedColor(color);
 		// }
 
-		System.out.println("Coordonées : [" + clickPoint.x() + ";" + clickPoint.y() + "]");
-
 		if (image != null && x >= 0 && y >= 0 && x < this.image.getWidth() && y < this.image.getHeight()) {
-			System.out.println(color);
 			mainFrame.onClick(image, clickPoint.x(), clickPoint.y(), color);
 			repaint();
 		}
@@ -277,13 +287,24 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	@Override
 	public void mousePressed(MouseEvent e) {
 
+		if (this.outil == 'R') {
+			if (mainFrame.getPoint1() != null && mainFrame.getPoint2() != null) {
+				this.mainFrame.setSubimage(this.changeImage(this.mainFrame.getSubImage()));
+			} else {
+				this.image = this.changeImage(this.image);
+			}
+
+			this.showOutilSlider('R');
+			outilSlider.setValue(0);
+			this.repaint();
+		}
+
 		if (mainFrame.isCurseurOn(Controleur.SELECTION_RECTANGLE)
 				|| mainFrame.isCurseurOn(Controleur.SELECTION_OVALE)) {
 			if (null == mainFrame.getSubImage()) {
 				mainFrame.setPoint1(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
 				mainFrame.setPoint2(null); // Réinitialiser le deuxième point
 				mainFrame.createSubImage(null);
-				System.out.println("non");
 			} else {
 				int x1 = Math.min(mainFrame.getPoint1().x(), mainFrame.getPoint2().x());
 				int y1 = Math.min(mainFrame.getPoint1().y(), mainFrame.getPoint2().y());
@@ -301,7 +322,6 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 					mainFrame.setPoint1(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
 					mainFrame.setPoint2(null); // Réinitialiser le deuxième point
 					mainFrame.createSubImage(null);
-					System.out.println("oui mais non");
 				}
 			}
 		}
@@ -334,7 +354,8 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		if (isMovingSubImage) {
 			// Fin du déplacement de la subimage
 			isMovingSubImage = false;
-		} else if (mainFrame.isCurseurOn(Controleur.SELECTION_RECTANGLE)) {
+		} else if (mainFrame.isCurseurOn(Controleur.SELECTION_RECTANGLE)
+				|| mainFrame.isCurseurOn(Controleur.SELECTION_OVALE)) {
 			// Terminer la sélection et créer la subimage
 			mainFrame.setPoint2(new Point(e.getX(), e.getY()));
 			mainFrame.createSubImage(image);

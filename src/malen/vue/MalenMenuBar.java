@@ -199,7 +199,6 @@ public class MalenMenuBar extends JMenuBar
 	// Méthode pour ajouter un ItemListener à chaque JMenuItem
 	private void addItemListenerToMenu(JMenuItem menuItem) 
 	{
-		System.out.println(menuItem.getText());
 		menuItem.addActionListener(new ActionListener() 
 		{
 			@Override
@@ -208,7 +207,6 @@ public class MalenMenuBar extends JMenuBar
 				// Quand un élément de menu est sélectionné
 				JMenuItem source = (JMenuItem) e.getSource();
 				String itemName = source.getText();
-				System.out.println("Action sur l'élément: " + itemName);
 
 				handleMenuAction(itemName);
 			}
@@ -228,23 +226,18 @@ public class MalenMenuBar extends JMenuBar
 				mainFrame.importImage();
 				break;
 			case "Remplissage":
-				System.out.println("ouai, tu utilise : " + menuItem);
 				mainFrame.switchCurseur(Controleur.POT_DE_PEINTURE);
 				break;
 			case "Transparent":
-				System.out.println("ouai, tu utilise : " + menuItem);
 				mainFrame.switchCurseur(Controleur.EFFACE_FOND);
 				break;
 			case "Luminosité":
 				mainFrame.afficherSlider('L');
-				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Constraste":
 				mainFrame.afficherSlider('C');
-				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Police":
-				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Rotation Axiale":
 				mainFrame.afficherSlider('R');
@@ -268,7 +261,6 @@ public class MalenMenuBar extends JMenuBar
 				mainFrame.chooseColor();
 				break;
 			default:
-				System.out.println("Action non définie pour " + menuItem);
 				break;
 		}
 	}
