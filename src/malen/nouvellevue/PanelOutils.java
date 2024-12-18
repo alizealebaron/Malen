@@ -181,6 +181,24 @@ public class PanelOutils extends JPanel
 
 	public void updateTextFont (JComboBox<String> fontBox, JSpinner sizeSpinner, JCheckBox boldCheck, JCheckBox italicCheck) { this.framePrincipale.updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck);}
 
+	/** Affiche ou désaffiche le texte
+	 * 
+	 */
+	public void afficherPanelText ()
+	{
+		if (this.panelGestionText.isVisible()) 
+		{
+			this.panelGestionText.setVisible(false);
+		} 
+		else 
+		{
+			if (this.outilSlider.isVisible())
+				this.showOutilSlider('D');
+
+			this.panelGestionText.setVisible(true);
+		}
+	}
+	
 	/* ------------------------------------------------------------ */
 	/*                   Transformation d'image                     */
 	/* ------------------------------------------------------------ */
@@ -202,15 +220,17 @@ public class PanelOutils extends JPanel
 	 */
 	public void showOutilSlider(char outil) 
 	{
-
 		if (outilSlider.isVisible() && outil == this.outil || outil == 'D') 
 		{
 			outilSlider.setVisible(false);
 			outilSlider.setEnabled(false);
 			outil = 'D';
 		} 
-		else 
+		else
 		{
+			if (this.panelGestionText.isVisible())
+				this.panelGestionText.setVisible(false);
+
 			outilSlider.setVisible(true);
 			outilSlider.setEnabled(true);
 		}

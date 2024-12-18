@@ -139,7 +139,7 @@ public class Controleur
 			case Controleur.PIPETTE:
 
 				System.out.println("Souris en mode : " + this.curseur);
-				// this.setColor(coulPixel);
+				this.setColor(coulPixel);
 				break;
 
 			case Controleur.POT_DE_PEINTURE:
@@ -154,7 +154,7 @@ public class Controleur
 
 			case Controleur.SELECTION_RECTANGLE:
 				if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
-					// this.mainFrame.pasteSubImage();
+					//this.mainFrame.pasteSubImage();
 				}
 
 				break;

@@ -75,7 +75,7 @@ public class FramePrincipale extends JFrame
 		this.scPanelPrincipal.setPreferredSize(new Dimension(800, 600)); // Taille du panneau d'affichage de l'image
 
 		// Ajouter le panel principale
-		this.panelPrincipal   = new PanelPrincipal (this, this.panelImage, this.panelOutils);
+		this.panelPrincipal   = new PanelPrincipal (this, this.panelImage, this.panelOutils, this.scPanelPrincipal);
 		this.add(this.panelPrincipal, BorderLayout.CENTER);
 
 		// Afficher la fenêtre
@@ -206,33 +206,34 @@ public class FramePrincipale extends JFrame
 	 * Permet d'afficher le panel de modification du texte
 	 * 
 	 */
-	public void afficherPanelText() 
-	{
-		if (this.panelOutils.getPanelGestionText().isVisible()) 
-		{
-			this.panelOutils.getPanelGestionText().setVisible(false);
-		} 
-		else 
-		{
-			if (this.panelOutils.getOutilSlider().isVisible())
-				this.panelOutils.showOutilSlider('D');
-
-			this.panelOutils.getPanelGestionText().setVisible(true);
-		}
-	}
+	public void afficherPanelText() { this.panelOutils.afficherPanelText(); }	
 
 	/* ------------------------------------------------------------ */
 	/*                     Gestion des outils                       */
 	/* ------------------------------------------------------------ */
 
-	public void changerContraste  (int value) { this.controleur.changerContraste  (this.panelImage.getImage(), value); }
-	public void changerLuminosite (int value) { this.controleur.changerLuminosite (this.panelImage.getImage(), value); }
+	public void changerContraste  (int  value) { this.controleur.changerContraste  (this.panelImage.getImage(), value); }
+	public void changerLuminosite (int  value) { this.controleur.changerLuminosite (this.panelImage.getImage(), value); }
+
+	public void afficherSlider    (char outil) { this.panelOutils.showOutilSlider   (outil)                           ; }
 
 	/* ------------------------------------------------------------ */
 	/*                     Liaison Controleur                       */
 	/* ------------------------------------------------------------ */
 
 	public void setCurrentColor (Color c) { this.controleur.setColor(c);}
+
+	/** Gère le clique selon le mod actuel en le passant au controleur
+	 * @param biImage
+	 * @param x
+	 * @param y
+	 * @param coulPixel
+	 */
+	public void onClick(BufferedImage biImage, int x, int y, Color coulPixel) 
+	{
+		System.out.println("Coucou");
+		this.controleur.onClick(biImage, coulPixel, x, y);
+	}
 
 	/* ------------------------------------------------------------ */
 	/*                       Liaison MenuBar                        */
@@ -265,6 +266,17 @@ public class FramePrincipale extends JFrame
 		}
 	}
 
+	public void chooseColor() 
+	{
+		// Afficher un sélecteur de couleur
+		Color selectedColor = JColorChooser.showDialog(null, "Choisir une couleur", controleur.getCurrentColor());
+
+		if (selectedColor != null) 
+		{
+			controleur.setColor(selectedColor);
+		}
+	}
+
 	/* ------------------------------------------------------------ */
 	/*                        Liaison Image                         */
 	/* ------------------------------------------------------------ */
@@ -291,6 +303,11 @@ public class FramePrincipale extends JFrame
 			this.scPanelPrincipal.revalidate(); // Revalider le JScrollPane pour appliquer les nouvelles dimensions
 			this.scPanelPrincipal.repaint   (); // Redessiner le JScrollPane
 		}
+	}
+
+	public boolean isCurseurOn(String curseur) 
+	{
+		return this.controleur.getCurseur().equals(curseur);
 	}
 }
 

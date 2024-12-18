@@ -10,6 +10,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.JCheckBox;
@@ -20,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
+import malen.Controleur;
 import malen.modele.Point;
 import malen.modele.Rotation;
 
@@ -31,7 +35,7 @@ import malen.modele.Rotation;
  * @since   : 19/12/2024
  */
 
-public class PanelImage extends JPanel
+public class PanelImage extends JPanel implements MouseListener, MouseMotionListener
 {
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                                 Attributs                                                                        */
@@ -60,11 +64,19 @@ public class PanelImage extends JPanel
 		this.framePrincipale = frame;
 		this.biImage         = null;
 
+		this.setLayout(null);
+
 		// Initialiser la zone de texte qui s'affichera
 		this.textField = new JTextField();
 		this.textField.setVisible(false);
 		this.textField.setBorder(null);
 		this.textField.addActionListener(e -> finalizeText());
+
+		this.add(this.textField);
+
+		// Mise en écoute de l'image
+		addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -150,8 +162,6 @@ public class PanelImage extends JPanel
 
 	private void startTextEditing(int x, int y) 
 	{
-		System.out.println("" + x + "|" + y);
-
 		this.textBounds = new Rectangle(x, y, 150, 30); // Taille initiale de la zone
 		this.textField.setBounds(textBounds);
 		this.textField.setFont(textFont);
@@ -255,7 +265,102 @@ public class PanelImage extends JPanel
 				g2d.drawImage(transformedImage, 0, 0, null);
 			}
 
+			if (textBounds != null && editingText) 
+			{
+				g2d.setColor(Color.BLACK);
+		
+				// Définir un contour pointillé avec une épaisseur visible
+				float[] dashPattern = {10, 6}; // Longueur des traits et espaces
+				g2d.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1, dashPattern, 0));
+				g2d.drawRect(textBounds.x - 1, textBounds.y - 1, textBounds.width + 1, textBounds.height + 1);
+			}
+
 			g2d.dispose();
 		}
+	}
+
+	/* ------------------------------------------------------------ */
+	/*                 🐁 Gestion de la souris 🐁                  */
+	/* ------------------------------------------------------------ */
+
+	public Color getColorAtPoint (Point p) 
+	{
+		if (this.biImage != null && p.x() >= 0 && p.x() < this.biImage.getWidth() && p.y() >= 0 && p.y() < this.biImage.getHeight()) 
+		{
+			return new Color(this.biImage.getRGB(p.x(), p.y()));
+		}
+		return null; // Retourne null si la position est hors de l'image
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) 
+	{
+		java.awt.Point awtPoint = e.getPoint();
+		Point clickPoint = new Point((int) awtPoint.getX(), (int) awtPoint.getY());
+		Color color = getColorAtPoint(clickPoint);
+
+		int x = (int) clickPoint.x();
+		int y = (int) clickPoint.y();
+
+		// if (color != null)
+		// {
+		// // Informer la fenêtre principale (MalenMainFrame) pour traiter la couleur
+		// mainFrame.setPickedColor(color);
+		// }
+
+		if (this.biImage != null && x >= 0 && y >= 0 && x < this.biImage.getWidth() && y < this.biImage.getHeight()) 
+		{
+			this.framePrincipale.onClick(this.biImage, clickPoint.x(), clickPoint.y(), color);
+
+			if (this.framePrincipale.isCurseurOn(Controleur.TEXT))
+			{
+				System.out.println("Il est passé par ici !");
+
+				if (this.editingText) 
+				{
+					finalizeText(); // Terminer l'édition du texte en cours
+				}
+
+				startTextEditing(e.getX(), e.getY());
+			}
+		}
+
+		repaint();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) 
+	{
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) 
+	{
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) 
+	{
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) 
+	{
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) 
+	{
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) 
+	{
+		
 	}
 }

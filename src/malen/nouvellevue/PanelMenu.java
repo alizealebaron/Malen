@@ -339,11 +339,11 @@ public class PanelMenu extends JMenuBar implements ActionListener
 				framePrincipale.switchCurseur(Controleur.EFFACE_FOND);
 				break;
 			case "Luminosité":
-				//framePrincipale.afficherSlider('L');
+				framePrincipale.afficherSlider('L');
 				framePrincipale.switchCurseur(Controleur.LUMINOSITE);
 				break;
 			case "Constraste":
-				//framePrincipale.afficherSlider('C');
+				framePrincipale.afficherSlider('C');
 				framePrincipale.switchCurseur(Controleur.CONTRASTE);
 				break;
 			case "Ajouter Texte":
@@ -351,7 +351,7 @@ public class PanelMenu extends JMenuBar implements ActionListener
 				framePrincipale.switchCurseur(Controleur.TEXT);
 				break;
 			case "Rotation Axiale":
-				//framePrincipale.afficherSlider('R');
+				framePrincipale.afficherSlider('R');
 				break;
 			case "Retournement Vertical":
 				//framePrincipale.switchRetournementVertical();
@@ -369,7 +369,7 @@ public class PanelMenu extends JMenuBar implements ActionListener
 				framePrincipale.switchCurseur(Controleur.PIPETTE);
 				break;
 			case "Palette":
-				//framePrincipale.chooseColor();
+				framePrincipale.chooseColor();
 				break;
 			default:
 				break;

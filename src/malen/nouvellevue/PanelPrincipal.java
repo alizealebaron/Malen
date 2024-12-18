@@ -3,6 +3,7 @@ package malen.nouvellevue;
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 
 /** Panel principale de l'application
@@ -29,7 +30,7 @@ public class PanelPrincipal extends JPanel
 	/*                                                                Controleurs                                                                       */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	public PanelPrincipal (FramePrincipale frame, PanelImage panelI, PanelOutils panelO)
+	public PanelPrincipal (FramePrincipale frame, PanelImage panelI, PanelOutils panelO, JScrollPane scPanel)
 	{
 		// Initialisation des composants
 		this.panelOutils = panelO;
@@ -40,6 +41,6 @@ public class PanelPrincipal extends JPanel
 		// Initialisation du panel
 		this.setLayout(new BorderLayout());
 		this.add(panelOutils, BorderLayout.NORTH );
-		this.add(panelImage , BorderLayout.CENTER);
+		this.add(scPanel    , BorderLayout.CENTER);
 	}
 }
