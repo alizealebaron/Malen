@@ -37,6 +37,8 @@ public class Controleur {
 	private MalenMainFrame mainFrame;
 	private MalenSubFrame  subFrame;
 
+	private boolean onMainFrame;
+
 	private Color currentColor = Color.GREEN; // La couleur actuelle, par défaut noire
 	private String curseur;
 
@@ -51,6 +53,7 @@ public class Controleur {
 		this.point1 = null;
 		this.point2 = null;
 		this.subImage = null;
+		this.onMainFrame = true;
 	}
 
 	// Méthode pour démarrer l'application
@@ -63,12 +66,6 @@ public class Controleur {
 	public void nouvelleFenetre() {
 		subFrame = new MalenSubFrame(this.mainFrame, this);
 		subFrame.setVisible(true);
-	}
-
-	public void export() {
-		BufferedImage img = subFrame.getImage();
-		subFrame.setVisible(false);
-		mainFrame.addImage(img);
 	}
 
 	public void setCurseur(String curseur) {
@@ -118,6 +115,26 @@ public class Controleur {
 		return this.subImage;
 	}
 
+	public void setOnMainFrame()
+	{
+		this.onMainFrame = true;
+	}
+
+	public void setOnSecondFrame()
+	{
+		this.onMainFrame = false;
+	}
+
+	public boolean isOnMainFrame()
+	{
+		return this.onMainFrame;
+	}
+
+	public boolean isOnSecondFrame()
+	{
+		return !this.onMainFrame;
+	}
+
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*---------------------------------------------------------Action avec le click---------------------------------------------------------------------*/
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -127,7 +144,7 @@ public class Controleur {
 	 * curseur
 	 * 
 	 */
-	public void onClick(BufferedImage biImage, Color coulPixel, int x, int y) {
+	public void onClickLeft(BufferedImage biImage, Color coulPixel, int x, int y) {
 		switch (this.curseur) {
 			case Controleur.SOURIS:
 
@@ -156,17 +173,17 @@ public class Controleur {
 
 				break;
 
-				case Controleur.SELECTION_RECTANGLE:
-	
-					System.out.println("Souris en mode : " + this.curseur);
-					System.out.println(this.subImage!=null);
-	
-					if (this.subImage!=null) { //peut poser des problemes, mettre verif sur point1 et point2
-						System.out.println("oui");
-						this.mainFrame.pasteSubImage();
-					}
-	
-					break;
+			case Controleur.SELECTION_RECTANGLE:
+
+				System.out.println("Souris en mode : " + this.curseur);
+				System.out.println(this.subImage!=null);
+
+				if (this.subImage!=null) { //peut poser des problemes, mettre verif sur point1 et point2
+					System.out.println("oui");
+					this.mainFrame.pasteSubImage();
+				}
+
+				break;
 	
 
 			default:

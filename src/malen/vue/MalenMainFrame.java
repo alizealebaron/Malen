@@ -7,13 +7,13 @@ import malen.Controleur;
 import malen.modele.MalenFrame;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
 public class MalenMainFrame extends MalenFrame {
 
 	private MalenImagePanel imagePanel;
-
 	protected Controleur controleur;
 
 	public MalenMainFrame(Controleur controleur) {
@@ -47,5 +47,18 @@ public class MalenMainFrame extends MalenFrame {
 
 	public void nouvelleFenetre () {
 		super.controleur.nouvelleFenetre();
+	}
+
+	public void onClickRight(MouseEvent e)
+	{
+		super.onClickRight(e);
+		if (this.controleur.isOnSecondFrame()){
+			this.controleur.setOnMainFrame();
+		}
+	}
+
+	public boolean isMainFrame()
+	{
+		return true;
 	}
 }

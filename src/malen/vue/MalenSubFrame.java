@@ -1,12 +1,14 @@
 package malen.vue;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
 
 import malen.Controleur;
 import malen.modele.MalenFrame;
 
 public class MalenSubFrame extends MalenFrame {
-    private MalenMainFrame mainFrame;
+    private   MalenMainFrame mainFrame;
+	protected Controleur controleur;
 
 	private static final String[][] MODELE_SUB_BAR = {
 			{	 "M", 				         "Fichier",			   "fichier.png",		"F"				    },
@@ -33,7 +35,8 @@ public class MalenSubFrame extends MalenFrame {
 
 	public MalenSubFrame(MalenMainFrame mainFrame, Controleur controleur) {
 		super(controleur);
-        this.mainFrame = mainFrame;
+        this.mainFrame  = mainFrame;
+		this.controleur = controleur;
 
 		this.setTitle("Malen - Fenêtre Secondaire");
 		this.setLocation(500, 250);
@@ -46,4 +49,19 @@ public class MalenSubFrame extends MalenFrame {
 		this.mainFrame.setVisible(false);
 		System.out.println("SALUT");
 	}
+
+	public void onClickRight(MouseEvent e)
+	{
+		super.onClickRight(e);
+		if (this.controleur.isOnMainFrame()){
+			this.controleur.setOnSecondFrame();
+			System.out.println("passage en seconde frame");
+		}
+	}
+
+	public boolean isMainFrame()
+	{
+		return false;
+	}
 }
+

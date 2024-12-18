@@ -10,6 +10,7 @@ import malen.modele.Rotation;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -21,13 +22,13 @@ import java.awt.image.BufferedImage;
 
 public class MalenImagePanel extends JPanel implements MouseListener, MouseMotionListener {
 
-    private BufferedImage  image;
-    private boolean        imageLoaded = false;
-    private MalenFrame     mainFrame;
-    private double         rotate_angle = 0;
-    private JPanel         sliderPanel;
-    private boolean        flipHorizontal = false;
-    private boolean        flipVertical = false;
+	private BufferedImage image;
+	private boolean imageLoaded = false;
+	private MalenFrame mainFrame;
+	private double rotate_angle = 0;
+	private JPanel sliderPanel;
+	private boolean flipHorizontal = false;
+	private boolean flipVertical = false;
 
 	private JSlider outilSlider;
 	private char outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
@@ -130,7 +131,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 		switch (this.outil) {
 			case 'R':
-				outilSlider.setValue((int)this.rotate_angle);
+				outilSlider.setValue((int) this.rotate_angle);
 				outilSlider.setMinimum(0);
 				outilSlider.setMaximum(360);
 				break;
@@ -167,12 +168,12 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		repaint();
 	}
 
-    public BufferedImage getImage() {
+	public BufferedImage getImage() {
 		if (this.image == null) {
 			System.out.println("Image actuelle nulle");
 			this.image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		}
-	
+
 		Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
 		this.image = rotation.applyTransformations(this.image);
 		return this.image;
@@ -183,25 +184,21 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		repaint();
 	}
 
-    @Override
-    protected void paintComponent(Graphics g)
-    {
-        super.paintComponent(g);
-        
-        if (!imageLoaded)
-        {
-            g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(0, 0, getWidth(), getHeight());
-            g.setColor(Color.BLACK);
-            g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
-        }
-        else
-        {
-            Graphics2D g2d = (Graphics2D) g.create();
-            Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
-            BufferedImage transformedImage = rotation.applyTransformations(image);
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 
-            this.setSize(new Dimension(image.getWidth(), image.getHeight()));
+		if (!imageLoaded) {
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(0, 0, getWidth(), getHeight());
+			g.setColor(Color.BLACK);
+			g.drawString("Aucune image chargée", getWidth() / 2 - 80, getHeight() / 2);
+		} else {
+			Graphics2D g2d = (Graphics2D) g.create();
+			Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+			BufferedImage transformedImage = rotation.applyTransformations(image);
+
+			this.setSize(new Dimension(image.getWidth(), image.getHeight()));
 
 			g2d.drawImage(transformedImage, 0, 0, null);
 
@@ -252,7 +249,13 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// Lorsqu'on clique sur l'image, obtenir la couleur sous le curseur
+
+		if (!SwingUtilities.isLeftMouseButton(e)) {
+			mainFrame.onClickRight(e);
+			return;
+		} else {
+		// Lorsqu'on fait un clique gauche sur l'image, obtenir la couleur sous le
+		// curseur
 		java.awt.Point awtPoint = e.getPoint();
 		Point clickPoint = new Point((int) awtPoint.getX(), (int) awtPoint.getY());
 		Color color = getColorAtPoint(clickPoint);
@@ -268,18 +271,30 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 		System.out.println("Coordonées : [" + clickPoint.x() + ";" + clickPoint.y() + "]");
 
+		Component sourceComponent = e.getComponent();
+		JFrame parentWindow = (JFrame) SwingUtilities.getWindowAncestor(sourceComponent);
+
+		if (parentWindow instanceof MalenMainFrame) {
+			System.out.println("Clic sur la main frame");
+		} else {
+			System.out.println("Clic sur la sub frame");
+		}
+
 		if (image != null && x >= 0 && y >= 0 && x < this.image.getWidth() && y < this.image.getHeight()) {
 			System.out.println(color);
-			mainFrame.onClick(image, clickPoint.x(), clickPoint.y(), color);
+			mainFrame.onClickLeft(image, clickPoint.x(), clickPoint.y(), color);
 			repaint();
-		}
+		}}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 
-		if (mainFrame.isCurseurOn(Controleur.SELECTION_RECTANGLE)
-				|| mainFrame.isCurseurOn(Controleur.SELECTION_OVALE)) {
+		if ((mainFrame.isCurseurOn(Controleur.SELECTION_RECTANGLE)
+				|| mainFrame.isCurseurOn(Controleur.SELECTION_OVALE))
+				&& ((this.mainFrame.isOnMainFrame()
+						&& this.mainFrame.isMainFrame())
+						|| (this.mainFrame.isOnSecondFrame() && !this.mainFrame.isMainFrame()))) {
 			if (null == mainFrame.getSubImage()) {
 				mainFrame.setPoint1(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
 				mainFrame.setPoint2(null); // Réinitialiser le deuxième point
@@ -297,7 +312,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 				} else {
 					java.awt.Point awtPoint = e.getPoint();
 					Point clickPoint = new Point((int) awtPoint.getX(), (int) awtPoint.getY());
-					mainFrame.onClick(image, clickPoint.x(), clickPoint.y(), getColorAtPoint(clickPoint));
+					mainFrame.onClickLeft(image, clickPoint.x(), clickPoint.y(), getColorAtPoint(clickPoint));
 					// Sinon, on commence une nouvelle sélection
 					mainFrame.setPoint1(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
 					mainFrame.setPoint2(null); // Réinitialiser le deuxième point
@@ -322,8 +337,11 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 			this.repaint();
 		} else {
 			// Mettre à jour le deuxième point pour le rectangle de sélection
-			if (mainFrame.isCurseurOn(Controleur.SELECTION_RECTANGLE)
-					|| mainFrame.isCurseurOn(Controleur.SELECTION_OVALE)) {
+			if ((mainFrame.isCurseurOn(Controleur.SELECTION_RECTANGLE)
+					|| mainFrame.isCurseurOn(Controleur.SELECTION_OVALE))
+					&& ((this.mainFrame.isOnMainFrame()
+							&& this.mainFrame.isMainFrame())
+							|| (this.mainFrame.isOnSecondFrame() && !this.mainFrame.isMainFrame()))) {
 				mainFrame.setPoint2(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
 				this.repaint();
 			}
@@ -335,7 +353,11 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		if (isMovingSubImage) {
 			// Fin du déplacement de la subimage
 			isMovingSubImage = false;
-		} else if (mainFrame.isCurseurOn(Controleur.SELECTION_RECTANGLE)) {
+		} else if ((mainFrame.isCurseurOn(Controleur.SELECTION_RECTANGLE)
+				|| mainFrame.isCurseurOn(Controleur.SELECTION_OVALE))
+				&& ((this.mainFrame.isOnMainFrame()
+						&& this.mainFrame.isMainFrame())
+						|| (this.mainFrame.isOnSecondFrame() && !this.mainFrame.isMainFrame()))) {
 			// Terminer la sélection et créer la subimage
 			mainFrame.setPoint2(new Point(e.getX(), e.getY()));
 			mainFrame.createSubImage(image);

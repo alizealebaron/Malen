@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import java.io.File;
@@ -14,6 +15,8 @@ import java.io.File;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
 import malen.Controleur;
@@ -181,8 +184,27 @@ public abstract class MalenFrame extends JFrame {
 		this.controleur.changerLuminosite(bi, value);
 	}
 
-	public void onClick(BufferedImage biImage, int x, int y, Color coulPixel) {
-		this.controleur.onClick(biImage, coulPixel, x, y);
+	public void onClickLeft(BufferedImage biImage, int x, int y, Color coulPixel) {
+		this.controleur.onClickLeft(biImage, coulPixel, x, y);
+	}
+
+	public void onClickRight(MouseEvent e){
+        JPopupMenu contextMenu = new JPopupMenu();
+
+        JMenuItem copyItem = new JMenuItem("Copier");
+        copyItem.addActionListener(actionEvent -> {
+            System.out.println("Option 'Copier' sélectionnée.");
+			//if (isSelected)
+        });
+        contextMenu.add(copyItem);
+
+		JMenuItem pasteItem = new JMenuItem("Coller");
+        pasteItem.addActionListener(actionEvent -> {
+            System.out.println("Option 'Coller' sélectionnée.");
+        });
+        contextMenu.add(pasteItem);
+
+        contextMenu.show(e.getComponent(), e.getX(), e.getY());
 	}
 
 	public Point getPoint1() {
@@ -210,7 +232,6 @@ public abstract class MalenFrame extends JFrame {
 	}
 
 	public void pasteSubImage(){
-		System.out.println("oui");
 		this.imagePanel.pasteSubImage();
 	}
 
@@ -225,6 +246,31 @@ public abstract class MalenFrame extends JFrame {
 	public void nouvelleFenetre() {}
 
 	public void export() {}
+
+	public void setOnMainFrame()
+	{
+		this.controleur.setOnMainFrame();
+	}
+
+	public void setOnSecondFrame()
+	{
+		this.controleur.setOnSecondFrame();
+	}
+
+	public boolean isOnMainFrame()
+	{
+		return this.controleur.isOnMainFrame();
+	}
+
+	public boolean isOnSecondFrame()
+	{
+		return this.controleur.isOnSecondFrame();
+	}
+
+	public boolean isMainFrame()
+	{
+		return true;
+	}
 
 	public void addImage(BufferedImage img) {
 		if (img == null) {
