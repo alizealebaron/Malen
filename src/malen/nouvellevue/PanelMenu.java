@@ -354,10 +354,10 @@ public class PanelMenu extends JMenuBar implements ActionListener
 				framePrincipale.afficherSlider('R');
 				break;
 			case "Retournement Vertical":
-				//framePrincipale.switchRetournementVertical();
+				framePrincipale.switchRetournementVertical();
 				break;
 			case "Retournement Horizontal":
-				//framePrincipale.switchRetournementHorizontal();
+				framePrincipale.switchRetournementHorizontal();
 				break;
 			case "Sélection Rectangle":
 				framePrincipale.switchCurseur(Controleur.SELECTION_RECTANGLE);

@@ -83,10 +83,11 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 	/*                                                                Accesseurs                                                                        */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	public boolean       isImage      ( ) { return this.biImage != null; }
-	public BufferedImage getImage     ( ) { return this.biImage        ; }
-	public Color         getColorText ( ) { return this.textColor      ; }
-	public JTextField    getTextField ( ) { return this.textField      ; }
+	public boolean       isImage        ( ) { return this.biImage != null; }
+	public BufferedImage getImage       ( ) { return this.biImage        ; }
+	public Color         getColorText   ( ) { return this.textColor      ; }
+	public JTextField    getTextField   ( ) { return this.textField      ; }
+	public Double        getRotateAngle ( ) { return this.rotate_angle   ; }
 
 	public Dimension getImageSize() 
 	{
@@ -102,7 +103,8 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 	/*                                                               Modificateurs                                                                      */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	public void setTextColor ( Color c ) { this.textColor = c; }
+	public void setTextColor   ( Color  c ) { this.textColor    = c; }
+	public void setRotateAngle ( Double a ) { this.rotate_angle = a; }
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                                 Méthodes                                                                         */
@@ -277,6 +279,22 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 
 			g2d.dispose();
 		}
+	}
+
+	/* ------------------------------------------------------------ */
+	/*                     ✨ Retournement ✨                      */
+	/* ------------------------------------------------------------ */
+
+	public void switchFlipHorizontal ()
+	{
+		this.flipHorizontal = !this.flipHorizontal;
+		repaint();
+	}
+
+	public void switchFlipVertical ()
+	{
+		this.flipVertical = !this.flipVertical;
+		repaint();
 	}
 
 	/* ------------------------------------------------------------ */

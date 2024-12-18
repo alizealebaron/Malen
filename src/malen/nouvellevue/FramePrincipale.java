@@ -179,17 +179,18 @@ public class FramePrincipale extends JFrame
 	/*                  Accesseurs                  */
 	/* -------------------------------------------- */
 	
-	public void          repaintImage ( ) {        this.panelImage.repaint      ( ) ; }
-	public boolean       isImage      ( ) { return this.panelImage.isImage      ( ) ; }
-	public BufferedImage getImage     ( ) { return this.panelImage.getImage     ( ) ; }
-	public Color         getColorText ( ) { return this.panelImage.getColorText ( ) ; }
+	public void          repaintImage   ( ) {        this.panelImage.repaint        ( ) ; }
+	public boolean       isImage        ( ) { return this.panelImage.isImage        ( ) ; }
+	public BufferedImage getImage       ( ) { return this.panelImage.getImage       ( ) ; }
+	public Color         getColorText   ( ) { return this.panelImage.getColorText   ( ) ; }
+	public Double        getRotateAngle ( ) { return this.panelImage.getRotateAngle ( ) ; }
 
 	public char          getOutil     ( ) { return this.panelOutils.getOutil    ( ) ; }
 
 	/*                 Modificateurs                */
 	/* -------------------------------------------- */
 
-	
+	public void setRotateAngle ( double angle ) { this.panelImage.setRotateAngle (angle); }
 
 	/*                    Autres                    */
 	/* -------------------------------------------- */
@@ -309,6 +310,9 @@ public class FramePrincipale extends JFrame
 	{
 		return this.controleur.getCurseur().equals(curseur);
 	}
+
+	public void switchRetournementHorizontal ( ) {this.panelImage.switchFlipHorizontal ( );}
+	public void switchRetournementVertical   ( ) {this.panelImage.switchFlipVertical   ( );}
 }
 
 

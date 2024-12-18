@@ -37,15 +37,12 @@ public class PanelOutils extends JPanel
 	private JSlider outilSlider;
 	private char outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
 
-	/* Gestion de la rotation */
-	private double  rotate_angle = 0;
-	private JPanel  sliderPanel;
-	private boolean flipHorizontal = false;
-	private boolean flipVertical = false;
-
 	/* Gestion du texte */
 	private JPanel     panelGestionText;
 	private JButton    btnCouleurText;
+
+	/* Gestion de la rotation */
+	private int        tempValue = 0;
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                                Controleurs                                                                       */
@@ -69,6 +66,7 @@ public class PanelOutils extends JPanel
 			{
 				case 'R':
 					this.rotateImage(value % 360);
+					this.tempValue = value;
 					break;
 				case 'L':
 					if (!outilSlider.getValueIsAdjusting() && this.framePrincipale.isImage()) 
@@ -85,7 +83,7 @@ public class PanelOutils extends JPanel
 					}
 					break;
 				default:
-					this.rotateImage(0);
+					//this.rotateImage(0); //Voir avec Alizéa si besoin //Pour alizéa du futur : Ca m'embêtait avec l'affichage du panel text en remettant à 0
 					break;
 			}
 		});
@@ -205,7 +203,7 @@ public class PanelOutils extends JPanel
 
 	public void rotateImage(double angle) 
 	{
-		this.rotate_angle = angle;
+		this.framePrincipale.setRotateAngle(angle);
 		this.framePrincipale.repaintImage();
 	}
 
@@ -240,11 +238,11 @@ public class PanelOutils extends JPanel
 		switch (this.outil) 
 		{
 			case 'R':
-				outilSlider.setValue(0);
 				outilSlider.setMinimum(0);
 				outilSlider.setMaximum(360);
-				break;
+				outilSlider.setValue(this.tempValue);
 
+				break;
 			case 'L':
 				outilSlider.setValue(0);
 				outilSlider.setMinimum(-255);
