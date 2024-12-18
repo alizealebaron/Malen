@@ -266,6 +266,7 @@ public class MalenMenuBar extends JMenuBar implements ActionListener
 				break;
 			case "Ajouter Texte":
 				mainFrame.afficherPanelText();
+				mainFrame.switchCurseur(Controleur.TEXT);
 				break;
 			case "Rotation Axiale":
 				mainFrame.afficherSlider('R');

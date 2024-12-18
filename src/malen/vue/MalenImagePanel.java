@@ -37,32 +37,30 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 	/* Gestion du texte */
 	private JPanel panelGestionText;
-	private JTextField textField;      // Zone de texte temporaire
-    private Rectangle textBounds;      // Bordure de la zone de texte
-    private Font textFont = new Font("Arial", Font.PLAIN, 20); // Font par défaut
-    private boolean editingText = false; // État de modification du texte
+	private JTextField textField; // Zone de texte temporaire
+	private Rectangle textBounds; // Bordure de la zone de texte
+	private Font textFont = new Font("Arial", Font.PLAIN, 20); // Font par défaut
+	private boolean editingText = false; // État de modification du texte
 
-
-	public MalenImagePanel(MalenMainFrame mainframe) 
-	{
+	public MalenImagePanel(MalenMainFrame mainframe) {
 		this.mainFrame = mainframe;
-	
+
 		// Désactiver le layout pour permettre un positionnement absolu
 		// this.setLayout(null); // Remplace le BorderLayout par null
 		setPreferredSize(new Dimension(800, 600)); // Taille initiale du panneau
-	
+
 		sliderPanel = new JPanel();
 		sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS)); // Empile les composants verticalement
 		sliderPanel.setBounds(0, 0, 200, 50); // Positionnement manuel si nécessaire
 		this.add(sliderPanel);
-	
+
 		outilSlider = new JSlider(0, 0, 0); // Curseur de 0 à 360 degrés
 		outilSlider.setVisible(false);
 		sliderPanel.add(outilSlider);
-	
+
 		outilSlider.addChangeListener(e -> {
 			int value = outilSlider.getValue();
-	
+
 			switch (this.outil) {
 				case 'R':
 					this.rotateImage(value % 360);
@@ -84,10 +82,10 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 					break;
 			}
 		});
-	
+
 		// Initialisation du panel de texte
 		initialisationPanelText();
-	
+
 		// Gestion de la souris
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -133,14 +131,14 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
-	/** Permet d'aficher ou non la barre d'outil (Rotation, Luminosité, Contraste)
+	/**
+	 * Permet d'aficher ou non la barre d'outil (Rotation, Luminosité, Contraste)
+	 * 
 	 * @param outil L = Luminosité / C = Contraste / R = Rotation / D = Default
 	 */
-	public void showOutilSlider(char outil) 
-	{
+	public void showOutilSlider(char outil) {
 
-		if (outilSlider.isVisible() && outil == this.outil || outil == 'D') 
-		{
+		if (outilSlider.isVisible() && outil == this.outil || outil == 'D') {
 			outilSlider.setVisible(false);
 			outilSlider.setEnabled(false);
 			outil = 'D';
@@ -151,8 +149,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 		this.outil = outil;
 
-		switch (this.outil) 
-		{
+		switch (this.outil) {
 			case 'R':
 				outilSlider.setValue(0);
 				outilSlider.setMinimum(0);
@@ -224,8 +221,11 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 					transformedImage = rotation.applyTransformations(mainFrame.getSubImage());
 
-					this.mainFrame.setPoint1(new Point(transformedImage.getMinX() + mainFrame.getPoint1().x(), transformedImage.getMinY() + mainFrame.getPoint1().y()));
-					this.mainFrame.setPoint2(new Point(transformedImage.getMinX() + transformedImage.getWidth() + mainFrame.getPoint1().x(), transformedImage.getMinY() + transformedImage.getHeight() + mainFrame.getPoint1().y()));
+					this.mainFrame.setPoint1(new Point(transformedImage.getMinX() + mainFrame.getPoint1().x(),
+							transformedImage.getMinY() + mainFrame.getPoint1().y()));
+					this.mainFrame.setPoint2(new Point(
+							transformedImage.getMinX() + transformedImage.getWidth() + mainFrame.getPoint1().x(),
+							transformedImage.getMinY() + transformedImage.getHeight() + mainFrame.getPoint1().y()));
 
 					g2d.drawImage(transformedImage, mainFrame.getPoint1().x(), mainFrame.getPoint1().y(), null);
 				} else {
@@ -281,23 +281,29 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		return null; // Retourne null si la position est hors de l'image
 	}
 
-	/* ------------------------------------------------------------------------------------------------------------------------------ */
-	/*                                                     Gestion du texte                                                           */
-	/* ------------------------------------------------------------------------------------------------------------------------------ */
+	/*
+	 * -----------------------------------------------------------------------------
+	 * -------------------------------------------------
+	 */
+	/* Gestion du texte */
+	/*
+	 * -----------------------------------------------------------------------------
+	 * -------------------------------------------------
+	 */
 
-	/** Initialise le panel de texte et tout ses composants
+	/**
+	 * Initialise le panel de texte et tout ses composants
 	 * 
 	 */
-	public void initialisationPanelText()
-	{
+	public void initialisationPanelText() {
 		// Initialisation d'un panel
 		this.panelGestionText = new JPanel();
 
-		// Initialiser la zone de texte qui s'affichera 
-        this.textField = new JTextField();
-        this.textField.setVisible(false);
-        this.textField.setBorder(null);
-        this.textField.addActionListener(e -> finalizeText()); 
+		// Initialiser la zone de texte qui s'affichera
+		this.textField = new JTextField();
+		this.textField.setVisible(false);
+		this.textField.setBorder(null);
+		this.textField.addActionListener(e -> finalizeText());
 
 		// Récupération de toutes les polices d'écriture du pc
 		String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
@@ -330,97 +336,101 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		this.add(textField);
 	}
 
-	/** Permet d'afficher le panel de modification du texte
+	/**
+	 * Permet d'afficher le panel de modification du texte
 	 * 
 	 */
-	public void afficherPanelText()
-	{
-		if (this.panelGestionText.isVisible()) 
-		{
+	public void afficherPanelText() {
+		if (this.panelGestionText.isVisible()) {
 			this.panelGestionText.setVisible(false);
-		} 
-		else
-		{
+		} else {
 			if (this.outilSlider.isVisible())
 				showOutilSlider('D');
-				
+
 			this.panelGestionText.setVisible(true);
 		}
 	}
 
-	
-    /** Récupération de toutes les données des champs pour modifier le champ de texte en direct
-     * @param fontBox
-     * @param sizeSpinner
-     * @param boldCheck
-     * @param italicCheck
-     */
-    private void updateTextFont(JComboBox<String> fontBox, JSpinner sizeSpinner, JCheckBox boldCheck, JCheckBox italicCheck) 
-	{
-        int style = Font.PLAIN;
-		if (boldCheck.isSelected()) style |= Font.BOLD;
-		if (italicCheck.isSelected()) style |= Font.ITALIC;
+	/**
+	 * Récupération de toutes les données des champs pour modifier le champ de texte
+	 * en direct
+	 * 
+	 * @param fontBox
+	 * @param sizeSpinner
+	 * @param boldCheck
+	 * @param italicCheck
+	 */
+	private void updateTextFont(JComboBox<String> fontBox, JSpinner sizeSpinner, JCheckBox boldCheck,
+			JCheckBox italicCheck) {
+		int style = Font.PLAIN;
+		if (boldCheck.isSelected())
+			style |= Font.BOLD;
+		if (italicCheck.isSelected())
+			style |= Font.ITALIC;
 
 		this.textFont = new Font((String) fontBox.getSelectedItem(), style, (Integer) sizeSpinner.getValue());
 		this.textField.setFont(textFont);
 
 		// Repositionner la zone de texte si nécessaire
-		if (editingText && textBounds != null) 
-		{
+		if (editingText && textBounds != null) {
 			textField.setBounds(textBounds); // Réutiliser la position précédente
 		}
-    }
+	}
 
-	/** Finalisation de l'ajout du texte à l'image
+	/**
+	 * Finalisation de l'ajout du texte à l'image
 	 * 
 	 */
-	private void finalizeText() 
-	{
+	private void finalizeText() {
 		// Création du graphique g2d pour jouter le texte
 		Graphics2D g2d = image.createGraphics();
 
-        if (editingText)
-		{
-            String text = textField.getText();
+		if (editingText) {
+			String text = textField.getText();
 
 			// On ajout le texte à l'image s'il n'est pas vide
-            if (!text.isEmpty()) 
-			{
-                g2d.setFont(textFont);
-                g2d.setColor(Color.BLACK);
-                g2d.drawString(text, textBounds.x + 2, textBounds.y + textBounds.height - 10);
-            }
+			if (!text.isEmpty()) {
+				g2d.setFont(textFont);
+				g2d.setColor(Color.BLACK);
+				g2d.drawString(text, textBounds.x + 2, textBounds.y + textBounds.height - 10);
+			}
 
 			// On rend le text invisible
-            textField.setVisible(false);
-            editingText = false;
-            textBounds = null;
+			textField.setVisible(false);
+			editingText = false;
+			textField.setText("");
+			textBounds = null;
 
 			// On repaint l'image
-            this.repaint();
-        }
-    }
+			this.repaint();
+		}
+	}
 
-	private void startTextEditing(int x, int y) 
-	{
-        this.textBounds = new Rectangle(x, y, 150, 30); // Taille initiale de la zone
-        this.textField.setBounds(textBounds);
-        this.textField.setFont(textFont);
-        this.textField.setText("");
-        this.textField.setVisible(true);
-        this.textField.requestFocus();
-        this.editingText = true;
+	private void startTextEditing(int x, int y) {
+		System.out.println("" + x + "|" + y);
+		this.textBounds = new Rectangle(x, y, 150, 30); // Taille initiale de la zone
+		this.textField.setBounds(textBounds);
+		this.textField.setFont(textFont);
+		this.textField.setText("");
+		this.textField.setVisible(true);
+		this.textField.requestFocus();
+		this.editingText = true;
 
-        this.repaint();
-    }
+		this.repaint();
+	}
 
-	/* ------------------------------------------------------------------------------------------------------------------------------ */
-	/*                                                  Gestion de la souris                                                          */
-	/* ------------------------------------------------------------------------------------------------------------------------------ */
+	/*
+	 * -----------------------------------------------------------------------------
+	 * -------------------------------------------------
+	 */
+	/* Gestion de la souris */
+	/*
+	 * -----------------------------------------------------------------------------
+	 * -------------------------------------------------
+	 */
 
 	@Override
-	public void mouseClicked(MouseEvent e) 
-	{
+	public void mouseClicked(MouseEvent e) {
 		// Lorsqu'on clique sur l'image, obtenir la couleur sous le curseur
 		java.awt.Point awtPoint = e.getPoint();
 		Point clickPoint = new Point((int) awtPoint.getX(), (int) awtPoint.getY());
@@ -439,21 +449,18 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 			mainFrame.onClick(image, clickPoint.x(), clickPoint.y(), color);
 
 			// Gestion de la zone de texte
-			if (this.mainFrame.isCurseurOn(Controleur.TEXT))
-			{
+			if (this.mainFrame.isCurseurOn(Controleur.TEXT)) {
 				System.out.println("Hey !");
 
-				if (this.editingText) 
-				{
-                    finalizeText(); // Terminer l'édition du texte en cours
-                }
+				if (this.editingText) {
+					finalizeText(); // Terminer l'édition du texte en cours
+				}
 
-                startTextEditing(e.getX(), e.getY());
+				startTextEditing(e.getX(), e.getY());
 			}
 
 			repaint();
 		}
-
 
 	}
 

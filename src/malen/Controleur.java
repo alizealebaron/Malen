@@ -103,12 +103,7 @@ public class Controleur
 		});
 	}
 
-	public void setCurseur(String curseur) {
-		this.curseur = curseur;
-		if ((!curseur.equals(SELECTION_RECTANGLE)) && (!curseur.equals(SELECTION_OVALE))) {
-			resetSelection(); // Réinitialiser la sélection quand on sort du mode sélection rectangle
-		}
-	}
+
 
 	public void resetSelection() {
 		point1 = null;
@@ -116,39 +111,8 @@ public class Controleur
 		subImage = null;
 	}
 
-	public String getCurseur() {
-		return this.curseur;
-	}
-
-	// Méthode pour afficher le sélecteur de couleur et stocker la couleur choisie
-	public void setColor(Color selectedColor) {
-		currentColor = selectedColor;
-	}
-
 	// Méthode pour obtenir la couleur actuelle
-	public Color getCurrentColor() {
-		return currentColor;
-	}
 
-	public Point getPoint1() {
-		return point1;
-	}
-
-	public Point getPoint2() {
-		return point2;
-	}
-
-	public void setPoint1(Point point1) {
-		this.point1 = point1;
-	}
-
-	public void setPoint2(Point point2) {
-		this.point2 = point2;
-	}
-
-	public BufferedImage getSubImage() {
-		return this.subImage;
-	}
 
 	public void setSubImage(BufferedImage image) {
 		this.subImage = image;
