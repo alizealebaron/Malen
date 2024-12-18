@@ -460,7 +460,8 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	 */
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) 
+	{
 		// Lorsqu'on clique sur l'image, obtenir la couleur sous le curseur
 		java.awt.Point awtPoint = e.getPoint();
 		Point clickPoint = new Point((int) awtPoint.getX(), (int) awtPoint.getY());
@@ -492,12 +493,11 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
                 }
 
                 startTextEditing(e.getX(), e.getY());
-			}
-
-			repaint();
 		}
 
+			repaint();
 	}
+
 
 	@Override
 	public void mousePressed(MouseEvent e) {
