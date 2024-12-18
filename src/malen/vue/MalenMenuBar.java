@@ -224,7 +224,6 @@ public class MalenMenuBar extends JMenuBar implements ActionListener
 	// Méthode pour ajouter un ItemListener à chaque JMenuItem
 	private void addItemListenerToMenu(JMenuItem menuItem) 
 	{
-		System.out.println(menuItem.getText());
 		menuItem.addActionListener(new ActionListener() 
 		{
 			@Override
@@ -233,7 +232,6 @@ public class MalenMenuBar extends JMenuBar implements ActionListener
 				// Quand un élément de menu est sélectionné
 				JMenuItem source = (JMenuItem) e.getSource();
 				String itemName = source.getText();
-				System.out.println("Action sur l'élément: " + itemName);
 
 				handleMenuAction(itemName);
 			}
@@ -253,22 +251,18 @@ public class MalenMenuBar extends JMenuBar implements ActionListener
 				mainFrame.importImage();
 				break;
 			case "Remplissage":
-				System.out.println("ouai, tu utilise : " + menuItem);
 				mainFrame.switchCurseur(Controleur.POT_DE_PEINTURE);
 				break;
 			case "Transparent":
-				System.out.println("ouai, tu utilise : " + menuItem);
 				mainFrame.switchCurseur(Controleur.EFFACE_FOND);
 				break;
 			case "Luminosité":
 				mainFrame.afficherSlider('L');
 				mainFrame.switchCurseur(Controleur.LUMINOSITE);
-				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Constraste":
 				mainFrame.afficherSlider('C');
 				mainFrame.switchCurseur(Controleur.CONTRASTE);
-				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Ajouter Texte":
 				mainFrame.afficherPanelText();
@@ -296,7 +290,6 @@ public class MalenMenuBar extends JMenuBar implements ActionListener
 				mainFrame.chooseColor();
 				break;
 			default:
-				System.out.println("Action non définie pour " + menuItem);
 				break;
 		}
 	}
