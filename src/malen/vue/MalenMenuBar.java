@@ -14,10 +14,11 @@ import malen.Controleur;
 import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.awt.*;
 import java.util.List;
 
-public class MalenMenuBar extends JMenuBar
+public class MalenMenuBar extends JMenuBar implements ActionListener
 {
 	/* ------------------------------------------------------------ */
 	/*             Constante pour navigation modulable              */
@@ -45,6 +46,7 @@ public class MalenMenuBar extends JMenuBar
 	/* ------------------------------------------------------------ */
 
 	private MalenMainFrame mainFrame;
+	private JButton btnCouleurAct;
 
 	/** Construteur de la navBar
 	 * @param mainFrame
@@ -110,6 +112,23 @@ public class MalenMenuBar extends JMenuBar
 					break;
 			}
 		}
+
+		this.add(Box.createHorizontalGlue());
+
+		// Ajout du bouton de couleur
+		this.btnCouleurAct = new JButton("      ");
+		this.btnCouleurAct.setBackground(this.mainFrame.getCurrentColor());
+		this.btnCouleurAct.setFocusPainted(false);
+        this.btnCouleurAct.setBackground(this.mainFrame.getCurrentColor()); // Couleur de fond
+		this.btnCouleurAct.setForeground(this.mainFrame.getCurrentColor());
+        this.btnCouleurAct.setOpaque(true); 
+        this.btnCouleurAct.setBorderPainted(false); 
+        this.btnCouleurAct.setToolTipText("Couleur actuelle");
+		
+
+        this.btnCouleurAct.addActionListener(this);
+
+		this.add(btnCouleurAct);
 	}
 
 	/**
@@ -177,6 +196,12 @@ public class MalenMenuBar extends JMenuBar
 		return resizedIcon;
 	}
 
+	public void setCouleurButton ()
+	{
+		this.btnCouleurAct.setBackground(this.mainFrame.getCurrentColor());
+		this.btnCouleurAct.setForeground(this.mainFrame.getCurrentColor());
+	}
+
 	/**
 	 * Méthodes qui permet de récupérer toutes les options du MenuBar
 	 */
@@ -216,10 +241,10 @@ public class MalenMenuBar extends JMenuBar
 	// Méthode pour gérer l'action de chaque élément du menu
 	private void handleMenuAction(String menuItem) {
 		switch (menuItem) {
-			case "Sauvegarder":
+			case "Enregistrer":
 				mainFrame.saveImage( "image_malen.png");
 				break;
-			case "Sauvegarder Sous":
+			case "Enregistrer Sous":
 				mainFrame.saveImage();
 				break;
 			case "Ouvrir":
@@ -233,11 +258,14 @@ public class MalenMenuBar extends JMenuBar
 				break;
 			case "Luminosité":
 				mainFrame.afficherSlider('L');
+				mainFrame.switchCurseur(Controleur.LUMINOSITE);
 				break;
 			case "Constraste":
 				mainFrame.afficherSlider('C');
+				mainFrame.switchCurseur(Controleur.CONTRASTE);
 				break;
-			case "Police":
+			case "Ajouter Texte":
+				mainFrame.afficherPanelText();
 				break;
 			case "Rotation Axiale":
 				mainFrame.afficherSlider('R');
@@ -281,6 +309,7 @@ public class MalenMenuBar extends JMenuBar
 			{		ITEM, 			         "Pipette",	           "pipette.png",	    "P"			     	},
 			{		ITEM, 			         "Palette",	           "couleur.png",	    "L"			     	},
 			{	MENU, 				           "Texte",		        "police.png",		"P"				    },
+			{		ITEM, 			   "Ajouter Texte",		        "police.png",		"T"				    },			
 			{	MENU, 				        "Rotation",		      "rotation.png",		"R"				    },
 			{		ITEM, 			 "Rotation Axiale",	          "rotation.png",	    "O"			     	},
 			{		ITEM, 	   "Retournement Vertical",	         "verticale.png",	    "V"			     	},
@@ -289,5 +318,24 @@ public class MalenMenuBar extends JMenuBar
 			{		ITEM, 	     "Sélection Rectangle",	             "carre.png",	    "R"			     	},
 			{		ITEM,            "Sélection Ovale",	            "cercle.png",	    "O"			     	},
 		};
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) 
+	{
+
+        // Ouvrir le sélecteur de couleur
+        Color selectedColor = JColorChooser.showDialog
+		(
+            null,
+            "Sélectionnez une couleur",
+            this.mainFrame.getCurrentColor()
+         );
+
+        // Si une couleur est sélectionnée, appliquer la couleur au label
+        if (selectedColor != null) 
+		{
+            this.mainFrame.setCurrentColor(selectedColor);
+        }
 	}
 }

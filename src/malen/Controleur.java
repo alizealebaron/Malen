@@ -22,25 +22,34 @@ import java.awt.image.BufferedImage;
  * @date : 16/12/2024
  */
 
-public class Controleur {
-	/**
-	 * 
-	 */
+public class Controleur 
+{
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*                                                                  Attributs                                                                       */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
 	public static final String PIPETTE = "pipette";
 	public static final String SOURIS = "souris";
 	public static final String POT_DE_PEINTURE = "pot";
 	public static final String SELECTION_RECTANGLE = "rectangle";
 	public static final String SELECTION_OVALE = "cercle";
 	public static final String EFFACE_FOND = "fond";
+	public static final String TEXT = "text";
+	public static final String LUMINOSITE = "lumi";
+	public static final String CONTRASTE = "cont";
 
 	private MalenMainFrame mainFrame;
 
-	private Color currentColor = Color.GREEN; // La couleur actuelle, par défaut noire
+	private Color currentColor = Color.BLACK; // La couleur actuelle, par défaut noire
 	private String curseur;
 
 	private Point point1;
 	private Point point2;
 	private BufferedImage subImage;
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*                                                                Controleurs                                                                       */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	public Controleur() {
 		mainFrame = new MalenMainFrame(this); // Crée la fenêtre principale
@@ -50,6 +59,42 @@ public class Controleur {
 		this.point2 = null;
 		this.subImage = null;
 	}
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*                                                                Accesseurs                                                                        */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	public Color         getCurrentColor () { return this.currentColor;}
+	public String        getCurseur      () { return this.curseur;     }
+	public Point         getPoint1       () { return this.point1;      }
+	public Point         getPoint2       () { return this.point2;      }
+	public BufferedImage getSubImage     () { return this.subImage;    }
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*                                                               Modificateurs                                                                      */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	public void setPoint1(Point point1       ) {this.point1  = point1;       }
+	public void setPoint2(Point point2       ) {this.point2  = point2;       }
+
+	public void setCurseur(String curseur) 
+	{
+		this.curseur = curseur;
+
+		if (!curseur.equals(SELECTION_RECTANGLE)) 
+			resetSelection(); // Réinitialiser la sélection quand on sort du mode sélection rectangle
+	}
+
+	public void setColor (Color selectedColor) 
+	{
+		currentColor = selectedColor;
+		this.mainFrame.updateButton();
+	}
+
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/*                                                                 Méthodes                                                                         */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	// Méthode pour démarrer l'application
 	public void startApplication() {

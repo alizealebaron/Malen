@@ -169,12 +169,13 @@ public class Couleur
 
 
 	/** Permet de vérifier que la couleur est dans les bornes
-	 * @param coul La couleur a vérifiée
+	 * @param coul La couleur a vérifier
 	 * @return La couleur changée si elle dépasse les bornes
 	 */
 	private static int verifBorneCouleur (int coul)
 	{
-		if (coul > 255) { coul = 255;}
+		// Si la couleur est trop grande ou trop petite, on la ramène à la borne inférieur ou supérieur
+		if (coul > 255) { coul = 255;} 
 		if (coul <   0) { coul =   0;}
 
 		return coul;
