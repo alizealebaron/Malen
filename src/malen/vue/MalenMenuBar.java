@@ -243,14 +243,16 @@ public class MalenMenuBar extends JMenuBar
 				break;
 			case "Luminosité":
 				mainFrame.afficherSlider('L');
+				mainFrame.switchCurseur(Controleur.LUMINOSITE);
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Constraste":
 				mainFrame.afficherSlider('C');
+				mainFrame.switchCurseur(Controleur.CONTRASTE);
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
-			case "Police":
-				System.out.println("ouai, tu utilise : " + menuItem);
+			case "Ajouter Texte":
+				mainFrame.switchCurseur(Controleur.TEXT);
 				break;
 			case "Rotation Axiale":
 				mainFrame.afficherSlider('R');
@@ -261,10 +263,10 @@ public class MalenMenuBar extends JMenuBar
 			case "Retournement Horizontal":
 				mainFrame.switchRetournementHorizontal();
 				break;
-			case "Rectangle":
+			case "Sélection Rectangle":
 				mainFrame.switchCurseur(Controleur.SELECTION_RECTANGLE);
 				break;
-			case "Oval":
+			case "Sélection Ovale":
 				mainFrame.switchCurseur(Controleur.SELECTION_OVALE);
 				break;
 			case "Pipette":
@@ -301,6 +303,7 @@ public class MalenMenuBar extends JMenuBar
 			{		ITEM, 			         "Pipette",	           "pipette.png",	    "P"			     	},
 			{		ITEM, 			         "Palette",	           "couleur.png",	    "L"			     	},
 			{	MENU, 				           "Texte",		        "police.png",		"P"				    },
+			{		ITEM, 			   "Ajouter Texte",		        "police.png",		"T"				    },			
 			{	MENU, 				        "Rotation",		      "rotation.png",		"R"				    },
 			{		ITEM, 			 "Rotation Axiale",	          "rotation.png",	    "O"			     	},
 			{		ITEM, 	   "Retournement Vertical",	         "verticale.png",	    "V"			     	},

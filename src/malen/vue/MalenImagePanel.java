@@ -20,14 +20,13 @@ import java.awt.image.BufferedImage;
 
 public class MalenImagePanel extends JPanel implements MouseListener, MouseMotionListener {
 
-	private BufferedImage image;
-	private boolean imageLoaded = false;
-	private MalenMainFrame mainFrame;
-	private double rotate_angle = 0;
-	private JSlider rotationSlider;
-	private JPanel sliderPanel;
-	private boolean flipHorizontal = false;
-	private boolean flipVertical = false;
+    private BufferedImage  image;
+    private boolean        imageLoaded = false;
+    private MalenMainFrame mainFrame;
+    private double         rotate_angle = 0;
+    private JPanel         sliderPanel;
+    private boolean        flipHorizontal = false;
+    private boolean        flipVertical = false;
 
 	private JSlider outilSlider;
 	private char outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
