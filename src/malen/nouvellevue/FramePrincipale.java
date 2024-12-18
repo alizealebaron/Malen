@@ -74,7 +74,7 @@ public class FramePrincipale extends JFrame
 		// Ajouter le panel principale
 		this.panelPrincipal   = new PanelPrincipal (this, this.panelImage, this.panelOutils);
 		this.add(this.panelPrincipal, BorderLayout.CENTER);
-		
+
 		// Afficher la fenêtre
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -88,8 +88,6 @@ public class FramePrincipale extends JFrame
 	public Point         getPoint1       ( ) { return this.controleur.getPoint1       ( ); }
 	public Point         getPoint2       ( ) { return this.controleur.getPoint2       ( ); }
 	public BufferedImage getSubImage     ( ) { return this.controleur.getSubImage     ( ); }
-
-	
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                               Modificateurs                                                                      */
@@ -170,6 +168,21 @@ public class FramePrincipale extends JFrame
 				break;
 		}
 	}
+
+	/* ------------------------------------------------------------ */
+	/*                   Passerelle Outils-Image                    */
+	/* ------------------------------------------------------------ */
+	
+	public void          repaintImage ( ) {        this.panelImage.repaint  ( ) ; }
+	public boolean       isImage      ( ) { return this.panelImage.isImage  ( ) ; }
+	public BufferedImage getImage     ( ) { return this.panelImage.getImage ( ) ; }
+
+	/* ------------------------------------------------------------ */
+	/*                     Gestion des outils                       */
+	/* ------------------------------------------------------------ */
+
+	public void changerContraste  (int value) { this.controleur.changerContraste  (this.panelImage.getImage(), value); }
+	public void changerLuminosite (int value) { this.controleur.changerLuminosite (this.panelImage.getImage(), value); }
 
 }
 

@@ -1,5 +1,7 @@
 package malen.nouvellevue;
 
+import java.awt.image.BufferedImage;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -18,6 +20,7 @@ public class PanelImage extends JPanel
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	private FramePrincipale framePrincipale;
+	private BufferedImage   biImage;
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                                Controleurs                                                                       */
@@ -26,6 +29,7 @@ public class PanelImage extends JPanel
 	public PanelImage (FramePrincipale frame)
 	{
 		this.framePrincipale = frame;
+		this.biImage         = null;
 
 		this.add(new JLabel("Ici Panel Image"));
 	}
@@ -34,7 +38,8 @@ public class PanelImage extends JPanel
 	/*                                                                Accesseurs                                                                        */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-
+	public boolean       isImage  ( ) { return this.biImage != null; }
+	public BufferedImage getImage ( ) { return this.biImage        ; }
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                               Modificateurs                                                                      */
@@ -45,4 +50,6 @@ public class PanelImage extends JPanel
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                                 Méthodes                                                                         */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	
 }
