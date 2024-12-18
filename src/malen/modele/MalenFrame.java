@@ -27,6 +27,7 @@ public abstract class MalenFrame extends JFrame {
 	protected MalenImagePanel imagePanel;
 	protected JScrollPane scrollPane;
 	private static final String REPERTOIRE = "./data/images/";
+	private Color currentColor = Color.BLACK; // La couleur actuelle, par défaut noire
 
 	public MalenFrame(Controleur controleur) {
 		this.controleur = controleur;
@@ -131,12 +132,24 @@ public abstract class MalenFrame extends JFrame {
 
 	public void chooseColor() {
 		// Afficher un sélecteur de couleur
-		Color selectedColor = JColorChooser.showDialog(null, "Choisir une couleur", controleur.getCurrentColor());
+		Color selectedColor = JColorChooser.showDialog(null, "Choisir une couleur", this.getCurrentColor());
 
 		if (selectedColor != null) {
-			controleur.setColor(selectedColor);
+			this.setColor(selectedColor);
 		}
 	}
+
+	public Color getCurrentColor() {
+		return this.currentColor;
+	}
+
+	public void setColor (Color selectedColor) 
+	{
+		this.currentColor = selectedColor;
+		this.updateButton();
+	}
+
+	public abstract void updateButton();
 
 	/**
 	 * @deprecated
@@ -147,9 +160,9 @@ public abstract class MalenFrame extends JFrame {
 			// colorLabel.setBackground(color);
 
 			// Passer la couleur au contrôleur
-			controleur.setColor(color);
+			this.setColor(color);
 
-			System.out.println(this.controleur.getCurrentColor().toString());
+			System.out.println(this.getCurrentColor().toString());
 
 		}
 	}
@@ -182,24 +195,7 @@ public abstract class MalenFrame extends JFrame {
 		this.controleur.onClickLeft(biImage, coulPixel, x, y);
 	}
 
-	public void onClickRight(MouseEvent e) {
-		JPopupMenu contextMenu = new JPopupMenu();
-
-		JMenuItem copyItem = new JMenuItem("Copier");
-		copyItem.addActionListener(actionEvent -> {
-			System.out.println("Option 'Copier' sélectionnée.");
-			// if (isSelected)
-		});
-		contextMenu.add(copyItem);
-
-		JMenuItem pasteItem = new JMenuItem("Coller");
-		pasteItem.addActionListener(actionEvent -> {
-			System.out.println("Option 'Coller' sélectionnée.");
-		});
-		contextMenu.add(pasteItem);
-
-		contextMenu.show(e.getComponent(), e.getX(), e.getY());
-	}
+	public abstract void onClickRight(MouseEvent e);
 
 	public Point getPoint1() {
 		return controleur.getPoint1();
@@ -226,8 +222,7 @@ public abstract class MalenFrame extends JFrame {
 		}
 	}
 
-	public void setSubimage(BufferedImage image)
-	{
+	public void setSubimage(BufferedImage image) {
 		this.controleur.setSubImage(image);
 	}
 
@@ -290,13 +285,14 @@ public abstract class MalenFrame extends JFrame {
 		imagePanel.setImage(resultImage);
 		repaint();
 	}
-	public void afficherPanelText()
-	{
+
+	public void afficherPanelText() {
 		this.imagePanel.afficherPanelText();
 	}
 
-	public Color getCurrentColor() {return this.controleur.getCurrentColor();}
-	public void setCurrentColor (Color c) { this.controleur.setColor(c);}
+	public void setCurrentColor(Color c) {
+		this.setColor(c);
+	}
 
 	private BufferedImage fusionnerImages(BufferedImage base, BufferedImage ajout) {
 		int largeur = Math.max(base.getWidth(), ajout.getWidth());

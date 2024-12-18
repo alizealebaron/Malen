@@ -23,10 +23,9 @@ import java.awt.image.BufferedImage;
  * @date : 16/12/2024
  */
 
-public class Controleur 
-{
+public class Controleur {
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
-	/*                                                                  Attributs                                                                       */
+	/* Attributs */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	public static final String PIPETTE = "pipette";
@@ -40,7 +39,7 @@ public class Controleur
 	public static final String CONTRASTE = "cont";
 
 	private MalenMainFrame mainFrame;
-	private MalenSubFrame  subFrame;
+	private MalenSubFrame subFrame;
 
 	private boolean onMainFrame;
 
@@ -54,7 +53,7 @@ public class Controleur
 	private int densite;
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
-	/*                                                                Controleurs                                                                       */
+	/* Controleurs */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	public Controleur() {
@@ -68,33 +67,39 @@ public class Controleur
 	}
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
-	/*                                                                Accesseurs                                                                        */
+	/* Accesseurs */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	public Color         getCurrentColor () { return this.currentColor;}
-	public String        getCurseur      () { return this.curseur;     }
-	public Point         getPoint1       () { return this.point1;      }
-	public Point         getPoint2       () { return this.point2;      }
-	public BufferedImage getSubImage     () { return this.subImage;    }
-
-	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
-	/*                                                               Modificateurs                                                                      */
-	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
-
-	public void setPoint1(Point point1       ) {this.point1  = point1;       }
-	public void setPoint2(Point point2       ) {this.point2  = point2;       }
-
-
-
-	public void setColor (Color selectedColor) 
-	{
-		currentColor = selectedColor;
-		this.mainFrame.updateButton();
+	public String getCurseur() {
+		return this.curseur;
 	}
 
+	public Point getPoint1() {
+		return this.point1;
+	}
+
+	public Point getPoint2() {
+		return this.point2;
+	}
+
+	public BufferedImage getSubImage() {
+		return this.subImage;
+	}
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
-	/*                                                                 Méthodes                                                                         */
+	/* Modificateurs */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	public void setPoint1(Point point1) {
+		this.point1 = point1;
+	}
+
+	public void setPoint2(Point point2) {
+		this.point2 = point2;
+	}
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/* Méthodes */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	// Méthode pour démarrer l'application
@@ -124,29 +129,25 @@ public class Controleur
 
 	// Méthode pour obtenir la couleur actuelle
 
-
 	public void setSubImage(BufferedImage image) {
 		this.subImage = image;
 	}
-	
 
-	public void setOnMainFrame()
-	{
+	public void setOnMainFrame() {
+		System.out.println("main frame");
 		this.onMainFrame = true;
 	}
 
-	public void setOnSecondFrame()
-	{
+	public void setOnSecondFrame() {
+		System.out.println("second frame");
 		this.onMainFrame = false;
 	}
 
-	public boolean isOnMainFrame()
-	{
+	public boolean isOnMainFrame() {
 		return this.onMainFrame;
 	}
 
-	public boolean isOnSecondFrame()
-	{
+	public boolean isOnSecondFrame() {
 		return !this.onMainFrame;
 	}
 
@@ -167,7 +168,15 @@ public class Controleur
 			case Controleur.PIPETTE:
 
 				System.out.println("Souris en mode : " + this.curseur);
-				setColor(coulPixel);
+				System.out.println(coulPixel.toString());
+				if (this.isOnMainFrame()) {
+					System.out.println("mainframe");
+					this.mainFrame.setColor(coulPixel);
+				}
+				if (this.isOnSecondFrame()) {
+					System.out.println("subFrame");
+					this.subFrame.setColor(coulPixel);
+				}
 				break;
 
 			case Controleur.POT_DE_PEINTURE:
@@ -187,12 +196,12 @@ public class Controleur
 
 				break;
 
-				case Controleur.SELECTION_OVALE:	
-					if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
-						this.mainFrame.pasteSubImage();
-					}
-	
-					break;
+			case Controleur.SELECTION_OVALE:
+				if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
+					this.mainFrame.pasteSubImage();
+				}
+
+				break;
 
 			default:
 				System.out.println("Choix incorrect");
