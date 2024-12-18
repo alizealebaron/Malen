@@ -171,8 +171,6 @@ public class PanelImage extends JPanel
 	{
 		try 
 		{
-			System.out.println("Hey !");
-
 			this.biImage = ImageIO.read(new File(imagePath));
 			this.imageLoaded = true;
 			this.repaint(); // Redessiner après avoir chargé l'image

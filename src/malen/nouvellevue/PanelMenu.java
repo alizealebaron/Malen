@@ -103,7 +103,7 @@ public class PanelMenu extends JMenuBar implements ActionListener
 			{	MENU, 				         "Fichier",			   "fichier.png",		"F"				    },
 			{		ITEM, 			          "Ouvrir",			    "ouvrir.png",		"O", "CTRL+O"	    },
 			{		ITEM, 			     "Enregistrer",			"sauvegarde.png",		"S", "CTRL+S"	    },
-			{		ITEM, 		   "Entregistrer Sous",			"sauvegarde.png",		"A", "CTRL+SHIFT+S"	},
+			{		ITEM, 		    "Enregistrer Sous",			"sauvegarde.png",		"A", "CTRL+SHIFT+S"	},
 			{	MENU, 			             "Couleur",			   "couleur.png",		"C"	             	},
 			{		ITEM, 			     "Remplissage",		   "remplissage.png",	    "I"			    	},
 			{		ITEM, 			     "Transparent",		  "transparence.png",	    "T"			    	},
@@ -324,10 +324,10 @@ public class PanelMenu extends JMenuBar implements ActionListener
 		switch (menuItem) 
 		{
 			case "Enregistrer":
-				framePrincipale.saveImage( "image_malen.png");
+				framePrincipale.saveImage("image_malen.png");
 				break;
 			case "Enregistrer Sous":
-				//framePrincipale.saveImage();
+				framePrincipale.saveImage();
 				break;
 			case "Ouvrir":
 				framePrincipale.importImage();
