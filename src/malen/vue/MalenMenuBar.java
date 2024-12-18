@@ -110,6 +110,11 @@ public class MalenMenuBar extends JMenuBar
 					break;
 			}
 		}
+
+		JButton btnCouleurAct = new JButton("");
+        btnCouleurAct.addActionListener(e -> JOptionPane.showMessageDialog(this, "Action déclenchée !"));
+
+		this.add(btnCouleurAct);
 	}
 
 	/**
