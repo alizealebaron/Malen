@@ -8,6 +8,7 @@ import malen.modele.MalenFrame;
 
 public class MalenSubFrame extends MalenFrame {
     private   MalenMainFrame mainFrame;
+	private   MalenMenuBar   subMenuBar;
 	protected Controleur controleur;
 
 	private static final String[][] MODELE_SUB_BAR = {
@@ -63,5 +64,7 @@ public class MalenSubFrame extends MalenFrame {
 	{
 		return false;
 	}
+
+		public void updateButton () {this.subMenuBar.setCouleurButton ();}
 }
 

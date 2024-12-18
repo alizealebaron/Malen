@@ -84,13 +84,7 @@ public class Controleur
 	public void setPoint1(Point point1       ) {this.point1  = point1;       }
 	public void setPoint2(Point point2       ) {this.point2  = point2;       }
 
-	public void setCurseur(String curseur) 
-	{
-		this.curseur = curseur;
 
-		if (!curseur.equals(SELECTION_RECTANGLE)) 
-			resetSelection(); // Réinitialiser la sélection quand on sort du mode sélection rectangle
-	}
 
 	public void setColor (Color selectedColor) 
 	{
@@ -134,6 +128,7 @@ public class Controleur
 	public void setSubImage(BufferedImage image) {
 		this.subImage = image;
 	}
+	
 
 	public void setOnMainFrame()
 	{

@@ -512,6 +512,12 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 
 			repaint();
+		}
+	}
+
+	public void setImage(BufferedImage img) {
+		this.image = img;
+		repaint();
 	}
 
 

@@ -15,7 +15,6 @@ import malen.modele.MalenFrame;
 
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.awt.*;
 import java.util.List;
 
@@ -121,10 +120,10 @@ public class MalenMenuBar extends JMenuBar implements ActionListener {
 
 		// Ajout du bouton de couleur
 		this.btnCouleurAct = new JButton("      ");
-		this.btnCouleurAct.setBackground(this.mainFrame.getCurrentColor());
+		this.btnCouleurAct.setBackground(this.parentFrame.getCurrentColor());
 		this.btnCouleurAct.setFocusPainted(false);
-		this.btnCouleurAct.setBackground(this.mainFrame.getCurrentColor()); // Couleur de fond
-		this.btnCouleurAct.setForeground(this.mainFrame.getCurrentColor());
+		this.btnCouleurAct.setBackground(this.parentFrame.getCurrentColor()); // Couleur de fond
+		this.btnCouleurAct.setForeground(this.parentFrame.getCurrentColor());
 		this.btnCouleurAct.setOpaque(true);
 		this.btnCouleurAct.setBorderPainted(false);
 		this.btnCouleurAct.setToolTipText("Couleur actuelle");
@@ -192,8 +191,8 @@ public class MalenMenuBar extends JMenuBar implements ActionListener {
 	}
 
 	public void setCouleurButton() {
-		this.btnCouleurAct.setBackground(this.mainFrame.getCurrentColor());
-		this.btnCouleurAct.setForeground(this.mainFrame.getCurrentColor());
+		this.btnCouleurAct.setBackground(this.parentFrame.getCurrentColor());
+		this.btnCouleurAct.setForeground(this.parentFrame.getCurrentColor());
 	}
 
 	/**
@@ -313,21 +312,6 @@ public class MalenMenuBar extends JMenuBar implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		// Ouvrir le sélecteur de couleur
-		Color selectedColor = JColorChooser.showDialog(
-				null,
-				"Sélectionnez une couleur",
-				this.mainFrame.getCurrentColor());
-
-		// Si une couleur est sélectionnée, appliquer la couleur au label
-		if (selectedColor != null) {
-			this.mainFrame.setCurrentColor(selectedColor);
-		}
-	}
-
-	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
 
@@ -336,13 +320,13 @@ public class MalenMenuBar extends JMenuBar implements ActionListener {
 		(
             null,
             "Sélectionnez une couleur",
-            this.mainFrame.getCurrentColor()
+            this.parentFrame.getCurrentColor()
          );
 
         // Si une couleur est sélectionnée, appliquer la couleur au label
         if (selectedColor != null) 
 		{
-            this.mainFrame.setCurrentColor(selectedColor);
+            this.parentFrame.setCurrentColor(selectedColor);
         }
 	}
 }
