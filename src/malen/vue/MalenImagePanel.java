@@ -41,6 +41,8 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
     private Rectangle textBounds;      // Bordure de la zone de texte
     private Font textFont = new Font("Arial", Font.PLAIN, 20); // Font par défaut
     private boolean editingText = false; // État de modification du texte
+	private Color textColor = Color.BLACK; // Couleur du texte
+	private JButton btnCouleurText;
 
 
 	public MalenImagePanel(MalenMainFrame mainframe) 
@@ -289,6 +291,15 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		JSpinner sizeSpinner = new JSpinner(new SpinnerNumberModel(20, 8, 72, 1));
 		JCheckBox boldCheck = new JCheckBox("Gras");
 		JCheckBox italicCheck = new JCheckBox("Italique");
+		this.btnCouleurText = new JButton("      ");
+        this.btnCouleurText.addActionListener(e -> chooseColor());
+		this.btnCouleurText.setBackground(this.mainFrame.getCurrentColor());
+		this.btnCouleurText.setFocusPainted(false);
+        this.btnCouleurText.setBackground(this.textColor); // Couleur de fond
+		this.btnCouleurText.setForeground(this.textColor);
+        this.btnCouleurText.setOpaque(true); 
+        this.btnCouleurText.setBorderPainted(false); 
+        this.btnCouleurText.setToolTipText("Couleur actuelle");
 
 		// Ajout des différents composants au panel
 		this.panelGestionText.add(new JLabel("Police:"));
@@ -297,6 +308,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		this.panelGestionText.add(sizeSpinner);
 		this.panelGestionText.add(boldCheck);
 		this.panelGestionText.add(italicCheck);
+		this.panelGestionText.add(btnCouleurText);
 
 		// Ajout de l'évenement pour écouter chacun des champs
 		fontBox.addActionListener(e -> updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck));
@@ -369,7 +381,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
             if (!text.isEmpty()) 
 			{
                 g2d.setFont(textFont);
-                g2d.setColor(Color.BLACK);
+                g2d.setColor(this.textColor);
                 g2d.drawString(text, textBounds.x + 2, textBounds.y + textBounds.height - 10);
             }
 
@@ -395,6 +407,23 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
         this.repaint();
     }
+
+	/** Permet de changer la couleur du texte
+	 * 
+	 */
+	private void chooseColor() 
+	{
+        Color newColor = JColorChooser.showDialog(this, "Choisir la couleur du texte", textColor);
+
+        if (newColor != null)
+		{
+			this.textColor = newColor;
+			this.textField.setForeground(this.textColor);
+			this.btnCouleurText.setBackground(this.textColor);
+			this.btnCouleurText.setForeground(this.textColor); 
+    	}
+
+	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------ */
 	/*                                                  Gestion de la souris                                                          */
@@ -423,18 +452,20 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		{
 			mainFrame.onClick(image, clickPoint.x(), clickPoint.y(), color);
 
-			// Gestion de la zone de texte
-			if (this.mainFrame.isCurseurOn(Controleur.TEXT))
+			// Gestion de la zone de text
+
+			repaint();
+		}
+
+		if (this.mainFrame.isCurseurOn(Controleur.TEXT))
+		{
+
+			if (this.editingText) 
 			{
-				System.out.println("Hey !");
+                finalizeText(); // Terminer l'édition du texte en cours
+            }
 
-				if (this.editingText) 
-				{
-                    finalizeText(); // Terminer l'édition du texte en cours
-                }
-
-                startTextEditing(e.getX(), e.getY());
-			}
+            startTextEditing(e.getX(), e.getY());
 
 			repaint();
 		}
