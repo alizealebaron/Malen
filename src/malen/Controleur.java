@@ -56,13 +56,12 @@ public class Controleur {
 	// Méthode pour démarrer l'application
 	public void startApplication() {
 		SwingUtilities.invokeLater(() -> {
-			mainFrame.setMainFrameMenu();
 			mainFrame.setVisible(true);
 		});
 	}
 
 	public void nouvelleFenetre() {
-		subFrame = new MalenSubFrame(this);
+		subFrame = new MalenSubFrame(this.mainFrame, this);
 		subFrame.setVisible(true);
 	}
 

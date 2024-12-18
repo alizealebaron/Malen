@@ -11,6 +11,8 @@ package malen.vue;
 
 import javax.swing.*;
 import malen.Controleur;
+import malen.modele.MalenFrame;
+
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.*;
@@ -43,31 +45,30 @@ public class MalenMenuBar extends JMenuBar
 	/*                                                              */
 	/* ------------------------------------------------------------ */
 
-	private MalenMainFrame mainFrame;
-	private String[][]     modeleBar;
+	private MalenFrame parentFrame;
+	private String[][] modeleBar;
+
 
 	/** Construteur de la navBar
 	 * @param mainFrame
 	 */
-	public MalenMenuBar(MalenMainFrame mainFrame) 
-	{
-		this(mainFrame, MalenMenuBar.getModeleBar());
-	}
 
-	public MalenMenuBar(MalenMainFrame mainFrame, String[][] modelebar)
+	public MalenMenuBar(MalenFrame parentFrame, String[][] modeleBar)
 	{
-		//Initialisation
 		super ();
-
-		this.mainFrame = mainFrame;
-		this.modeleBar = modelebar;
-
+		this.parentFrame = parentFrame;
+		this.modeleBar   = modeleBar;
 		this.initComposants ( );
+	}
+	public MalenMenuBar(MalenFrame parentFrame) 
+	{
+		this(parentFrame, MalenMenuBar.getModeleBar());
 	}
 
 	/* ------------------------------------------------------------ */
 	/*                 Initialisation des composants                */
 	/* ------------------------------------------------------------ */
+
 
 	private void initComposants ( )
 	{
@@ -75,10 +76,6 @@ public class MalenMenuBar extends JMenuBar
 		JMenu  sousMenuEnCreation = null;
 		String hotkey;
 
-		// Format du MenuBar
-		//String[][] modeleBar = MalenMenuBar.getModeleBar ( );
-
-		// Générer les composants
 		for ( int cptLig = 0; cptLig < modeleBar.length; cptLig++ )
 		{
 			String[] ligne = modeleBar[cptLig];
@@ -225,61 +222,58 @@ public class MalenMenuBar extends JMenuBar
 	private void handleMenuAction(String menuItem) {
 		switch (menuItem) {
 			case "Enregistrer":
-				mainFrame.saveImage( "image_malen.png");
+				parentFrame.saveImage( "image_malen.png");
 				break;
 			case "Enregistrer Sous":
-				mainFrame.saveImage();
+				parentFrame.saveImage();
 				break;
 			case "Ouvrir":
-				mainFrame.importImage();
+				parentFrame.importImage();
 				break;
 			case "Remplissage":
 				System.out.println("ouai, tu utilise : " + menuItem);
-				mainFrame.switchCurseur(Controleur.POT_DE_PEINTURE);
+				parentFrame.switchCurseur(Controleur.POT_DE_PEINTURE);
 				break;
 			case "Transparent":
 				System.out.println("ouai, tu utilise : " + menuItem);
-				mainFrame.switchCurseur(Controleur.EFFACE_FOND);
+				parentFrame.switchCurseur(Controleur.EFFACE_FOND);
 				break;
 			case "Luminosité":
-				mainFrame.afficherSlider('L');
-				mainFrame.switchCurseur(Controleur.LUMINOSITE);
+				parentFrame.afficherSlider('L');
+				parentFrame.switchCurseur(Controleur.LUMINOSITE);
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Constraste":
-				mainFrame.afficherSlider('C');
-				mainFrame.switchCurseur(Controleur.CONTRASTE);
+				parentFrame.afficherSlider('C');
+				parentFrame.switchCurseur(Controleur.CONTRASTE);
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Ajouter Texte":
-				mainFrame.switchCurseur(Controleur.TEXT);
+				parentFrame.switchCurseur(Controleur.TEXT);
 				break;
 			case "Rotation Axiale":
-				mainFrame.afficherSlider('R');
+				parentFrame.afficherSlider('R');
 				break;
 			case "Retournement Vertical":
-				mainFrame.switchRetournementVertical();
+				parentFrame.switchRetournementVertical();
 				break;
 			case "Retournement Horizontal":
-				mainFrame.switchRetournementHorizontal();
+				parentFrame.switchRetournementHorizontal();
 				break;
 			case "Sélection Rectangle":
-				mainFrame.switchCurseur(Controleur.SELECTION_RECTANGLE);
+				parentFrame.switchCurseur(Controleur.SELECTION_RECTANGLE);
 				break;
 			case "Sélection Ovale":
-				mainFrame.switchCurseur(Controleur.SELECTION_OVALE);
+				parentFrame.switchCurseur(Controleur.SELECTION_OVALE);
 				break;
 			case "Pipette":
-				mainFrame.switchCurseur(Controleur.PIPETTE);
+				parentFrame.switchCurseur(Controleur.PIPETTE);
 				break;
 			case "Palette":
-				mainFrame.chooseColor();
+				parentFrame.chooseColor();
 				break;
 			case "Nouvelle Fenêtre":
-				mainFrame.nouvelleFenetre();
-				break;
-			case "Exporter":
-				mainFrame.export();
+				parentFrame.nouvelleFenetre();
 				break;
 			default:
 				System.out.println("Action non définie pour " + menuItem);
@@ -311,8 +305,8 @@ public class MalenMenuBar extends JMenuBar
 			{	MENU, 				       "Sélection",		     "selection.png",		"S"				    },
 			{		ITEM, 	     "Sélection Rectangle",	             "carre.png",	    "R"			     	},
 			{		ITEM,            "Sélection Ovale",	            "cercle.png",	    "O"			     	},
-			{   MENU,               "Nouvelle Fenêtre",              "frame.png",       "N", "CTRL+N"       },
-			{       ITEM,           "Nouvelle Fenêtre",              "frame.png",       "N", "CTRL+N"       },
+			{	MENU, 				"Nouvelle Fenêtre",		    	 "frame.png",		"E"				    },
+			{		ITEM, 	     	"Nouvelle Fenêtre",	             "frame.png",	    "E", "CTRL+E"     	},
 		};
 	}
 }

@@ -3,6 +3,7 @@ package malen.vue;
 import javax.swing.*;
 
 import malen.Controleur;
+import malen.modele.MalenFrame;
 import malen.modele.Point;
 import malen.modele.Rotation;
 
@@ -22,7 +23,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
     private BufferedImage  image;
     private boolean        imageLoaded = false;
-    private MalenMainFrame mainFrame;
+    private MalenFrame     mainFrame;
     private double         rotate_angle = 0;
     private JPanel         sliderPanel;
     private boolean        flipHorizontal = false;
@@ -32,7 +33,7 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	private char outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
 	private boolean isMovingSubImage;
 
-	public MalenImagePanel(MalenMainFrame mainframe) {
+	public MalenImagePanel(MalenFrame mainframe) {
 		this.mainFrame = mainframe;
 		setPreferredSize(new Dimension(800, 600)); // Taille initiale du panneau
 
