@@ -133,7 +133,9 @@ public class Controleur
 				break;
 
 			case Controleur.PIPETTE:
-				this.currentColor = coulPixel;
+
+				System.out.println("Souris en mode : " + this.curseur);
+				setColor(coulPixel);
 				break;
 
 			case Controleur.POT_DE_PEINTURE:
