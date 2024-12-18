@@ -46,51 +46,49 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	public MalenImagePanel(MalenMainFrame mainframe) 
 	{
 		this.mainFrame = mainframe;
+	
+		// Désactiver le layout pour permettre un positionnement absolu
+		// this.setLayout(null); // Remplace le BorderLayout par null
 		setPreferredSize(new Dimension(800, 600)); // Taille initiale du panneau
-
+	
 		sliderPanel = new JPanel();
 		sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS)); // Empile les composants verticalement
-
+		sliderPanel.setBounds(0, 0, 200, 50); // Positionnement manuel si nécessaire
+		this.add(sliderPanel);
+	
 		outilSlider = new JSlider(0, 0, 0); // Curseur de 0 à 360 degrés
 		outilSlider.setVisible(false);
-
 		sliderPanel.add(outilSlider);
-		add(sliderPanel, BorderLayout.NORTH);
-
+	
 		outilSlider.addChangeListener(e -> {
 			int value = outilSlider.getValue();
-
+	
 			switch (this.outil) {
 				case 'R':
-
 					this.rotateImage(value % 360);
 					break;
-
 				case 'L':
 					if (!outilSlider.getValueIsAdjusting() && image != null) {
 						this.mainFrame.changerLuminosite(image, value);
 						repaint();
 					}
 					break;
-
 				case 'C':
 					if (!outilSlider.getValueIsAdjusting() && image != null) {
 						this.mainFrame.changerContraste(image, value);
 						repaint();
 					}
 					break;
-
 				default:
 					break;
 			}
 		});
-
-		/* Initialisation du panel de texte */
+	
+		// Initialisation du panel de texte
 		initialisationPanelText();
-
-		/* Gestion de la souris */
-
-		addMouseListener(this); // Ajouter un écouteur de souris
+	
+		// Gestion de la souris
+		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
 
@@ -342,11 +340,17 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
     private void updateTextFont(JComboBox<String> fontBox, JSpinner sizeSpinner, JCheckBox boldCheck, JCheckBox italicCheck) 
 	{
         int style = Font.PLAIN;
-        if (boldCheck.isSelected()) style |= Font.BOLD;
-        if (italicCheck.isSelected()) style |= Font.ITALIC;
+		if (boldCheck.isSelected()) style |= Font.BOLD;
+		if (italicCheck.isSelected()) style |= Font.ITALIC;
 
-        this.textFont = new Font((String) fontBox.getSelectedItem(), style, (Integer) sizeSpinner.getValue());
-        this.textField.setFont(textFont);
+		this.textFont = new Font((String) fontBox.getSelectedItem(), style, (Integer) sizeSpinner.getValue());
+		this.textField.setFont(textFont);
+
+		// Repositionner la zone de texte si nécessaire
+		if (editingText && textBounds != null) 
+		{
+			textField.setBounds(textBounds); // Réutiliser la position précédente
+		}
     }
 
 	/** Finalisation de l'ajout du texte à l'image
@@ -379,6 +383,19 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
         }
     }
 
+	private void startTextEditing(int x, int y) 
+	{
+        this.textBounds = new Rectangle(x, y, 150, 30); // Taille initiale de la zone
+        this.textField.setBounds(textBounds);
+        this.textField.setFont(textFont);
+        this.textField.setText("");
+        this.textField.setVisible(true);
+        this.textField.requestFocus();
+        this.editingText = true;
+
+        this.repaint();
+    }
+
 	/* ------------------------------------------------------------------------------------------------------------------------------ */
 	/*                                                  Gestion de la souris                                                          */
 	/* ------------------------------------------------------------------------------------------------------------------------------ */
@@ -407,9 +424,22 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 			mainFrame.onClick(image, clickPoint.x(), clickPoint.y(), color);
 
 			// Gestion de la zone de texte
+			if (this.mainFrame.isCurseurOn(Controleur.TEXT))
+			{
+				System.out.println("Hey !");
+
+				if (this.editingText) 
+				{
+                    finalizeText(); // Terminer l'édition du texte en cours
+                }
+
+                startTextEditing(e.getX(), e.getY());
+			}
 
 			repaint();
 		}
+
+
 	}
 
 	@Override

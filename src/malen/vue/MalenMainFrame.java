@@ -29,12 +29,14 @@ public class MalenMainFrame extends JFrame {
 
 	private Controleur controleur;
 
-	public MalenMainFrame(Controleur controleur) {
+	public MalenMainFrame(Controleur controleur) 
+	{
 		this.controleur = controleur;
 		// Configuration de la fenêtre principale
-		setTitle("Mini Paint Application");
+		setTitle("Malen");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1000, 700);
+		setSize(1650,1080);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		setLayout(new BorderLayout());
 
 		// Ajouter le panneau de menu
@@ -135,7 +137,8 @@ public class MalenMainFrame extends JFrame {
 		}
 	}
 
-	public boolean isCurseurOn(String curseur) {
+	public boolean isCurseurOn(String curseur) 
+	{
 		return this.controleur.getCurseur().equals(curseur);
 	}
 
