@@ -13,6 +13,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -244,5 +245,17 @@ public class MalenMainFrame extends JFrame {
 		} catch (IOException e) {
 			System.err.println("Erreur lors de la sauvegarde : " + e.getMessage());
 		}
+	}
+
+	/* ------------------------------------------------------------------------------------------------------------------------------ */
+	/*                                                     Gestion du texte                                                           */
+	/* ------------------------------------------------------------------------------------------------------------------------------ */
+
+	/** Permet d'afficher le panel de modification du texte
+	 * 
+	 */
+	public void afficherPanelText()
+	{
+		this.imagePanel.afficherPanelText();
 	}
 }

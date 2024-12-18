@@ -10,8 +10,11 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +35,16 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	private char outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
 	private boolean isMovingSubImage;
 
-	public MalenImagePanel(MalenMainFrame mainframe) {
+	/* Gestion du texte */
+	private JPanel panelGestionText;
+	private JTextField textField;      // Zone de texte temporaire
+    private Rectangle textBounds;      // Bordure de la zone de texte
+    private Font textFont = new Font("Arial", Font.PLAIN, 20); // Font par défaut
+    private boolean editingText = false; // État de modification du texte
+
+
+	public MalenImagePanel(MalenMainFrame mainframe) 
+	{
 		this.mainFrame = mainframe;
 		setPreferredSize(new Dimension(800, 600)); // Taille initiale du panneau
 
@@ -73,6 +85,11 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 			}
 		});
 
+		/* Initialisation du panel de texte */
+		initialisationPanelText();
+
+		/* Gestion de la souris */
+
 		addMouseListener(this); // Ajouter un écouteur de souris
 		addMouseMotionListener(this);
 	}
@@ -91,7 +108,8 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
-	public void pasteSubImage() {
+	public void pasteSubImage() 
+	{
 		System.out.println("oui");
 		if (mainFrame.getSubImage() != null && this.image != null && mainFrame.getPoint1() != null
 				&& mainFrame.getPoint2() != null) {
@@ -115,19 +133,30 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
-	public void showOutilSlider(char outil) {
+	/** Permet d'aficher ou non la barre d'outil (Rotation, Luminosité, Contraste)
+	 * @param outil L = Luminosité / C = Contraste / R = Rotation / D = Default
+	 */
+	public void showOutilSlider(char outil) 
+	{
 
-		if (outilSlider.isVisible() && outil == this.outil) {
+		if (outilSlider.isVisible() && outil == this.outil || outil == 'D') 
+		{
 			outilSlider.setVisible(false);
 			outilSlider.setEnabled(false);
-		} else {
+		} 
+		else
+		{
+			if (this.panelGestionText.isVisible())
+				afficherPanelText();
+
 			outilSlider.setVisible(true);
 			outilSlider.setEnabled(true);
 		}
 
 		this.outil = outil;
 
-		switch (this.outil) {
+		switch (this.outil) 
+		{
 			case 'R':
 				outilSlider.setValue(0);
 				outilSlider.setMinimum(0);
@@ -236,10 +265,127 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		return null; // Retourne null si la position est hors de l'image
 	}
 
-	/*------------------------------------------ Pipette ------------------------------------------*/
+	/* ------------------------------------------------------------------------------------------------------------------------------ */
+	/*                                                     Gestion du texte                                                           */
+	/* ------------------------------------------------------------------------------------------------------------------------------ */
+
+	/** Initialise le panel de texte et tout ses composants
+	 * 
+	 */
+	public void initialisationPanelText()
+	{
+		// Initialisation d'un panel
+		this.panelGestionText = new JPanel();
+
+		// Initialiser la zone de texte qui s'affichera 
+        this.textField = new JTextField();
+        this.textField.setVisible(false);
+        this.textField.setBorder(null);
+        this.textField.addActionListener(e -> finalizeText()); 
+
+		// Récupération de toutes les polices d'écriture du pc
+		String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+
+		// Initialisation des différents champs de modification
+		JComboBox<String> fontBox = new JComboBox<>(fonts);
+		JSpinner sizeSpinner = new JSpinner(new SpinnerNumberModel(20, 8, 72, 1));
+		JCheckBox boldCheck = new JCheckBox("Gras");
+		JCheckBox italicCheck = new JCheckBox("Italique");
+
+		// Ajout des différents composants au panel
+		this.panelGestionText.add(new JLabel("Police:"));
+		this.panelGestionText.add(fontBox);
+		this.panelGestionText.add(new JLabel("Taille:"));
+		this.panelGestionText.add(sizeSpinner);
+		this.panelGestionText.add(boldCheck);
+		this.panelGestionText.add(italicCheck);
+
+		// Ajout de l'évenement pour écouter chacun des champs
+		fontBox.addActionListener(e -> updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck));
+		sizeSpinner.addChangeListener(e -> updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck));
+		boldCheck.addActionListener(e -> updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck));
+		italicCheck.addActionListener(e -> updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck));
+
+		// Ajout du panelTexte au panelImage puis on le rend invisible
+		this.add(this.panelGestionText, BorderLayout.SOUTH);
+		this.panelGestionText.setVisible(false);
+
+		// Ajout de la zone de texte invisible
+		this.add(textField);
+	}
+
+	/** Permet d'afficher le panel de modification du texte
+	 * 
+	 */
+	public void afficherPanelText()
+	{
+		if (this.panelGestionText.isVisible()) 
+		{
+			this.panelGestionText.setVisible(false);
+		} 
+		else
+		{
+			if (this.outilSlider.isVisible())
+				showOutilSlider('D');
+				
+			this.panelGestionText.setVisible(true);
+		}
+	}
+
+	
+    /** Récupération de toutes les données des champs pour modifier le champ de texte en direct
+     * @param fontBox
+     * @param sizeSpinner
+     * @param boldCheck
+     * @param italicCheck
+     */
+    private void updateTextFont(JComboBox<String> fontBox, JSpinner sizeSpinner, JCheckBox boldCheck, JCheckBox italicCheck) 
+	{
+        int style = Font.PLAIN;
+        if (boldCheck.isSelected()) style |= Font.BOLD;
+        if (italicCheck.isSelected()) style |= Font.ITALIC;
+
+        this.textFont = new Font((String) fontBox.getSelectedItem(), style, (Integer) sizeSpinner.getValue());
+        this.textField.setFont(textFont);
+    }
+
+	/** Finalisation de l'ajout du texte à l'image
+	 * 
+	 */
+	private void finalizeText() 
+	{
+		// Création du graphique g2d pour jouter le texte
+		Graphics2D g2d = image.createGraphics();
+
+        if (editingText)
+		{
+            String text = textField.getText();
+
+			// On ajout le texte à l'image s'il n'est pas vide
+            if (!text.isEmpty()) 
+			{
+                g2d.setFont(textFont);
+                g2d.setColor(Color.BLACK);
+                g2d.drawString(text, textBounds.x + 2, textBounds.y + textBounds.height - 10);
+            }
+
+			// On rend le text invisible
+            textField.setVisible(false);
+            editingText = false;
+            textBounds = null;
+
+			// On repaint l'image
+            this.repaint();
+        }
+    }
+
+	/* ------------------------------------------------------------------------------------------------------------------------------ */
+	/*                                                  Gestion de la souris                                                          */
+	/* ------------------------------------------------------------------------------------------------------------------------------ */
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) 
+	{
 		// Lorsqu'on clique sur l'image, obtenir la couleur sous le curseur
 		java.awt.Point awtPoint = e.getPoint();
 		Point clickPoint = new Point((int) awtPoint.getX(), (int) awtPoint.getY());
@@ -256,9 +402,12 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 
 		System.out.println("Coordonées : [" + clickPoint.x() + ";" + clickPoint.y() + "]");
 
-		if (image != null && x >= 0 && y >= 0 && x < this.image.getWidth() && y < this.image.getHeight()) {
-			System.out.println(color);
+		if (image != null && x >= 0 && y >= 0 && x < this.image.getWidth() && y < this.image.getHeight()) 
+		{
 			mainFrame.onClick(image, clickPoint.x(), clickPoint.y(), color);
+
+			// Gestion de la zone de texte
+
 			repaint();
 		}
 	}

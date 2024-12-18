@@ -246,6 +246,7 @@ public class MalenMenuBar extends JMenuBar
 				System.out.println("ouai, tu utilise : " + menuItem);
 				break;
 			case "Ajouter Texte":
+				mainFrame.afficherPanelText();
 				mainFrame.switchCurseur(Controleur.TEXT);
 				break;
 			case "Rotation Axiale":
