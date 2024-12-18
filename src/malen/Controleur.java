@@ -89,11 +89,11 @@ public class Controleur
 			resetSelection(); // Réinitialiser la sélection quand on sort du mode sélection rectangle
 	}
 
-	// public void setColor (Color selectedColor) 
-	// {
-	// 	currentColor = selectedColor;
-	// 	this.mainFrame.updateButton();
-	// }
+	public void setColor (Color selectedColor) 
+	{
+		currentColor = selectedColor;
+		this.mainFrame.updateButton();
+	}
 
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/

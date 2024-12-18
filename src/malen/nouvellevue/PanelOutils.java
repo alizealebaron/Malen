@@ -1,12 +1,14 @@
 package malen.nouvellevue;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -43,11 +45,6 @@ public class PanelOutils extends JPanel
 
 	/* Gestion du texte */
 	private JPanel     panelGestionText;
-	private JTextField textField; // Zone de texte temporaire
-	private Rectangle  textBounds; // Bordure de la zone de texte
-	private Font       textFont = new Font("Arial", Font.PLAIN, 20); // Font par défaut
-	private boolean    editingText = false; // État de modification du texte
-	private Color      textColor = Color.BLACK; // Couleur du texte
 	private JButton    btnCouleurText;
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -96,13 +93,17 @@ public class PanelOutils extends JPanel
 		//Génération du champ de texte
 		initialisationPanelText();
 
+		this.setPreferredSize(new Dimension(0, 50));
+
 	}
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                                Accesseurs                                                                        */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	
+	public JPanel  getPanelGestionText ( ) { return this.panelGestionText; }
+	public JSlider getOutilSlider      ( ) { return this.outilSlider     ; }
+	public char    getOutil            ( ) { return this.outil           ; }
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                               Modificateurs                                                                      */
@@ -127,12 +128,6 @@ public class PanelOutils extends JPanel
 		// Initialisation d'un panel
 		this.panelGestionText = new JPanel();
 
-		// Initialiser la zone de texte qui s'affichera
-		this.textField = new JTextField();
-		this.textField.setVisible(false);
-		this.textField.setBorder(null);
-		this.textField.addActionListener(e -> finalizeText());
-
 		// Récupération de toutes les polices d'écriture du pc
 		String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
@@ -144,10 +139,10 @@ public class PanelOutils extends JPanel
 
 		this.btnCouleurText = new JButton("      ");
         this.btnCouleurText.addActionListener(e -> chooseColor());
-		this.btnCouleurText.setBackground(this.mainFrame.getCurrentColor());
+		this.btnCouleurText.setBackground(this.framePrincipale.getCurrentColor());
 		this.btnCouleurText.setFocusPainted(false);
-        this.btnCouleurText.setBackground(this.textColor); // Couleur de fond
-		this.btnCouleurText.setForeground(this.textColor);
+        this.btnCouleurText.setBackground(Color.BLACK); // Couleur de fond
+		this.btnCouleurText.setForeground(Color.BLACK);
         this.btnCouleurText.setOpaque(true); 
         this.btnCouleurText.setBorderPainted(false); 
         this.btnCouleurText.setToolTipText("Couleur actuelle");
@@ -170,10 +165,21 @@ public class PanelOutils extends JPanel
 		// Ajout du panelTexte au panelImage puis on le rend invisible
 		this.panelGestionText.setVisible(false);
 		this.add(this.panelGestionText);
-
-		// Ajout de la zone de texte invisible
-		this.add(textField);
 	}
+
+	private void chooseColor() 
+	{
+        Color newColor = JColorChooser.showDialog(this, "Choisir la couleur du texte", this.framePrincipale.getColorText());
+
+        if (newColor != null)
+		{
+			this.framePrincipale.updateTextColor(newColor);
+			this.btnCouleurText .setBackground  (newColor);
+			this.btnCouleurText .setForeground  (newColor);
+    	}
+	}
+
+	public void updateTextFont (JComboBox<String> fontBox, JSpinner sizeSpinner, JCheckBox boldCheck, JCheckBox italicCheck) { this.framePrincipale.updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck);}
 
 	/* ------------------------------------------------------------ */
 	/*                   Transformation d'image                     */
@@ -183,5 +189,59 @@ public class PanelOutils extends JPanel
 	{
 		this.rotate_angle = angle;
 		this.framePrincipale.repaintImage();
+	}
+
+	/* ------------------------------------------------------------ */
+	/*                    Gestion de l'échelle                      */
+	/* ------------------------------------------------------------ */
+
+	/**
+	 * Permet d'aficher ou non la barre d'outil (Rotation, Luminosité, Contraste)
+	 * 
+	 * @param outil L = Luminosité / C = Contraste / R = Rotation / D = Default
+	 */
+	public void showOutilSlider(char outil) 
+	{
+
+		if (outilSlider.isVisible() && outil == this.outil || outil == 'D') 
+		{
+			outilSlider.setVisible(false);
+			outilSlider.setEnabled(false);
+			outil = 'D';
+		} 
+		else 
+		{
+			outilSlider.setVisible(true);
+			outilSlider.setEnabled(true);
+		}
+
+		this.outil = outil;
+
+		switch (this.outil) 
+		{
+			case 'R':
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(0);
+				outilSlider.setMaximum(360);
+				break;
+
+			case 'L':
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(-255);
+				outilSlider.setMaximum(255);
+				break;
+
+			case 'C':
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(-100);
+				outilSlider.setMaximum(100);
+				break;
+
+			default:
+				outilSlider.setValue(0);
+				outilSlider.setMinimum(0);
+				outilSlider.setMaximum(0);
+				break;
+		}
 	}
 }

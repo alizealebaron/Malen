@@ -42,7 +42,7 @@ public class FramePrincipale extends JFrame
 	private PanelOutils      panelOutils;
 	private PanelImage       panelImage;
 
-	private JScrollBar       scPanelPrincipal;
+	private JScrollPane      scPanelPrincipal;
 
 	// Lien avec le controleur
 	private Controleur       controleur;
@@ -70,6 +70,9 @@ public class FramePrincipale extends JFrame
 		// Initialisation du panel outil et du panel image
 		this.panelImage  = new PanelImage (this);
 		this.panelOutils = new PanelOutils(this);
+
+		this.scPanelPrincipal = new JScrollPane(this.panelImage); // Envelopper l'image dans un JScrollPane
+		this.scPanelPrincipal.setPreferredSize(new Dimension(800, 600)); // Taille du panneau d'affichage de l'image
 
 		// Ajouter le panel principale
 		this.panelPrincipal   = new PanelPrincipal (this, this.panelImage, this.panelOutils);
@@ -172,10 +175,51 @@ public class FramePrincipale extends JFrame
 	/* ------------------------------------------------------------ */
 	/*                   Passerelle Outils-Image                    */
 	/* ------------------------------------------------------------ */
+
+	/*                  Accesseurs                  */
+	/* -------------------------------------------- */
 	
-	public void          repaintImage ( ) {        this.panelImage.repaint  ( ) ; }
-	public boolean       isImage      ( ) { return this.panelImage.isImage  ( ) ; }
-	public BufferedImage getImage     ( ) { return this.panelImage.getImage ( ) ; }
+	public void          repaintImage ( ) {        this.panelImage.repaint      ( ) ; }
+	public boolean       isImage      ( ) { return this.panelImage.isImage      ( ) ; }
+	public BufferedImage getImage     ( ) { return this.panelImage.getImage     ( ) ; }
+	public Color         getColorText ( ) { return this.panelImage.getColorText ( ) ; }
+
+	public char          getOutil     ( ) { return this.panelOutils.getOutil    ( ) ; }
+
+	/*                 Modificateurs                */
+	/* -------------------------------------------- */
+
+	
+
+	/*                    Autres                    */
+	/* -------------------------------------------- */
+
+	public void updateTextFont (JComboBox<String> fontBox, JSpinner sizeSpinner, JCheckBox boldCheck, JCheckBox italicCheck) { this.panelImage.updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck);}
+
+	public void updateTextColor ( Color c ) 
+	{ 
+		this.panelImage.setTextColor(c);
+		this.panelImage.getTextField().setForeground(c);
+	}
+
+	/**
+	 * Permet d'afficher le panel de modification du texte
+	 * 
+	 */
+	public void afficherPanelText() 
+	{
+		if (this.panelOutils.getPanelGestionText().isVisible()) 
+		{
+			this.panelOutils.getPanelGestionText().setVisible(false);
+		} 
+		else 
+		{
+			if (this.panelOutils.getOutilSlider().isVisible())
+				this.panelOutils.showOutilSlider('D');
+
+			this.panelOutils.getPanelGestionText().setVisible(true);
+		}
+	}
 
 	/* ------------------------------------------------------------ */
 	/*                     Gestion des outils                       */
@@ -184,6 +228,70 @@ public class FramePrincipale extends JFrame
 	public void changerContraste  (int value) { this.controleur.changerContraste  (this.panelImage.getImage(), value); }
 	public void changerLuminosite (int value) { this.controleur.changerLuminosite (this.panelImage.getImage(), value); }
 
+	/* ------------------------------------------------------------ */
+	/*                     Liaison Controleur                       */
+	/* ------------------------------------------------------------ */
+
+	public void setCurrentColor (Color c) { this.controleur.setColor(c);}
+
+	/* ------------------------------------------------------------ */
+	/*                       Liaison MenuBar                        */
+	/* ------------------------------------------------------------ */
+
+	public void updateButton      () {this.panelMenu.setCouleurButton ();}
+
+	public void saveImage() 
+	{
+		JFileChooser fileChooser = new JFileChooser();
+		int userSelection = fileChooser.showSaveDialog(null);
+
+		if (userSelection == JFileChooser.APPROVE_OPTION) 
+		{
+			File fileToSave = fileChooser.getSelectedFile();
+			this.saveImage(fileToSave.getAbsolutePath() + ".png");
+		}
+	}
+
+	public void saveImage(String fileName) 
+	{
+		try 
+		{
+			File outputFile = new File(fileName);
+			ImageIO.write(this.panelImage.getImage(), "png", outputFile);
+		} 
+		catch (IOException e) 
+		{
+			System.err.println("Erreur lors de la sauvegarde : " + e.getMessage());
+		}
+	}
+
+	/* ------------------------------------------------------------ */
+	/*                        Liaison Image                         */
+	/* ------------------------------------------------------------ */
+
+	public void importImage() 
+	{
+		JFileChooser fileChooser = new JFileChooser();
+
+		fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("png", "gif"));
+		int result = fileChooser.showOpenDialog(this);
+
+		if (result == JFileChooser.APPROVE_OPTION) 
+		{
+			File selectedFile = fileChooser.getSelectedFile();
+			String imagePath = selectedFile.getAbsolutePath();
+
+			// Importer l'image dans le panneau
+			this.panelImage.importImage(imagePath);
+
+			// Mettre à jour la taille du JScrollPane selon la taille de l'image
+			Dimension imageSize = this.panelImage.getImageSize();
+			this.panelImage.setPreferredSize(imageSize); // Mettre à jour la taille du panel
+
+			this.scPanelPrincipal.revalidate(); // Revalider le JScrollPane pour appliquer les nouvelles dimensions
+			this.scPanelPrincipal.repaint   (); // Redessiner le JScrollPane
+		}
+	}
 }
 
 

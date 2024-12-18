@@ -257,7 +257,8 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
-	public void saveImageToFile(String filePath) {
+	public void saveImageToFile(String filePath) 
+	{
 		if (!imageLoaded) {
 			JOptionPane.showMessageDialog(this, "Aucune image à sauvegarder.", "Erreur", JOptionPane.ERROR_MESSAGE);
 			return;
@@ -268,7 +269,8 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	}
 
 	// Méthode pour obtenir la taille de l'image
-	public Dimension getImageSize() {
+	public Dimension getImageSize() 
+	{
 		if (image != null) {
 			return new Dimension(image.getWidth(), image.getHeight());
 		}
@@ -372,8 +374,8 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	 * @param boldCheck
 	 * @param italicCheck
 	 */
-	private void updateTextFont(JComboBox<String> fontBox, JSpinner sizeSpinner, JCheckBox boldCheck,
-			JCheckBox italicCheck) {
+	private void updateTextFont(JComboBox<String> fontBox, JSpinner sizeSpinner, JCheckBox boldCheck, JCheckBox italicCheck) 
+	{
 		int style = Font.PLAIN;
 		if (boldCheck.isSelected())
 			style |= Font.BOLD;
@@ -393,7 +395,8 @@ public class MalenImagePanel extends JPanel implements MouseListener, MouseMotio
 	 * Finalisation de l'ajout du texte à l'image
 	 * 
 	 */
-	private void finalizeText() {
+	private void finalizeText() 
+	{
 		// Création du graphique g2d pour jouter le texte
 		Graphics2D g2d = image.createGraphics();
 

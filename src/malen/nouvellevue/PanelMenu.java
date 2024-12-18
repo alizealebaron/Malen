@@ -281,7 +281,7 @@ public class PanelMenu extends JMenuBar implements ActionListener
 	{
 		List<String> options = new ArrayList<> ( );
 
-		for ( String[] ligne : MalenMenuBar.getModeleBar ( ) )
+		for ( String[] ligne : PanelMenu.getModeleBar ( ) )
 		{
 			if ( ligne[TYPE].equals ( ITEM ) || ligne[TYPE].equals ( ITEM_SM ) )
 			{
@@ -319,13 +319,15 @@ public class PanelMenu extends JMenuBar implements ActionListener
 	/*                     Réaction à l'action                      */
 	/* ------------------------------------------------------------ */
 
-	private void handleMenuAction(String menuItem) {
-		switch (menuItem) {
+	private void handleMenuAction(String menuItem) 
+	{
+		switch (menuItem) 
+		{
 			case "Enregistrer":
 				framePrincipale.saveImage( "image_malen.png");
 				break;
 			case "Enregistrer Sous":
-				framePrincipale.saveImage();
+				//framePrincipale.saveImage();
 				break;
 			case "Ouvrir":
 				framePrincipale.importImage();
@@ -337,11 +339,11 @@ public class PanelMenu extends JMenuBar implements ActionListener
 				framePrincipale.switchCurseur(Controleur.EFFACE_FOND);
 				break;
 			case "Luminosité":
-				framePrincipale.afficherSlider('L');
+				//framePrincipale.afficherSlider('L');
 				framePrincipale.switchCurseur(Controleur.LUMINOSITE);
 				break;
 			case "Constraste":
-				framePrincipale.afficherSlider('C');
+				//framePrincipale.afficherSlider('C');
 				framePrincipale.switchCurseur(Controleur.CONTRASTE);
 				break;
 			case "Ajouter Texte":
@@ -349,13 +351,13 @@ public class PanelMenu extends JMenuBar implements ActionListener
 				framePrincipale.switchCurseur(Controleur.TEXT);
 				break;
 			case "Rotation Axiale":
-				framePrincipale.afficherSlider('R');
+				//framePrincipale.afficherSlider('R');
 				break;
 			case "Retournement Vertical":
-				framePrincipale.switchRetournementVertical();
+				//framePrincipale.switchRetournementVertical();
 				break;
 			case "Retournement Horizontal":
-				framePrincipale.switchRetournementHorizontal();
+				//framePrincipale.switchRetournementHorizontal();
 				break;
 			case "Sélection Rectangle":
 				framePrincipale.switchCurseur(Controleur.SELECTION_RECTANGLE);
@@ -367,7 +369,7 @@ public class PanelMenu extends JMenuBar implements ActionListener
 				framePrincipale.switchCurseur(Controleur.PIPETTE);
 				break;
 			case "Palette":
-				framePrincipale.chooseColor();
+				//framePrincipale.chooseColor();
 				break;
 			default:
 				break;
