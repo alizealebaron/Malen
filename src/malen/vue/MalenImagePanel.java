@@ -3,7 +3,6 @@ package malen.vue;
 import javax.swing.*;
 
 import malen.Controleur;
-import malen.modele.MalenFrame;
 import malen.modele.Point;
 import malen.modele.Rotation;
 

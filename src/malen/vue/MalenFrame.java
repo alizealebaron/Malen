@@ -1,4 +1,4 @@
-package malen.modele;
+package malen.vue;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,7 +20,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
 import malen.Controleur;
-import malen.vue.MalenImagePanel;
+import malen.modele.Point;
 
 public abstract class MalenFrame extends JFrame {
 	protected Controleur controleur;

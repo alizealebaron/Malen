@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 
 import malen.Controleur;
-import malen.modele.MalenFrame;
 
 import java.awt.BorderLayout;
 import java.io.File;

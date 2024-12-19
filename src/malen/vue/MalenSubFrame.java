@@ -7,7 +7,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import malen.Controleur;
-import malen.modele.MalenFrame;
 
 public class MalenSubFrame extends MalenFrame {
 	private MalenMenuBar subMenuBar;

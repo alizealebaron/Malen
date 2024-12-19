@@ -11,7 +11,6 @@ package malen.vue;
 
 import javax.swing.*;
 import malen.Controleur;
-import malen.modele.MalenFrame;
 
 import java.awt.event.*;
 import java.util.ArrayList;
