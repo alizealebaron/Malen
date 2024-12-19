@@ -48,14 +48,13 @@ public class Controleur
 
 	private boolean onMainFrame;
 
-	private Color currentColor = Color.BLACK; // La couleur actuelle, par défaut noire
 	private String curseur;
 
 	private Point point1;
 	private Point point2;
 	private BufferedImage subImage;
 
-	private int densite;
+	private int densite = 30;
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                                Controleurs                                                                       */
@@ -79,13 +78,15 @@ public class Controleur
 	public Point         getPoint1       () { return this.point1;      }
 	public Point         getPoint2       () { return this.point2;      }
 	public BufferedImage getSubImage     () { return this.subImage;    }
+	public int           getDensite      () { return this.densite;     }
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                               Modificateurs                                                                      */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	public void setPoint1(Point point1       ) {this.point1  = point1;       }
-	public void setPoint2(Point point2       ) {this.point2  = point2;       }
+	public void setPoint1  (Point point1       ) {this.point1  = point1;       }
+	public void setPoint2  (Point point2       ) {this.point2  = point2;       }
+	public void setDensite (int   densite      ) {this.densite = densite;      }
 
 	public void setCurseur(String curseur) {
 		this.curseur = curseur;
@@ -107,30 +108,30 @@ public class Controleur
 
 			case Controleur.PIPETTE:
 				this.mainFrame.setCursor(toolkit.createCustomCursor(
-						toolkit.getImage(REPERTOIRE + "pipette-curseur.png"), new java.awt.Point(0, 0), "Pipette"));
+						toolkit.getImage(REPERTOIRE + "pipette-curseur.png"), new java.awt.Point(0, 25), "Pipette"));
 				if (this.subFrame != null) {
 					this.subFrame.setCursor(
 							toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "pipette-curseur.png"),
-									new java.awt.Point(0, 0), "Pipette"));
+									new java.awt.Point(0, 25), "Pipette"));
 				}
 				break;
 
 			case Controleur.POT_DE_PEINTURE:
 				this.mainFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "peinture.png"),
-						new java.awt.Point(0, 15), "Pot"));
+						new java.awt.Point(31, 31), "Pot"));
 				if (this.subFrame != null) {
 					this.subFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "peinture.png"),
-							new java.awt.Point(0, 15), "Pot"));
+							new java.awt.Point(31, 31), "Pot"));
 				}
 				break;
 
 			case Controleur.EFFACE_FOND:
 				this.mainFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "goutte.png"),
-						new java.awt.Point(0, 0), "Transparence"));
+						new java.awt.Point(16, 16), "Transparence"));
 				if (this.subFrame != null) {
 					this.subFrame
 							.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "goutte.png"),
-									new java.awt.Point(0, 0), "Transparence"));
+									new java.awt.Point(16, 16), "Transparence"));
 				}
 				break;
 
@@ -211,7 +212,8 @@ public class Controleur
 	 * curseur
 	 * 
 	 */
-	public void onClickLeft(BufferedImage biImage, Color coulPixel, int x, int y) {
+	public void onClickLeft(BufferedImage biImage, Color coulPixel, int x, int y) 
+	{
 		switch (this.curseur) {
 			case Controleur.SOURIS:
 				break;
@@ -231,12 +233,21 @@ public class Controleur
 				break;
 
 			case Controleur.POT_DE_PEINTURE:
-				fill(biImage, coulPixel, this.currentColor, x, y);
-
+			
+				if (this.isOnMainFrame()) 
+				{
+					fill(biImage, coulPixel, this.mainFrame.getCurrentColor(), x, y, this.densite);
+					
+				}
+				if (this.isOnSecondFrame()) 
+				{
+					fill(biImage, coulPixel, this.subFrame.getCurrentColor(), x, y, this.densite);
+				}
+				
 				break;
 
 			case Controleur.EFFACE_FOND:
-				fondTransparent(biImage, coulPixel, x, y);
+				fondTransparent(biImage, coulPixel, x, y, this.densite);
 
 				break;
 
@@ -324,12 +335,12 @@ public class Controleur
 	/*---------------------------------------------------------Liaison modele couleur-------------------------------------------------------------------*/
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	public BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y) {
-		return Couleur.fill(biOriginal, colOld, colNew, x, y);
+	public BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y, int distance) {
+		return Couleur.fill(biOriginal, colOld, colNew, x, y, this.densite);
 	}
 
-	public BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y) {
-		return Couleur.fondTransparent(biOriginal, colOld, x, y);
+	public BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y, int distance) {
+		return Couleur.fondTransparent(biOriginal, colOld, x, y, this.densite);
 	}
 
 	public BufferedImage changerContraste(BufferedImage biOriginal, int contraste) {

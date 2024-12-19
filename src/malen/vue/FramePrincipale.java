@@ -11,7 +11,16 @@ import java.awt.BorderLayout;
 import java.io.File;
 import java.io.IOException;
 
-public class FramePrincipale extends Frame {
+/** Frame principale de l'application
+ * @author  : Alizéa Lebaron
+ * @author  : Tom Goureau
+ * @author  : Trystan Baillobay
+ * @version : 1.0.0 - 19/12/2024
+ * @since   : 19/12/2024
+ */
+
+public class FramePrincipale extends Frame 
+{
 
 	private PanelMenu    panelMenu;
 	private String       nomImage = null;

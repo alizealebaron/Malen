@@ -26,7 +26,16 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
 
-public class PanelImage extends JPanel implements MouseListener, MouseMotionListener {
+/** Panel contenant l'image de l'application
+ * @author  : Alizéa Lebaron
+ * @author  : Tom Goureau
+ * @author  : Trystan Baillobay
+ * @version : 1.0.0 - 19/12/2024
+ * @since   : 19/12/2024
+ */
+
+public class PanelImage extends JPanel implements MouseListener, MouseMotionListener 
+{
 
 	private Frame         mainFrame;
 	private BufferedImage image;
@@ -47,7 +56,8 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 	private boolean flipHorizontal = false;
 	private boolean flipVertical   = false;
 
-	public PanelImage(Frame mainframe) {
+	public PanelImage(Frame mainframe) 
+	{
 		this.mainFrame = mainframe;
 		this.image     = null;
 

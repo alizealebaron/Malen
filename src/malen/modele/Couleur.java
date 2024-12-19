@@ -26,7 +26,7 @@ public class Couleur
 	 * @param y Coordonnées y du point initial
 	 * @return L'image modifiée
 	 */
-	public static BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y)
+	public static BufferedImage fill(BufferedImage biOriginal, Color colOld, Color colNew, int x, int y, int distance)
 	{
 		// Initialisation de la liste des points
 		Queue<Point> file = new LinkedList<Point>();
@@ -45,7 +45,7 @@ public class Couleur
 			Point p = file.remove();
 
 			// On vérifie que le point est dans l'image et que la couleur est ressemblante
-			if ( p.x() >= 0 && p.x() < biOriginal.getWidth  () && p.y() >= 0 && p.y() < biOriginal.getHeight () && distance (intCoulOld, biOriginal.getRGB(p.x(), p.y() ) & 0xFFFFFF ) < 90)
+			if ( p.x() >= 0 && p.x() < biOriginal.getWidth  () && p.y() >= 0 && p.y() < biOriginal.getHeight () && distance (intCoulOld, biOriginal.getRGB(p.x(), p.y() ) & 0xFFFFFF ) < distance)
 			{
 				// On change la couleur
 				biOriginal.setRGB ( p.x(), p.y(), colNew.getRGB());
@@ -68,7 +68,7 @@ public class Couleur
 	 * @param y Coordonnées y du point de référence
 	 * @return L'image modifiée
 	 */
-	public static BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y)
+	public static BufferedImage fondTransparent(BufferedImage biOriginal, Color colOld, int x, int y, int distance)
 	{
 		// Initialisation de la liste des points
 		Queue<Point> file = new LinkedList<Point>();
@@ -87,7 +87,7 @@ public class Couleur
 			Point p = file.remove();
 
 			// On vérifie que le point est dans l'image et que la couleur est ressemblante
-			if ( p.x() >= 0 && p.x() < biOriginal.getWidth  () && p.y() >= 0 && p.y() < biOriginal.getHeight () && distance (intCoulOld, biOriginal.getRGB(p.x(), p.y() ) & 0xFFFFFF ) < 90)
+			if ( p.x() >= 0 && p.x() < biOriginal.getWidth  () && p.y() >= 0 && p.y() < biOriginal.getHeight () && distance (intCoulOld, biOriginal.getRGB(p.x(), p.y() ) & 0xFFFFFF ) < distance)
 			{
 				// On change la couleur
 				biOriginal.setRGB ( p.x(), p.y(), coulTranspa);
