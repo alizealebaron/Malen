@@ -41,7 +41,7 @@ public class Controleur
 	public static final String LUMINOSITE = "lumi";
 	public static final String CONTRASTE = "cont";
 
-	private static final String REPERTOIRE = "../data/images/";
+	private static final String REPERTOIRE = "./data/images/";
 	private FramePrincipale   mainFrame;
 	private FrameSecondaire   subFrame;
 
@@ -170,6 +170,7 @@ public class Controleur
 	public void nouvelleFenetre() {
 		subFrame = new FrameSecondaire(this.mainFrame, this);
 		subFrame.setVisible(true);
+		mainFrame.actualiserMenu(false);
 	}
 
 	public void resetSelection() {

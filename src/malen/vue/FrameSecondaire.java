@@ -16,7 +16,8 @@ import malen.Controleur;
 
 public class FrameSecondaire extends Frame
 {
-	private PanelMenu panelMenu;
+	private PanelMenu       panelMenu;
+	private FramePrincipale mainFrame;
 
 	private static final String[][] MODELE_SUB_BAR = 
 	{
@@ -43,11 +44,21 @@ public class FrameSecondaire extends Frame
 	public FrameSecondaire(FramePrincipale mainFrame, Controleur controleur)
 	{
 		super(controleur);
+		this.mainFrame = mainFrame;
 		this.setTitle("Malen - Fenêtre Secondaire");
 		this.setLocation(500, 250);
 
 		this.panelMenu = new PanelMenu(this, MODELE_SUB_BAR);
 		this.add(this.panelMenu, BorderLayout.NORTH);
+
+		this.addWindowListener(new java.awt.event.WindowAdapter()
+		{
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent e)
+			{
+				onClose();
+			}
+		});
 	}
 
 	public void onClickRight(MouseEvent e)
@@ -62,4 +73,10 @@ public class FrameSecondaire extends Frame
 	public void updateButton() { this.panelMenu.setCouleurButton(); }
 
 	public boolean isMainFrame() { return false; }
+
+	public void onClose()
+	{
+		this.mainFrame.actualiserMenu(true);
+		this.dispose();
+	}
 }
