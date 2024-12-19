@@ -35,6 +35,7 @@ import java.awt.geom.Rectangle2D;
 
 public class PanelImage extends JPanel implements MouseListener, MouseMotionListener 
 {
+	private int nbrepaint;
 
 	private Frame         mainFrame;
 	private BufferedImage image;
@@ -57,6 +58,7 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 
 	public PanelImage(Frame mainframe) 
 	{
+		this.nbrepaint = 0;
 		this.mainFrame = mainframe;
 		this.image     = null;
 
@@ -218,7 +220,7 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 		{
 			this.image = ImageIO.read(new File(imagePath));
 			this.imageLoaded = true;
-			this.repaint(); // Redessiner après avoir chargé l'image
+			this.setSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
 		} 
 		catch (IOException e)
 		{
@@ -253,25 +255,18 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 				&& ((this.mainFrame.isOnMainFrame()
 				&& this.mainFrame.isMainFrame()) || (this.mainFrame.isOnSecondFrame() && !this.mainFrame.isMainFrame()))) 
 			{
-				//this.setSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
-
 				g2d.drawImage(this.image, 0, 0, null);
 
-				if (this.mainFrame.getOutil() == 'R') 
+				if (this.mainFrame.getOutil() == 'R')
 				{
 					transformedImage = rotation.applyTransformations(this.mainFrame.getSubImage());
+					this.mainFrame.setPoint1(new Point(
+							transformedImage.getMinX() + this.mainFrame.getPoint1().x(),
+							transformedImage.getMinY() + this.mainFrame.getPoint1().y()));
 
-					this.mainFrame.setPoint1(new Point
-					(
-						transformedImage.getMinX() + this.mainFrame.getPoint1().x(), 
-						transformedImage.getMinY() + this.mainFrame.getPoint1().y()
-					));
-
-					this.mainFrame.setPoint2 ( new Point
-					(
-						transformedImage.getMinX() + transformedImage.getWidth () + this.mainFrame.getPoint1().x(),
-						transformedImage.getMinY() + transformedImage.getHeight() + this.mainFrame.getPoint1().y()
-					));
+					this.mainFrame.setPoint2(new Point(
+							transformedImage.getMinX() + transformedImage.getWidth()  + this.mainFrame.getPoint1().x(),
+							transformedImage.getMinY() + transformedImage.getHeight() + this.mainFrame.getPoint1().y()));
 
 					g2d.drawImage(transformedImage, this.mainFrame.getPoint1().x(), this.mainFrame.getPoint1().y(), null);
 				} 
@@ -304,7 +299,6 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 				else
 				{
 					g2d.drawImage(this.image, 0, 0, null);
-					this.setSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
 				}
 			}
 
@@ -387,13 +381,10 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 			int x = (int) clickPoint.x();
 			int y = (int) clickPoint.y();
 			
-			Component sourceComponent = e.getComponent();
-			JFrame parentWindow = (JFrame) SwingUtilities.getWindowAncestor(sourceComponent);
-			
 			if (image != null && x >= 0 && y >= 0 && x < this.image.getWidth() && y < this.image.getHeight())
 			{
 				mainFrame.onClickLeft(this.image, clickPoint.x(), clickPoint.y(), color);
-				repaint();
+				this.setSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
 			}
 
 			if (this.mainFrame.isCurseurOn(Controleur.TEXT))

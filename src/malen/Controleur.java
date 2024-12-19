@@ -250,6 +250,8 @@ public class Controleur
 					} else {
 						this.subFrame.pasteSubImage();
 					}
+					this.setCurseur(Controleur.SOURIS);
+					this.resetSelection();
 				}
 				break;
 
@@ -260,6 +262,8 @@ public class Controleur
 					} else {
 						this.subFrame.pasteSubImage();
 					}
+					this.setCurseur(Controleur.SOURIS);
+					this.resetSelection();
 				}
 				break;
 
