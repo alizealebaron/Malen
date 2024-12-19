@@ -249,7 +249,7 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 				&& ((this.mainFrame.isOnMainFrame()
 				&& this.mainFrame.isMainFrame()) || (this.mainFrame.isOnSecondFrame() && !this.mainFrame.isMainFrame()))) 
 			{
-				this.setSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
+				//this.setSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
 
 				g2d.drawImage(this.image, 0, 0, null);
 

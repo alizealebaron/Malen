@@ -20,8 +20,7 @@ public abstract class Frame extends JFrame {
 	protected Controleur controleur;
 	protected JScrollPane      scPanelPrincipal;
 
-	protected PanelPrincipal   panelPrincipal; 
-	protected PanelMenu        panelMenu;
+	protected PanelPrincipal   panelPrincipal;
 	protected PanelOutils      panelOutils;
 	protected PanelImage       panelImage;
 

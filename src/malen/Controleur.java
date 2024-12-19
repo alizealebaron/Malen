@@ -248,7 +248,6 @@ public class Controleur
 						this.subFrame.pasteSubImage();
 					}
 				}
-
 				break;
 
 			case Controleur.SELECTION_OVALE:
@@ -259,7 +258,6 @@ public class Controleur
 						this.subFrame.pasteSubImage();
 					}
 				}
-
 				break;
 
 			default:

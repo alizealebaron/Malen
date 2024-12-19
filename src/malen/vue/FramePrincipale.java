@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class FramePrincipale extends Frame {
 
-	private PanelMenu    menuPanel;
+	private PanelMenu    panelMenu;
 	private String       nomImage = null;
 
 	public FramePrincipale(Controleur controleur) {
@@ -119,7 +119,7 @@ public class FramePrincipale extends Frame {
 	}
 
 	public void updateButton() {
-		this.menuPanel.setCouleurButton();
+		this.panelMenu.setCouleurButton();
 	}
 
 	public boolean isMainFrame() {

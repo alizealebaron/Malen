@@ -10,7 +10,7 @@ import malen.Controleur;
 
 public class FrameSecondaire extends Frame
 {
-	private PanelMenu subMenuBar;
+	private PanelMenu panelMenu;
 
 	private static final String[][] MODELE_SUB_BAR = 
 	{
@@ -74,7 +74,7 @@ public class FrameSecondaire extends Frame
 		}
 	}
 
-	public void updateButton() { this.subMenuBar.setCouleurButton(); }
+	public void updateButton() { this.panelMenu.setCouleurButton(); }
 
 	public boolean isMainFrame() { return false; }
 }
