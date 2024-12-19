@@ -7,12 +7,16 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.TexturePaint;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Rectangle2D;
 
 import javax.imageio.ImageIO;
 import javax.swing.JCheckBox;
@@ -50,6 +54,7 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 	private boolean         editingText = false; // État de modification du texte
 	private Font            textFont = new Font("Arial", Font.PLAIN, 20); // Font par défaut
 	private Color           textColor = Color.BLACK; // Couleur du texte
+	private File            fontImage = null;
 
 	private double  rotate_angle   = 0;
 	private boolean flipHorizontal = false;
@@ -57,6 +62,7 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 
 	private boolean isMovingSubImage;
 
+	
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                                Controleurs                                                                       */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -107,6 +113,7 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 
 	public void setTextColor   ( Color  c ) { this.textColor    = c; }
 	public void setRotateAngle ( Double a ) { this.rotate_angle = a; }
+	public void setFontImage   ( File   f ) { this.fontImage    = f; }
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                                 Méthodes                                                                         */
@@ -139,18 +146,57 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 	 */
 	private void finalizeText() 
 	{
-		// Création du graphique g2d pour jouter le texte
+		// Création du graphique g2d pour ajouter le texte
 		Graphics2D g2d = biImage.createGraphics();
 
-		if (editingText) {
+		if (editingText) 
+		{
 			String text = textField.getText();
 
 			// On ajout le texte à l'image s'il n'est pas vide
-            if (!text.isEmpty()) 
+            if (!text.isEmpty())
 			{
-                g2d.setFont(textFont);
-                g2d.setColor(this.textColor);
-                g2d.drawString(text, textBounds.x + 2, textBounds.y + textBounds.height - 10);
+				if (this.fontImage != null)
+				{	
+					try 
+					{
+						BufferedImage backgroundImage = ImageIO.read(new File(this.fontImage.getAbsolutePath()));
+
+						TexturePaint texturePaint = new TexturePaint
+						(
+							backgroundImage,
+							new Rectangle2D.Double(0, 0, backgroundImage.getWidth(), backgroundImage.getHeight())
+						);
+
+						// Définir la texture comme peinture
+						g2d.setPaint(texturePaint);
+
+						// Définir une police pour le texte
+						g2d.setFont(this.textFont);
+
+						// Créer un objet Shape représentant le texte
+						FontMetrics metrics = g2d.getFontMetrics(this.textFont);
+						
+						Shape textShape = this.textFont.createGlyphVector(g2d.getFontRenderContext(), text).getOutline(textBounds.x + 2, textBounds.y + textBounds.height - 10);
+
+						// Remplir le texte avec la texture
+						g2d.fill(textShape);
+
+						// Optionnel : Ajouter un contour au texte
+						g2d.draw(textShape);
+					}
+					catch (Exception e) 
+					{
+						System.err.println("Erreur lors du chargement de l'image de fond de texte : " + e);
+					}
+					
+				}	
+				else
+				{
+					g2d.setFont(textFont);
+					g2d.setColor(this.textColor);
+					g2d.drawString(text, textBounds.x + 2, textBounds.y + textBounds.height - 10);
+				}
             }
 
 			// On rend le text invisible

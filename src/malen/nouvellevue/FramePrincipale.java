@@ -202,6 +202,7 @@ public class FramePrincipale extends JFrame
 	/* -------------------------------------------- */
 
 	public void setRotateAngle ( double angle ) { this.panelImage.setRotateAngle (angle); }
+	public void setFontImage   ( File   image ) { this.panelImage.setFontImage   (image); }
 
 	/*                    Autres                    */
 	/* -------------------------------------------- */

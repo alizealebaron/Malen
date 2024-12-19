@@ -5,17 +5,21 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /** Panel de gestion des outils
  * @author  : Alizéa Lebaron
@@ -135,6 +139,29 @@ public class PanelOutils extends JPanel
 		JCheckBox boldCheck       = new JCheckBox("Gras");
 		JCheckBox italicCheck     = new JCheckBox("Italique");
 
+		JButton btnFondImage = new JButton("Ajouter une image de fond");
+		btnFondImage.addActionListener(e -> 
+		{
+
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setDialogTitle("Sélectionnez une image");
+
+			// Ajouter un filtre pour les fichiers GIF et PNG
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("Images (GIF, PNG)", "gif", "png");
+			fileChooser.setFileFilter(filter);
+
+			// Empêcher l'utilisateur de sélectionner des répertoires
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+			int result = fileChooser.showOpenDialog(this.framePrincipale);
+
+            if (result == JFileChooser.APPROVE_OPTION) 
+			{
+                File selectedFile = fileChooser.getSelectedFile();
+                this.framePrincipale.setFontImage(selectedFile);
+            }
+		});
+
 		this.btnCouleurText = new JButton("      ");
         this.btnCouleurText.addActionListener(e -> chooseColor());
 		this.btnCouleurText.setBackground(this.framePrincipale.getCurrentColor());
@@ -153,6 +180,7 @@ public class PanelOutils extends JPanel
 		this.panelGestionText.add(boldCheck);
 		this.panelGestionText.add(italicCheck);
 		this.panelGestionText.add(btnCouleurText);
+		this.panelGestionText.add(btnFondImage);
 
 		// Ajout de l'évenement pour écouter chacun des champs
 		fontBox    .addActionListener (e -> updateTextFont(fontBox, sizeSpinner, boldCheck, italicCheck) );
