@@ -83,7 +83,7 @@ public class PanelOutils extends JPanel
 					}
 					break;
 				default:
-					//this.rotateImage(0); //Voir avec Alizéa si besoin //Pour alizéa du futur : Ca m'embêtait avec l'affichage du panel text en remettant à 0
+					this.rotateImage(0); //Voir avec Alizéa si besoin //Pour alizéa du futur : Ca m'embêtait avec l'affichage du panel text en remettant à 0
 					break;
 			}
 		});

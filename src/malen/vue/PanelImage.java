@@ -32,8 +32,6 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 	private BufferedImage image;
 	private boolean       imageLoaded = false;
 
-	private JSlider outilSlider;
-	private char outil = 'D'; // L = Luminosité / C = Contraste / R = Rotation / D = Default
 	private boolean isMovingSubImage;
 
 	/* Gestion du texte */
@@ -154,9 +152,6 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 
 						// Définir une police pour le texte
 						g2d.setFont(this.textFont);
-
-						// Créer un objet Shape représentant le texte
-						FontMetrics metrics = g2d.getFontMetrics(this.textFont);
 						
 						Shape textShape = this.textFont.createGlyphVector(g2d.getFontRenderContext(), text).getOutline(textBounds.x + 2, textBounds.y + textBounds.height - 10);
 
@@ -295,7 +290,7 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 
 				transformedImage = rotation.applyTransformations(this.image);
 
-				this.setSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
+				//this.setSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
 
 				g2d.drawImage(transformedImage, 0, 0, null);
 			}
@@ -419,13 +414,14 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 
 		if (this.mainFrame.getOutil() == 'R') {
 			if (this.mainFrame.getPoint1() != null && this.mainFrame.getPoint2() != null) {
+				System.out.println("colle subimage");
 				this.mainFrame.setSubimage(this.changeImage(this.mainFrame.getSubImage()));
 			} else {
+				System.out.println("colle image");
 				this.image = this.changeImage(this.image);
 			}
 
 			this.mainFrame.showOutilSlider('R');
-			outilSlider.setValue(0);
 			this.repaint();
 		}
 

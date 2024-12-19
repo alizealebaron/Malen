@@ -23,6 +23,7 @@ public class Rotation
 
     public BufferedImage applyTransformations(BufferedImage image)
 	{
+		BufferedImage outputImage = image;
 		int originalWidth  = image.getWidth();
 		int originalHeight = image.getHeight();
 	
@@ -32,7 +33,7 @@ public class Rotation
 		int newHeight  = (int) Math.round(Math.abs(originalWidth  * Math.sin(radians)) + 
 										  Math.abs(originalHeight * Math.cos(radians)));
 	
-		BufferedImage outputImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+		outputImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = outputImage.createGraphics();
 	
 		// Activer l'anti-aliasing pour une meilleure qualité et ne sauvegarder que l'image
@@ -52,8 +53,6 @@ public class Rotation
 		g2d.drawImage(image, 0, 0, null);
 		g2d.dispose();
 
-		image = outputImage;
-	
 		return outputImage;
 	}
 
