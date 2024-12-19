@@ -113,7 +113,6 @@ public class PanelMenu extends JMenuBar implements ActionListener
 			{		ITEM, 			      "Constraste",	         "contraste.png",	    "O"			     	},
 			{		SEPARATEUR														                 		},
 			{		ITEM, 			         "Pipette",	           "pipette.png",	    "P"			     	},
-			{		ITEM, 			         "Palette",	           "couleur.png",	    "L"			     	},
 			{	MENU, 				           "Texte",		        "police.png",		"P"				    },
 			{		ITEM, 			   "Ajouter Texte",		        "police.png",		"T"				    },			
 			{	MENU, 				        "Rotation",		      "rotation.png",		"R"				    },
@@ -193,7 +192,6 @@ public class PanelMenu extends JMenuBar implements ActionListener
         this.btnCouleurAct.setOpaque(true); 
         this.btnCouleurAct.setBorderPainted(false); 
         this.btnCouleurAct.setToolTipText("Couleur actuelle");
-		
         this.btnCouleurAct.addActionListener(this);
 
 		this.add(btnCouleurAct);
@@ -383,18 +381,6 @@ public class PanelMenu extends JMenuBar implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		// Ouvrir le sélecteur de couleur
-        Color selectedColor = JColorChooser.showDialog
-		(
-            null,
-            "Sélectionnez une couleur",
-            this.parentFrame.getCurrentColor()
-        );
-
-        // Si une couleur est sélectionnée, appliquer la couleur au label
-        if (selectedColor != null) 
-		{
-            this.parentFrame.setCurrentColor(selectedColor);
-        }
+		parentFrame.chooseColor();
 	}
 }

@@ -16,7 +16,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import malen.Controleur;
 import malen.modele.Point;
 
-public abstract class Frame extends JFrame {
+/** Frame parente
+ * @author  : Alizéa Lebaron
+ * @author  : Tom Goureau
+ * @author  : Trystan Baillobay
+ * @version : 1.0.0 - 19/12/2024
+ * @since   : 19/12/2024
+ */
+
+public abstract class Frame extends JFrame 
+{
 	protected Controleur controleur;
 	protected JScrollPane      scPanelPrincipal;
 
@@ -187,14 +196,36 @@ public abstract class Frame extends JFrame {
 		return this.controleur.getCurseur().equals(curseur);
 	}
 
+	public int  getDensite (     ) { return this.controleur.getDensite( );}
+	public void setDensite (int d) {        this.controleur.setDensite(d);}
+
 	public void chooseColor()
 	{
-		// Afficher un sélecteur de couleur
-		Color selectedColor = JColorChooser.showDialog(null, "Choisir une couleur", this.getCurrentColor());
+		// Créer une instance de ColorChooserPalette
+		ColorChooserPalette colorChooser = new ColorChooserPalette(this.getDensite());
 
-		if (selectedColor != null)
+		// Afficher le sélecteur de couleurs
+		int option = JOptionPane.showConfirmDialog
+		(
+			null,
+			colorChooser,
+			"Choisir une couleur",
+			JOptionPane.OK_CANCEL_OPTION
+		);
+	
+		if (option == JOptionPane.OK_OPTION) 
 		{
-			this.setColor(selectedColor);
+			// Récupérer la couleur et la différence
+			Color selectedColor = colorChooser.getColor();
+			int colorDifference = colorChooser.getColorDifference();
+
+			System.out.println(selectedColor);
+	
+			if (selectedColor != null) 
+			{
+				this.setColor(selectedColor);
+				this.setDensite(colorDifference);
+			}
 		}
 	}
 

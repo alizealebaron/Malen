@@ -8,6 +8,14 @@ import javax.swing.JPopupMenu;
 
 import malen.Controleur;
 
+/** Frame secondaire de l'application
+ * @author  : Alizéa Lebaron
+ * @author  : Tom Goureau
+ * @author  : Trystan Baillobay
+ * @version : 1.0.0 - 19/12/2024
+ * @since   : 19/12/2024
+ */
+
 public class FrameSecondaire extends Frame
 {
 	private PanelMenu panelMenu;
@@ -23,7 +31,6 @@ public class FrameSecondaire extends Frame
 		{		"I", 			      "Constraste",	         "contraste.png",	    "O"			     	},
 		{		"S"													     	                     		},
 		{		"I", 			         "Pipette",	           "pipette.png",	    "P"			     	},
-		{		"I", 			         "Palette",	           "couleur.png",	    "L"			     	},
 		{	"M", 				           "Texte",		        "police.png",		"P"				    },
 		{		"I", 			   "Ajouter Texte",		        "police.png",		"T"				    },			
 		{	"M", 				        "Rotation",		      "rotation.png",		"R"				    },
