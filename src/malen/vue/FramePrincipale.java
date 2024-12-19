@@ -115,4 +115,23 @@ public class FramePrincipale extends Frame
 	public boolean isMainFrame() {
 		return true;
 	}
+
+	public void actualiserMenu(boolean activation)
+	{
+		for (int i = 0; i < this.panelMenu.getMenuCount(); i++) {
+			JMenu menu = this.panelMenu.getMenu(i);
+			if (menu.getText().equals("Nouvelle Fenêtre")) {
+				menu.setEnabled(activation);
+				return;
+			}
+			// Vérifier les éléments de ce menu
+			for (int j = 0; j < menu.getItemCount(); j++) {
+				JMenuItem item = menu.getItem(j);
+				if (item != null && item.getText().equals("Nouvelle Fenêtre")) {
+					item.setEnabled(activation);
+					return;
+				}
+			}
+		}
+	}
 }

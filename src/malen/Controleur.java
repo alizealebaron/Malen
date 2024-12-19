@@ -170,6 +170,7 @@ public class Controleur
 	public void nouvelleFenetre() {
 		subFrame = new FrameSecondaire(this.mainFrame, this);
 		subFrame.setVisible(true);
+		mainFrame.actualiserMenu(false);
 	}
 
 	public void resetSelection() {
