@@ -55,7 +55,7 @@ public class FrameSecondaire extends Frame
 		if (this.controleur.isOnMainFrame())
 		{
 			this.controleur.setOnSecondFrame();
-			System.out.println("passage en seconde frame");
+			this.controleur.onClickRight();
 		}
 	}
 

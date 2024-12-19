@@ -386,24 +386,12 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 
 			int x = (int) clickPoint.x();
 			int y = (int) clickPoint.y();
-
-			System.out.println("Coordonées : [" + clickPoint.x() + ";" + clickPoint.y() + "]");
-
+			
 			Component sourceComponent = e.getComponent();
 			JFrame parentWindow = (JFrame) SwingUtilities.getWindowAncestor(sourceComponent);
-
-			if (parentWindow instanceof Frame)
-			{
-				System.out.println("Clic sur la main frame");
-			}
-			else
-			{
-				System.out.println("Clic sur la sub frame");
-			}
-
+			
 			if (image != null && x >= 0 && y >= 0 && x < this.image.getWidth() && y < this.image.getHeight())
 			{
-				System.out.println(color);
 				mainFrame.onClickLeft(this.image, clickPoint.x(), clickPoint.y(), color);
 				repaint();
 			}
@@ -423,14 +411,11 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 
 		@Override
 	public void mousePressed(MouseEvent e) {
-		System.out.println("pressed");
-
+		
 		if (this.mainFrame.getOutil() == 'R') {
 			if (this.mainFrame.getPoint1() != null && this.mainFrame.getPoint2() != null) {
-				System.out.println("colle subimage");
-				this.mainFrame.setSubimage(this.changeImage(this.mainFrame.getSubImage()));
+			this.mainFrame.setSubimage(this.changeImage(this.mainFrame.getSubImage()));
 			} else {
-				System.out.println("colle image");
 				this.image = this.changeImage(this.image);
 			}
 
@@ -443,21 +428,18 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 				&& ((this.mainFrame.isOnMainFrame()
 						&& this.mainFrame.isMainFrame())
 						|| (this.mainFrame.isOnSecondFrame() && !this.mainFrame.isMainFrame()))) {
-			System.out.println("oui 1" + this.mainFrame.isMainFrame());
 
 			if (this.mainFrame.getSubImage() == null) {
 				this.mainFrame.setPoint1(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
 				this.mainFrame.setPoint2(null); // Réinitialiser le deuxième point
 				this.mainFrame.createSubImage(null);
 			} else {
-				System.out.println("oui 2" + this.mainFrame.isMainFrame());
 				int x1 = Math.min(this.mainFrame.getPoint1().x(), this.mainFrame.getPoint2().x());
 				int y1 = Math.min(this.mainFrame.getPoint1().y(), this.mainFrame.getPoint2().y());
 				int x2 = Math.max(this.mainFrame.getPoint1().x(), this.mainFrame.getPoint2().x());
 				int y2 = Math.max(this.mainFrame.getPoint1().y(), this.mainFrame.getPoint2().y());
 
 				if (e.getX() >= x1 && e.getX() <= x2 && e.getY() >= y1 && e.getY() <= y2) {
-					System.out.println("oui 3" + this.mainFrame.isMainFrame());
 					// Si le clic est dans la zone de la subimage, on commence à la déplacer
 					this.isMovingSubImage = true;
 				} else {

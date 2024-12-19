@@ -218,10 +218,8 @@ public abstract class Frame extends JFrame
 			// Récupérer la couleur et la différence
 			Color selectedColor = colorChooser.getColor();
 			int colorDifference = colorChooser.getColorDifference();
-
-			System.out.println(selectedColor);
-	
-			if (selectedColor != null) 
+			
+			if (selectedColor != null)  
 			{
 				this.setColor(selectedColor);
 				this.setDensite(colorDifference);

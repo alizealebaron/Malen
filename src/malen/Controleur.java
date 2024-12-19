@@ -186,12 +186,10 @@ public class Controleur
 	}
 	
 	public void setOnMainFrame() {
-		System.out.println("main frame");
 		this.onMainFrame = true;
 	}
 
 	public void setOnSecondFrame() {
-		System.out.println("second frame");
 		this.onMainFrame = false;
 	}
 
@@ -219,15 +217,10 @@ public class Controleur
 				break;
 
 			case Controleur.PIPETTE:
-
-				System.out.println("Souris en mode : " + this.curseur);
-				System.out.println(coulPixel.toString());
 				if (this.isOnMainFrame()) {
-					System.out.println("mainframe");
 					this.mainFrame.setColor(coulPixel);
 				}
 				if (this.isOnSecondFrame()) {
-					System.out.println("subFrame");
 					this.subFrame.setColor(coulPixel);
 				}
 				break;
@@ -237,12 +230,10 @@ public class Controleur
 				if (this.isOnMainFrame()) 
 				{
 					fill(biImage, coulPixel, this.mainFrame.getCurrentColor(), x, y, this.densite);
-					System.out.println("mainframe");
 				}
 				if (this.isOnSecondFrame()) 
 				{
 					fill(biImage, coulPixel, this.subFrame.getCurrentColor(), x, y, this.densite);
-					System.out.println("subframe");
 				}
 				
 				break;
@@ -273,9 +264,23 @@ public class Controleur
 				break;
 
 			default:
-				System.out.println("Choix incorrect");
 				break;
 
+		}
+	}
+
+	public void onClickRight()
+	{
+		if (this.subFrame != null)
+		{
+			if (onMainFrame)
+			{
+				this.subFrame.repaint();
+			}
+			else
+			{
+				this.mainFrame.repaint();
+			}
 		}
 	}
 
@@ -288,9 +293,6 @@ public class Controleur
 				int y1 = Math.min(point1.y(), point2.y());
 				int width = Math.abs(point1.x() - point2.x());
 				int height = Math.abs(point1.y() - point2.y());
-
-				System.out.println("subimage rect : " + x1 + " " + y1 + " " + width + " " + height + " ");
-
 				subImage = image.getSubimage(x1, y1, width, height);
 			}
 		}
@@ -306,8 +308,6 @@ public class Controleur
 				int y1 = Math.min(point1.y(), point2.y());
 				int width = Math.abs(point1.x() - point2.x());
 				int height = Math.abs(point1.y() - point2.y());
-
-				System.out.println("subimage oval : " + x1 + " " + y1 + " " + width + " " + height + " ");
 
 				// Crée une image vide avec un canal alpha (transparence)
 				BufferedImage ovalImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);

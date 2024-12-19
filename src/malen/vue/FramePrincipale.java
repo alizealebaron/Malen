@@ -85,8 +85,6 @@ public class FramePrincipale extends Frame
 
 	public void saveImage(String fileName) 
 	{
-		System.out.println(fileName);
-
 		try 
 		{
 			File outputFile = new File(fileName);
@@ -102,7 +100,7 @@ public class FramePrincipale extends Frame
 		if (this.controleur.isOnSecondFrame())
 		{
 			this.controleur.setOnMainFrame();
-			System.out.println("passage en main frame");
+			this.controleur.onClickRight();
 		}
 	}
 
