@@ -15,7 +15,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -528,31 +527,4 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 	@Override
 	public void mouseMoved(MouseEvent e) {
 	}
-
-
-
-
-
-
-
-
-
-
-
-/*
-	public void rotateImage(double angle) {
-		this.rotate_angle = angle % 360;
-		repaint();
-	}
-
-	public void saveImageToFile(String filePath) {
-		if (!imageLoaded) {
-			JOptionPane.showMessageDialog(this, "Aucune image à sauvegarder.", "Erreur", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
-
-		Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
-		rotation.saveImageToFile(image, filePath);
-	}
-*/
 }

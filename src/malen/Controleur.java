@@ -118,10 +118,10 @@ public class Controleur
 
 			case Controleur.POT_DE_PEINTURE:
 				this.mainFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "peinture.png"),
-						new java.awt.Point(31, 31), "Pot"));
+						new java.awt.Point(23,23), "Pot"));
 				if (this.subFrame != null) {
 					this.subFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "peinture.png"),
-							new java.awt.Point(31, 31), "Pot"));
+							new java.awt.Point(23,23), "Pot"));
 				}
 				break;
 
@@ -237,11 +237,12 @@ public class Controleur
 				if (this.isOnMainFrame()) 
 				{
 					fill(biImage, coulPixel, this.mainFrame.getCurrentColor(), x, y, this.densite);
-					
+					System.out.println("mainframe");
 				}
 				if (this.isOnSecondFrame()) 
 				{
 					fill(biImage, coulPixel, this.subFrame.getCurrentColor(), x, y, this.densite);
+					System.out.println("subframe");
 				}
 				
 				break;
