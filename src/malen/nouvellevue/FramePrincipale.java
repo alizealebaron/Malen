@@ -209,6 +209,8 @@ public class FramePrincipale extends JFrame
 	 */
 	public void afficherPanelText() { this.panelOutils.afficherPanelText(); }	
 
+	public void showOutilSlider(char outil) { this.panelOutils.showOutilSlider(outil);}
+
 	/* ------------------------------------------------------------ */
 	/*                     Gestion des outils                       */
 	/* ------------------------------------------------------------ */
@@ -313,6 +315,18 @@ public class FramePrincipale extends JFrame
 
 	public void switchRetournementHorizontal ( ) {this.panelImage.switchFlipHorizontal ( );}
 	public void switchRetournementVertical   ( ) {this.panelImage.switchFlipVertical   ( );}
+
+	public void createSubImage(BufferedImage image) 
+	{
+		if (this.isCurseurOn(Controleur.SELECTION_RECTANGLE)) 
+		{
+			this.controleur.createRectangleSubImage(image);
+		}
+		if (this.isCurseurOn(Controleur.SELECTION_OVALE)) 
+		{
+			this.controleur.createOvalSubImage(image);
+		}
+	}
 }
 
 

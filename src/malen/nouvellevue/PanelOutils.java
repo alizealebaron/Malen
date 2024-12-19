@@ -240,7 +240,7 @@ public class PanelOutils extends JPanel
 			case 'R':
 				outilSlider.setMinimum(0);
 				outilSlider.setMaximum(360);
-				outilSlider.setValue(this.tempValue);
+				outilSlider.setValue(0);
 
 				break;
 			case 'L':

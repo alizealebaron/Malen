@@ -55,6 +55,8 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 	private boolean flipHorizontal = false;
 	private boolean flipVertical   = false;
 
+	private boolean isMovingSubImage;
+
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                                Controleurs                                                                       */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -281,6 +283,12 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 		}
 	}
 
+	public BufferedImage changeImage(BufferedImage rotaImage) 
+	{
+		Rotation rotation = new Rotation(rotate_angle, flipHorizontal, flipVertical);
+		return rotation.getImage(rotaImage);
+	}
+
 	/* ------------------------------------------------------------ */
 	/*                     ✨ Retournement ✨                      */
 	/* ------------------------------------------------------------ */
@@ -349,13 +357,74 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 	@Override
 	public void mousePressed(MouseEvent e) 
 	{
-		
+		if (this.framePrincipale.getOutil() == 'R') 
+		{
+			if (this.framePrincipale.getPoint1() != null && this.framePrincipale.getPoint2() != null) 
+			{
+				this.framePrincipale.setSubimage(this.changeImage(this.framePrincipale.getSubImage()));
+			} 
+			else 
+			{
+				this.biImage = this.changeImage(this.biImage);
+			}
+
+			this.framePrincipale.showOutilSlider('R');
+
+			//outilSlider.setValue(0); //TODO: Peut-être pas besoin mais je le note au cas où
+
+			this.repaint();
+		}
+
+		if (this.framePrincipale.isCurseurOn(Controleur.SELECTION_RECTANGLE) || this.framePrincipale.isCurseurOn(Controleur.SELECTION_OVALE)) 
+		{
+			if (null == this.framePrincipale.getSubImage()) 
+			{
+				this.framePrincipale.setPoint1(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
+				this.framePrincipale.setPoint2(null); // Réinitialiser le deuxième point
+
+				this.framePrincipale.createSubImage(null);
+			} 
+			else 
+			{
+				int x1 = Math.min(this.framePrincipale.getPoint1().x(), this.framePrincipale.getPoint2().x());
+				int y1 = Math.min(this.framePrincipale.getPoint1().y(), this.framePrincipale.getPoint2().y());
+				int x2 = Math.max(this.framePrincipale.getPoint1().x(), this.framePrincipale.getPoint2().x());
+				int y2 = Math.max(this.framePrincipale.getPoint1().y(), this.framePrincipale.getPoint2().y());
+
+				if (e.getX() >= x1 && e.getX() <= x2 && e.getY() >= y1 && e.getY() <= y2) 
+				{
+					// Si le clic est dans la zone de la subimage, on commence à la déplacer
+					this.isMovingSubImage = true;
+				} 
+				else 
+				{
+					java.awt.Point awtPoint = e.getPoint();
+					Point clickPoint = new Point((int) awtPoint.getX(), (int) awtPoint.getY());
+					this.framePrincipale.onClick(this.biImage, clickPoint.x(), clickPoint.y(), getColorAtPoint(clickPoint));
+					// Sinon, on commence une nouvelle sélection
+					this.framePrincipale.setPoint1(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
+					this.framePrincipale.setPoint2(null); // Réinitialiser le deuxième point
+					this.framePrincipale.createSubImage(null);
+				}
+			}
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) 
 	{
-		
+		if (isMovingSubImage) {
+			// Fin du déplacement de la subimage
+			isMovingSubImage = false;
+		} 
+		else if (this.framePrincipale.isCurseurOn(Controleur.SELECTION_RECTANGLE) || this.framePrincipale.isCurseurOn(Controleur.SELECTION_OVALE)) 
+		{
+			// Terminer la sélection et créer la subimage
+			this.framePrincipale.setPoint2(new Point(e.getX(), e.getY()));
+			this.framePrincipale.createSubImage(this.biImage);
+		}
+
+		this.repaint();
 	}
 
 	@Override
@@ -373,7 +442,27 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 	@Override
 	public void mouseDragged(MouseEvent e) 
 	{
-		
+		if (isMovingSubImage) 
+		{
+			// Calcul du déplacement relatif
+			int deltaX = e.getX() - this.framePrincipale.getPoint1().x();
+			int deltaY = e.getY() - this.framePrincipale.getPoint1().y();
+
+			// Mettre à jour les points pour "déplacer" la subimage
+			this.framePrincipale.setPoint1(new Point(this.framePrincipale.getPoint1().x() + deltaX, this.framePrincipale.getPoint1().y() + deltaY));
+			this.framePrincipale.setPoint2(new Point(this.framePrincipale.getPoint2().x() + deltaX, this.framePrincipale.getPoint2().y() + deltaY));
+
+			this.repaint();
+		} 
+		else 
+		{
+			// Mettre à jour le deuxième point pour le rectangle de sélection
+			if (this.framePrincipale.isCurseurOn(Controleur.SELECTION_RECTANGLE)
+					|| this.framePrincipale.isCurseurOn(Controleur.SELECTION_OVALE)) {
+				this.framePrincipale.setPoint2(new Point((int) e.getPoint().getX(), (int) e.getPoint().getY()));
+				this.repaint();
+			}
+		}
 	}
 
 	@Override
