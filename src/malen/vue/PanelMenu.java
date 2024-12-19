@@ -117,7 +117,7 @@ public class PanelMenu extends JMenuBar implements ActionListener
 			{	MENU, 				           "Texte",		        "police.png",		"P"				    },
 			{		ITEM, 			   "Ajouter Texte",		        "police.png",		"T"				    },			
 			{	MENU, 				        "Rotation",		      "rotation.png",		"R"				    },
-			{		ITEM, 			 "Rotation Axiale",	          "rotation.png",	    "O"			     	},
+			{		ITEM, 			  "Rotation Plane",	          "rotation.png",	    "O"			     	},
 			{		ITEM, 	   "Retournement Vertical",	         "verticale.png",	    "V"			     	},
 			{		ITEM,    "Retournement Horizontal",	       "horizontale.png",	    "H"			     	},
 			{	MENU, 				       "Sélection",		     "selection.png",		"S"				    },
@@ -351,7 +351,7 @@ public class PanelMenu extends JMenuBar implements ActionListener
 				parentFrame.afficherPanelText();
 				parentFrame.switchCurseur(Controleur.TEXT);
 				break;
-			case "Rotation Axiale":
+			case "Rotation Plane":
 				parentFrame.afficherSlider('R');
 				break;
 			case "Retournement Vertical":

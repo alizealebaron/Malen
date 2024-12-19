@@ -206,24 +206,6 @@ public abstract class Frame extends JFrame {
 
 	public abstract void updateButton();
 
-	/**
-	 * @deprecated
-	 */
-	public void setPickedColor(Color color)
-	{
-		if (this.isCurseurOn(Controleur.PIPETTE))
-		{
-			// Afficher la couleur dans le label
-			// colorLabel.setBackground(color);
-
-			// Passer la couleur au contrôleur
-			this.setColor(color);
-
-			System.out.println(this.getCurrentColor().toString());
-
-		}
-	}
-
 	public void saveImage() {}
 
 	public void saveSousImage () {}
@@ -318,38 +300,4 @@ public abstract class Frame extends JFrame {
 	}
 
 	public abstract boolean isMainFrame();
-
-	/*public void addImage(BufferedImage img)
-	{
-		if (img == null)
-		{
-			System.out.println("Aucune image à exporter.");
-			return;
-		}
-
-		BufferedImage baseImage = panelImage.getImage();
-		if (baseImage == null || baseImage.getWidth() == 1 && baseImage.getHeight() == 1)
-		{
-			baseImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		}
-
-		BufferedImage resultImage = fusionnerImages(baseImage, img);
-		panelImage.setImage(resultImage);
-		repaint();
-	}*/
-
-	/*private BufferedImage fusionnerImages(BufferedImage base, BufferedImage ajout)
-	{
-		int largeur = Math.max(base.getWidth(), ajout.getWidth());
-		int hauteur = Math.max(base.getHeight(), ajout.getHeight());
-
-		BufferedImage resultat = new BufferedImage(largeur, hauteur, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = resultat.createGraphics();
-
-		g2d.drawImage(base, 0, 0, null);
-		g2d.drawImage(ajout, 0, 0, null);
-		g2d.dispose();
-
-		return resultat;
-	}*/
 }

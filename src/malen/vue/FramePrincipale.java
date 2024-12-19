@@ -90,27 +90,10 @@ public class FramePrincipale extends Frame {
 	}
 
 	public void onClickRight(MouseEvent e) {
-		if (this.controleur.isOnSecondFrame()) {
+		if (this.controleur.isOnSecondFrame())
+		{
 			this.controleur.setOnMainFrame();
 			System.out.println("passage en main frame");
-		} else {
-
-			JPopupMenu contextMenu = new JPopupMenu();
-
-			JMenuItem copyItem = new JMenuItem("Copier");
-			copyItem.addActionListener(actionEvent -> {
-				System.out.println("Option 'Copier' sélectionnée.");
-				// if (isSelected)
-			});
-			contextMenu.add(copyItem);
-
-			JMenuItem pasteItem = new JMenuItem("Coller");
-			pasteItem.addActionListener(actionEvent -> {
-				System.out.println("Option 'Coller' sélectionnée.");
-			});
-			contextMenu.add(pasteItem);
-
-			contextMenu.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
 

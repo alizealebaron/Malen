@@ -3,8 +3,6 @@ package malen.vue;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 
 import malen.Controleur;
 
@@ -27,7 +25,7 @@ public class FrameSecondaire extends Frame
 		{	"M", 				           "Texte",		        "police.png",		"P"				    },
 		{		"I", 			   "Ajouter Texte",		        "police.png",		"T"				    },			
 		{	"M", 				        "Rotation",		      "rotation.png",		"R"				    },
-		{		"I", 			 "Rotation Axiale",	          "rotation.png",	    "O"			     	},
+		{		"I", 			  "Rotation Plane",	          "rotation.png",	    "O"			     	},
 		{		"I", 	   "Retournement Vertical",	         "verticale.png",	    "V"			     	},
 		{		"I",     "Retournement Horizontal",	       "horizontale.png",	    "H"			     	},
 		{	"M", 				       "Sélection",		     "selection.png",		"S"				    },
@@ -51,26 +49,6 @@ public class FrameSecondaire extends Frame
 		{
 			this.controleur.setOnSecondFrame();
 			System.out.println("passage en seconde frame");
-		}
-		else
-		{
-
-			JPopupMenu contextMenu = new JPopupMenu();
-
-			JMenuItem copyItem = new JMenuItem("Copier");
-			copyItem.addActionListener(actionEvent -> {
-				System.out.println("Option 'Copier' sélectionnée.");
-				// if (isSelected)
-			});
-			contextMenu.add(copyItem);
-
-			JMenuItem pasteItem = new JMenuItem("Coller");
-			pasteItem.addActionListener(actionEvent -> {
-				System.out.println("Option 'Coller' sélectionnée.");
-			});
-			contextMenu.add(pasteItem);
-
-			contextMenu.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
 

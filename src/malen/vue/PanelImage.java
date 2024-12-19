@@ -284,15 +284,19 @@ public class PanelImage extends JPanel implements MouseListener, MouseMotionList
 						Math.abs(this.mainFrame.getPoint1().y() - this.mainFrame.getPoint2().y())
 					);
 				}
-			} 
-			else 
+			}
+			else
 			{
-
-				transformedImage = rotation.applyTransformations(this.image);
-
-				//this.setSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
-
-				g2d.drawImage(transformedImage, 0, 0, null);
+				if (this.mainFrame.getOutil() == 'R')
+				{
+					transformedImage = rotation.applyTransformations(this.image);
+					g2d.drawImage(transformedImage, 0, 0, null);
+				}
+				else
+				{
+					g2d.drawImage(this.image, 0, 0, null);
+					this.setSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
+				}
 			}
 
 			if (textBounds != null && editingText) 
