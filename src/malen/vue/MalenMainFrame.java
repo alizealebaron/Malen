@@ -236,7 +236,8 @@ public class MalenMainFrame extends JFrame {
 		return this.imagePanel.getImage();
 	}
 
-	public void saveImage() {
+	public void saveImage() 
+	{
 		JFileChooser fileChooser = new JFileChooser();
 		int userSelection = fileChooser.showSaveDialog(null);
 

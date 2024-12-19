@@ -242,7 +242,7 @@ public class MalenMenuBar extends JMenuBar implements ActionListener
 	private void handleMenuAction(String menuItem) {
 		switch (menuItem) {
 			case "Enregistrer":
-				mainFrame.saveImage( "image_malen.png");
+				mainFrame.saveImage();
 				break;
 			case "Enregistrer Sous":
 				mainFrame.saveImage();

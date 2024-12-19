@@ -37,6 +37,9 @@ public class FramePrincipale extends JFrame
 	// Chemin vers le répertoire d'images
 	private static final String REPERTOIRE = "./data/images/";
 
+	// Nom de l'image à enregistrer
+	private String nomImage = null;
+
 	// Lien avec les panels
 	private PanelPrincipal   panelPrincipal; 
 	private PanelMenu        panelMenu;
@@ -258,18 +261,55 @@ public class FramePrincipale extends JFrame
 
 	public void saveImage() 
 	{
+		if (this.nomImage == null)
+		{
+			JFileChooser fileChooser = new JFileChooser();
+			int userSelection = fileChooser.showSaveDialog(null);
+
+			if (userSelection == JFileChooser.APPROVE_OPTION) 
+			{
+				File fileToSave = fileChooser.getSelectedFile();
+				String filePath = fileToSave.getAbsolutePath();
+
+				if (!filePath.toLowerCase().endsWith(".png")) 
+				{
+					filePath += ".png";
+				}
+
+				this.nomImage = filePath;
+				this.saveImage(filePath);
+			}
+		}
+		else
+		{
+			this.saveImage(this.nomImage);
+		}
+	}
+
+	public void saveSousImage ()
+	{
 		JFileChooser fileChooser = new JFileChooser();
 		int userSelection = fileChooser.showSaveDialog(null);
 
 		if (userSelection == JFileChooser.APPROVE_OPTION) 
 		{
 			File fileToSave = fileChooser.getSelectedFile();
-			this.saveImage(fileToSave.getAbsolutePath() + ".png");
+			String filePath = fileToSave.getAbsolutePath();
+
+			if (!filePath.toLowerCase().endsWith(".png")) 
+			{
+				filePath += ".png";
+			}
+
+			this.nomImage = filePath;
+			this.saveImage(filePath);
 		}
 	}
 
 	public void saveImage(String fileName) 
 	{
+		System.out.println(fileName);
+
 		try 
 		{
 			File outputFile = new File(fileName);

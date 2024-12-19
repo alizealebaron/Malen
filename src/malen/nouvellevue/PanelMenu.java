@@ -324,10 +324,10 @@ public class PanelMenu extends JMenuBar implements ActionListener
 		switch (menuItem) 
 		{
 			case "Enregistrer":
-				framePrincipale.saveImage("image_malen.png");
+				framePrincipale.saveImage();
 				break;
 			case "Enregistrer Sous":
-				framePrincipale.saveImage();
+				framePrincipale.saveSousImage();
 				break;
 			case "Ouvrir":
 				framePrincipale.importImage();
