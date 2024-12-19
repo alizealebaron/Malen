@@ -1,0 +1,16 @@
+src/malen/Controleur.java
+
+src/malen/modele/Couleur.java
+src/malen/modele/Rotation.java
+src/malen/modele/Point.java
+
+src/malen/vue/ColorChooserPalette.java
+
+src/malen/vue/Frame.java
+src/malen/vue/FramePrincipale.java
+src/malen/vue/FrameSecondaire.java
+
+src/malen/vue/PanelImage.java
+src/malen/vue/PanelMenu.java
+src/malen/vue/PanelOutils.java
+src/malen/vue/PanelPrincipal.java
