@@ -266,6 +266,7 @@ public class FramePrincipale extends JFrame
 			JFileChooser fileChooser = new JFileChooser();
 			int userSelection = fileChooser.showSaveDialog(null);
 
+			//TODO: Peut-être gérer le cas où l'utilisateur ne met rien
 			if (userSelection == JFileChooser.APPROVE_OPTION) 
 			{
 				File fileToSave = fileChooser.getSelectedFile();
