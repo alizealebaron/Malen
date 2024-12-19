@@ -36,7 +36,7 @@ public class PanelMenu extends JMenuBar implements ActionListener
 	/*            Constantes pour navigation modulable              */
 	/* ------------------------------------------------------------ */
 
-	private static final String REPERTOIRE = "./data/images/";
+	private static final String REPERTOIRE = "../data/images/";
 
 	// Identifiants des éléments du menu
 	private static final String MENU            = "M";

@@ -41,7 +41,7 @@ public class Controleur
 	public static final String LUMINOSITE = "lumi";
 	public static final String CONTRASTE = "cont";
 
-	private static final String REPERTOIRE = "./data/images/";
+	private static final String REPERTOIRE = "../data/images/";
 	private FramePrincipale   mainFrame;
 	private FrameSecondaire   subFrame;
 
@@ -250,6 +250,8 @@ public class Controleur
 					} else {
 						this.subFrame.pasteSubImage();
 					}
+					this.setCurseur(Controleur.SOURIS);
+					this.resetSelection();
 				}
 				break;
 
@@ -260,6 +262,8 @@ public class Controleur
 					} else {
 						this.subFrame.pasteSubImage();
 					}
+					this.setCurseur(Controleur.SOURIS);
+					this.resetSelection();
 				}
 				break;
 
