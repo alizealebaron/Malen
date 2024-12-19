@@ -8,10 +8,12 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Toolkit;
 
+import java.awt.Cursor;
+import java.awt.Toolkit;
 import javax.swing.SwingUtilities;
 
-import malen.vue.MalenMainFrame;
-import malen.vue.MalenSubFrame;
+import malen.vue.FramePrincipale;
+import malen.vue.FrameSecondaire;
 import malen.modele.Couleur;
 import malen.modele.Point;
 
@@ -43,8 +45,10 @@ public class Controleur {
 
 	private static final String REPERTOIRE = "./data/images/";
 
-	private MalenMainFrame mainFrame;
-	private MalenSubFrame subFrame;
+	private static final String REPERTOIRE = "./data/images/";
+	private FramePrincipale   mainFrame;
+	private FrameSecondaire   subFrame;
+
 
 	private boolean onMainFrame;
 
@@ -62,7 +66,7 @@ public class Controleur {
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 	public Controleur() {
-		this.mainFrame = new MalenMainFrame(this); // Crée la fenêtre principale
+		mainFrame = new FramePrincipale(this); // Crée la fenêtre principale
 		this.curseur = "souris";
 
 		this.point1 = null;
@@ -75,49 +79,17 @@ public class Controleur {
 	/* Accesseurs */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	public String getCurseur() {
-		return this.curseur;
-	}
-
-	public Point getPoint1() {
-		return this.point1;
-	}
-
-	public Point getPoint2() {
-		return this.point2;
-	}
-
-	public BufferedImage getSubImage() {
-		return this.subImage;
-	}
+	public String        getCurseur      () { return this.curseur;     }
+	public Point         getPoint1       () { return this.point1;      }
+	public Point         getPoint2       () { return this.point2;      }
+	public BufferedImage getSubImage     () { return this.subImage;    }
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/* Modificateurs */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	public void setPoint1(Point point1) {
-		this.point1 = point1;
-	}
-
-	public void setPoint2(Point point2) {
-		this.point2 = point2;
-	}
-
-	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
-	/* Méthodes */
-	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
-
-	// Méthode pour démarrer l'application
-	public void startApplication() {
-		SwingUtilities.invokeLater(() -> {
-			mainFrame.setVisible(true);
-		});
-	}
-
-	public void nouvelleFenetre() {
-		subFrame = new MalenSubFrame(this.mainFrame, this);
-		subFrame.setVisible(true);
-	}
+	public void setPoint1(Point point1       ) {this.point1  = point1;       }
+	public void setPoint2(Point point2       ) {this.point2  = point2;       }
 
 	public void setCurseur(String curseur) {
 		this.curseur = curseur;
@@ -139,29 +111,29 @@ public class Controleur {
 
 			case Controleur.PIPETTE:
 				this.mainFrame.setCursor(toolkit.createCustomCursor(
-						toolkit.getImage(REPERTOIRE + "pipette-retournee.png"), new java.awt.Point(0, 0), "Pipette"));
+						toolkit.getImage(REPERTOIRE + "pipette-curseur.png"), new java.awt.Point(0, 0), "Pipette"));
 				if (this.subFrame != null) {
 					this.subFrame.setCursor(
-							toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "pipette-retournee.png"),
+							toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "pipette-curseur.png"),
 									new java.awt.Point(0, 0), "Pipette"));
 				}
 				break;
 
 			case Controleur.POT_DE_PEINTURE:
-				this.mainFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "pot.png"),
+				this.mainFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "peinture.png"),
 						new java.awt.Point(0, 15), "Pot"));
 				if (this.subFrame != null) {
-					this.subFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "pot.png"),
+					this.subFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "peinture.png"),
 							new java.awt.Point(0, 15), "Pot"));
 				}
 				break;
 
 			case Controleur.EFFACE_FOND:
-				this.mainFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "transparence.png"),
+				this.mainFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "goutte.png"),
 						new java.awt.Point(0, 0), "Transparence"));
 				if (this.subFrame != null) {
 					this.subFrame
-							.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "transparence.png"),
+							.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "goutte.png"),
 									new java.awt.Point(0, 0), "Transparence"));
 				}
 				break;
@@ -185,6 +157,24 @@ public class Controleur {
 		}
 	}
 
+
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+	/* Méthodes */
+	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	// Méthode pour démarrer l'application
+	public void startApplication() {
+		SwingUtilities.invokeLater(() -> {
+			mainFrame.setVisible(true);
+		});
+	}
+
+
+	public void nouvelleFenetre() {
+		subFrame = new FrameSecondaire(this.mainFrame, this);
+		subFrame.setVisible(true);
+	}
+
 	public void resetSelection() {
 		point1 = null;
 		point2 = null;
@@ -196,7 +186,7 @@ public class Controleur {
 	public void setSubImage(BufferedImage image) {
 		this.subImage = image;
 	}
-
+	
 	public void setOnMainFrame() {
 		System.out.println("main frame");
 		this.onMainFrame = true;

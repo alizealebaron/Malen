@@ -11,35 +11,80 @@ import java.awt.BorderLayout;
 import java.io.File;
 import java.io.IOException;
 
-public class MalenMainFrame extends MalenFrame {
+public class FramePrincipale extends Frame {
 
-	private MalenMenuBar menuPanel;
+	private PanelMenu    menuPanel;
+	private String       nomImage = null;
 
-	public MalenMainFrame(Controleur controleur) {
+	public FramePrincipale(Controleur controleur) {
 		super(controleur);
 		setTitle("Malen - Fenêtre Principale");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Ajouter le panneau de menu
-		this.menuPanel = new MalenMenuBar(this);
-		add(this.menuPanel, BorderLayout.NORTH);
+		this.panelMenu = new PanelMenu(this);
+		this.add(this.panelMenu, BorderLayout.NORTH);
 	}
 
-	public void saveImage() {
-		JFileChooser fileChooser = new JFileChooser();
-		int userSelection = fileChooser.showSaveDialog(null);
+	public void saveImage() 
+	{
+		if (this.nomImage == null)
+		{
+			JFileChooser fileChooser = new JFileChooser();
+			int userSelection = fileChooser.showSaveDialog(null);
 
-		if (userSelection == JFileChooser.APPROVE_OPTION) {
-			File fileToSave = fileChooser.getSelectedFile();
-			this.saveImage(fileToSave.getAbsolutePath() + ".png");
+			//TODO: Peut-être gérer le cas où l'utilisateur ne met rien
+			if (userSelection == JFileChooser.APPROVE_OPTION) 
+			{
+				File fileToSave = fileChooser.getSelectedFile();
+				String filePath = fileToSave.getAbsolutePath();
+
+				if (!filePath.toLowerCase().endsWith(".png")) 
+				{
+					filePath += ".png";
+				}
+
+				this.nomImage = filePath;
+				this.saveImage(filePath);
+			}
+		}
+		else
+		{
+			this.saveImage(this.nomImage);
 		}
 	}
 
-	public void saveImage(String fileName) {
-		try {
+	public void saveSousImage ()
+	{
+		JFileChooser fileChooser = new JFileChooser();
+		int userSelection = fileChooser.showSaveDialog(null);
+
+		if (userSelection == JFileChooser.APPROVE_OPTION) 
+		{
+			File fileToSave = fileChooser.getSelectedFile();
+			String filePath = fileToSave.getAbsolutePath();
+
+			if (!filePath.toLowerCase().endsWith(".png")) 
+			{
+				filePath += ".png";
+			}
+
+			this.nomImage = filePath;
+			this.saveImage(filePath);
+		}
+	}
+
+	public void saveImage(String fileName) 
+	{
+		System.out.println(fileName);
+
+		try 
+		{
 			File outputFile = new File(fileName);
-			ImageIO.write(this.imagePanel.getImage(), "png", outputFile);
-		} catch (IOException e) {
+			ImageIO.write(this.panelImage.getImage(), "png", outputFile);
+		} 
+		catch (IOException e) 
+		{
 			System.err.println("Erreur lors de la sauvegarde : " + e.getMessage());
 		}
 	}
