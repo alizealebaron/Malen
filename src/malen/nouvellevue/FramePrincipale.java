@@ -10,6 +10,7 @@ package malen.nouvellevue;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import malen.Controleur;
 import malen.modele.Point;
@@ -77,6 +78,16 @@ public class FramePrincipale extends JFrame
 		// Ajouter le panel principale
 		this.panelPrincipal   = new PanelPrincipal (this, this.panelImage, this.panelOutils, this.scPanelPrincipal);
 		this.add(this.panelPrincipal, BorderLayout.CENTER);
+
+		try 
+		{
+			// Définit le look-and-feel natif du système
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Impossible d'appliquer le look-and-feel natif : " + e.getMessage());
+		}
 
 		// Afficher la fenêtre
 		setLocationRelativeTo(null);
@@ -287,17 +298,22 @@ public class FramePrincipale extends JFrame
 	public void importImage() 
 	{
 		JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Sélectionnez une image");
 
-		fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("png", "gif"));
-		int result = fileChooser.showOpenDialog(this);
+        // Ajouter un filtre pour les fichiers GIF et PNG
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images (GIF, PNG)", "gif", "png");
+        fileChooser.setFileFilter(filter);
 
-		if (result == JFileChooser.APPROVE_OPTION) 
+        // Empêcher l'utilisateur de sélectionner des répertoires
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        // Afficher le dialogue
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) 
 		{
-			File selectedFile = fileChooser.getSelectedFile();
-			String imagePath = selectedFile.getAbsolutePath();
-
+            File selectedFile = fileChooser.getSelectedFile();
 			// Importer l'image dans le panneau
-			this.panelImage.importImage(imagePath);
+			this.panelImage.importImage(selectedFile.getAbsolutePath());
 
 			// Mettre à jour la taille du JScrollPane selon la taille de l'image
 			Dimension imageSize = this.panelImage.getImageSize();
@@ -305,7 +321,7 @@ public class FramePrincipale extends JFrame
 
 			this.scPanelPrincipal.revalidate(); // Revalider le JScrollPane pour appliquer les nouvelles dimensions
 			this.scPanelPrincipal.repaint   (); // Redessiner le JScrollPane
-		}
+        }
 	}
 
 	public boolean isCurseurOn(String curseur) 
