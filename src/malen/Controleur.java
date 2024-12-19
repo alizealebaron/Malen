@@ -1,17 +1,18 @@
 package malen;
 
 import java.awt.Color;
-import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 
+import java.awt.Cursor;
+import java.awt.Toolkit;
 import javax.swing.SwingUtilities;
 
-import malen.vue.MalenMainFrame;
+import malen.vue.FramePrincipale;
+import malen.vue.FrameSecondaire;
 import malen.modele.Couleur;
 import malen.modele.Point;
-import malen.nouvellevue.FramePrincipale;
 
 import java.awt.image.BufferedImage;
 
@@ -40,7 +41,12 @@ public class Controleur
 	public static final String LUMINOSITE = "lumi";
 	public static final String CONTRASTE = "cont";
 
-	private FramePrincipale mainFrame;
+	private static final String REPERTOIRE = "./data/images/";
+	private FramePrincipale   mainFrame;
+	private FrameSecondaire   subFrame;
+
+
+	private boolean onMainFrame;
 
 	private Color currentColor = Color.BLACK; // La couleur actuelle, par défaut noire
 	private String curseur;
@@ -62,13 +68,13 @@ public class Controleur
 		this.point1 = null;
 		this.point2 = null;
 		this.subImage = null;
+		this.onMainFrame = true;
 	}
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*                                                                Accesseurs                                                                        */
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-	public Color         getCurrentColor () { return this.currentColor;}
 	public String        getCurseur      () { return this.curseur;     }
 	public Point         getPoint1       () { return this.point1;      }
 	public Point         getPoint2       () { return this.point2;      }
@@ -81,18 +87,70 @@ public class Controleur
 	public void setPoint1(Point point1       ) {this.point1  = point1;       }
 	public void setPoint2(Point point2       ) {this.point2  = point2;       }
 
-	public void setCurseur(String curseur) 
-	{
+	public void setCurseur(String curseur) {
 		this.curseur = curseur;
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		switch (this.curseur) {
+			case Controleur.SELECTION_RECTANGLE:
+				this.mainFrame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				}
+				break;
 
-		if (!curseur.equals(SELECTION_RECTANGLE)) 
+			case Controleur.SELECTION_OVALE:
+				this.mainFrame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				}
+				break;
+
+			case Controleur.PIPETTE:
+				this.mainFrame.setCursor(toolkit.createCustomCursor(
+						toolkit.getImage(REPERTOIRE + "pipette-curseur.png"), new java.awt.Point(0, 0), "Pipette"));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(
+							toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "pipette-curseur.png"),
+									new java.awt.Point(0, 0), "Pipette"));
+				}
+				break;
+
+			case Controleur.POT_DE_PEINTURE:
+				this.mainFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "peinture.png"),
+						new java.awt.Point(0, 15), "Pot"));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "peinture.png"),
+							new java.awt.Point(0, 15), "Pot"));
+				}
+				break;
+
+			case Controleur.EFFACE_FOND:
+				this.mainFrame.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "goutte.png"),
+						new java.awt.Point(0, 0), "Transparence"));
+				if (this.subFrame != null) {
+					this.subFrame
+							.setCursor(toolkit.createCustomCursor(toolkit.getImage(REPERTOIRE + "goutte.png"),
+									new java.awt.Point(0, 0), "Transparence"));
+				}
+				break;
+
+			case Controleur.TEXT:
+				this.mainFrame.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+				}
+				break;
+
+			default:
+				this.mainFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				if (this.subFrame != null) {
+					this.subFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				}
+				break;
+		}
+		if (!curseur.equals(SELECTION_RECTANGLE)) {
 			resetSelection(); // Réinitialiser la sélection quand on sort du mode sélection rectangle
-	}
-
-	public void setColor (Color selectedColor) 
-	{
-		currentColor = selectedColor;
-		this.mainFrame.updateButton();
+		}
 	}
 
 
@@ -108,6 +166,10 @@ public class Controleur
 	}
 
 
+	public void nouvelleFenetre() {
+		subFrame = new FrameSecondaire(this.mainFrame, this);
+		subFrame.setVisible(true);
+	}
 
 	public void resetSelection() {
 		point1 = null;
@@ -121,6 +183,24 @@ public class Controleur
 	public void setSubImage(BufferedImage image) {
 		this.subImage = image;
 	}
+	
+	public void setOnMainFrame() {
+		System.out.println("main frame");
+		this.onMainFrame = true;
+	}
+
+	public void setOnSecondFrame() {
+		System.out.println("second frame");
+		this.onMainFrame = false;
+	}
+
+	public boolean isOnMainFrame() {
+		return this.onMainFrame;
+	}
+
+	public boolean isOnSecondFrame() {
+		return !this.onMainFrame;
+	}
 
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 	/*---------------------------------------------------------Action avec le click---------------------------------------------------------------------*/
@@ -131,7 +211,7 @@ public class Controleur
 	 * curseur
 	 * 
 	 */
-	public void onClick(BufferedImage biImage, Color coulPixel, int x, int y) {
+	public void onClickLeft(BufferedImage biImage, Color coulPixel, int x, int y) {
 		switch (this.curseur) {
 			case Controleur.SOURIS:
 				break;
@@ -139,7 +219,15 @@ public class Controleur
 			case Controleur.PIPETTE:
 
 				System.out.println("Souris en mode : " + this.curseur);
-				this.setColor(coulPixel);
+				System.out.println(coulPixel.toString());
+				if (this.isOnMainFrame()) {
+					System.out.println("mainframe");
+					this.mainFrame.setColor(coulPixel);
+				}
+				if (this.isOnSecondFrame()) {
+					System.out.println("subFrame");
+					this.subFrame.setColor(coulPixel);
+				}
 				break;
 
 			case Controleur.POT_DE_PEINTURE:
@@ -154,17 +242,25 @@ public class Controleur
 
 			case Controleur.SELECTION_RECTANGLE:
 				if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
-					//this.mainFrame.pasteSubImage();
+					if (this.isOnMainFrame()) {
+						this.mainFrame.pasteSubImage();
+					} else {
+						this.subFrame.pasteSubImage();
+					}
 				}
 
 				break;
 
-				case Controleur.SELECTION_OVALE:	
-					if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
-						// this.mainFrame.pasteSubImage();
+			case Controleur.SELECTION_OVALE:
+				if (this.subImage != null) { // peut poser des problemes, mettre verif sur point1 et point2
+					if (this.isOnMainFrame()) {
+						this.mainFrame.pasteSubImage();
+					} else {
+						this.subFrame.pasteSubImage();
 					}
-	
-					break;
+				}
+
+				break;
 
 			default:
 				System.out.println("Choix incorrect");
