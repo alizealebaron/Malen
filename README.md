@@ -13,6 +13,6 @@ Le projet Malen est un TP de synthèse regroupant toutes nos connaissances conce
 ## Comment compiler et exécuter l'application ?
 
 1. Placez-vous dans le répertoire Malen
-2. Tapez la commande `javac option.list compil.list`
+2. Tapez la commande `javac option.list compil.list` ou `javac $(cat option.list) $(cat compil.list)` (Ubuntu)
 3. Ensuite, déplacez vous dans le dossier /class avec la commande `cd /class`
 4. Exécutez le fichier à l'aide de la commande `java malen.Controleur`
